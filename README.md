@@ -11,11 +11,13 @@ human disease., Nat Rev Genet 12, 56-68.
 human disease genes identified through genome-wide association studies, PLoS ONE 4(11), e8090.
 
 > Goh, K.-I., Cusick, M. E., Valle, D., Childs, B., Vidal, M. and Barabsi, A.-L. [2007], The human disease
-network, Proceedings of the National Academy of Sciences 104(21), 8685{8690.
+network, Proceedings of the National Academy of Sciences 104(21), 8685-8690.
 URL: http://www.pnas.org/content/104/21/8685.abstract
 
 > Menche, J., Sharma, A., Kitsak, M., Ghiassian, S., Vidal, M., Loscalzo, J. and Barabasi, A. [2015], Un-
 covering disease-disease relationships through the incomplete human interactome, Science 347(6224).
 
 > Vidal, M., Cusick, M. and Barabasi, A. [2011], Interactome networks and human disease, Cell
-144(6), 986{998.
+144(6), 986-998.
+
+## Project updated 27th July 2017
