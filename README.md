@@ -3,6 +3,9 @@ The new science of complex networks has revealed the dynamic nature of diseases 
 
 In this work we use network science and graph theory to explore the dynamic nature of diseases and the genes associated with them. We investigate the hypothesis that many human diseases or disorders are linked by common genetic modules, therefore a defect in one of any of the cooperating genes in a module may lead to a specific disease or related symptom. Furthermore, although faulty genes need not be directly shared between diseases they can interact with similar proteins in the network neighborhood. Thus, some diseases are indirectly linked and any analysis of disease genes must take this into account. We build our networks using data and information extracted from protein interaction databases, OMIM disease database, lists of diseases categorized by MeSH, the drugbank repository, along with supporting knowledge in the form of biological ontologies. We demonstrate how the complex network approach allows us to identify modules of cooperating proteins and ultimately, understand their role in disease with respect to targeting drugs more effectively. 
 
+![Alt Text](https://user-images.githubusercontent.com/11558110/28996853-90e80f06-79ff-11e7-9837-e18648b93844.jpg)
+
+
 ## References
 > Barabasi, A., Gulbahce, N. and Loscalzo, J. [2011], Network medicine: a network-based approach to
 human disease., Nat Rev Genet 12, 56-68.
