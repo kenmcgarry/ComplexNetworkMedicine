@@ -1,6 +1,7 @@
-# parseTree.R
+# meshtree.R
+# formally parsetree.R
 # 9/12/2016, restarted 6/7/2017. parses the Mesh (Medical Subject Headings) datafile, 
-# collects subheadings based on intial main heading string
+# Collects subheadings based on intial main heading string
 # First we need to parse it into a sensible structure and create a tree: 
 # This software needs a rewrite in functional form as its brute force repetitive code.
 
@@ -18,8 +19,6 @@ digestive <- subset(meshtree,grepl(level1,meshtree$MeSH)) # search based on leve
 rownames(digestive)=NULL
 digestive <- data.frame(lapply(digestive, as.character), stringsAsFactors=FALSE)
 digestive <- digestive[!duplicated(digestive[,2]),] # keep only unique entries of diseases, remove duplicates
-
-
 
 # Obtain Level 2 names
 level2<-" "
@@ -360,7 +359,7 @@ nodesize=5 # change the number if you want bigger nodes
 nodecolor=character(ncol(ad))  # create a character for every column in adjaceny matrix
 x <- 1:ncol(ad)
 
-nodelabel<-V(g)$name
+nodelabel<-V(gs)$name
 d1<-as.character(netdiseases[,1])
 d2<-as.character(netdiseases[,2])
 
@@ -402,7 +401,7 @@ for ( i in 1:ncol(ad)){
     nodecolor[i]<-"pink"}
   y<-(sapply(nodelabel[i],grep,d1)) 
   if(is.integer(y)){   
-    nodecolor[i]<-"lightblue"}                              
+    nodecolor[i]<-"tomato"}                              
 } 
 
 #--- TKPLOT allows you drag nodes around and create a better graph --------
