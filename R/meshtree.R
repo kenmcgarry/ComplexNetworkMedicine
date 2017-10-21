@@ -247,7 +247,7 @@ for (i in 1:length(level8)){
 print(dsd,"diseasename","id",limit=NULL)
 
 # tidy up please!
-# rm(level1,level2,level3,level4,level5,level6,level7,level8,n3,n4,n5,n6,n7,n8,thename,nodestoadd)
+rm(level1,level2,level3,level4,level5,level6,level7,level8,n3,n4,n5,n6,n7,n8,thename,nodestoadd)
 
 # -------------------------------------------------------------------------------------
 # BUILD LISTS OF DISEASE GENES FOR EACH ID IF THEY EXIST 
@@ -346,6 +346,9 @@ for(i in 1:length(mydiseases$Disease)){ # for every gene make an entry for each 
   netdiseases <- rbind(netdiseases,netgenes)
   #netdiseases[k,2] <- temp[j]
 } # we now have a SMALLER list of the connected diseases and associated genes
+
+# Save workspace at this point in R-files/disease/ and its called....
+# GI-disease-Oct21st2017.RData
 
 # Build a SMALL graph of the multiple (2+diseases) connected diseases
 # use igraph for conventional gene and diseases linkages
