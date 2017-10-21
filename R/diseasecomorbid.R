@@ -9,7 +9,7 @@
 # data is downloaded from http://barabasilab.neu.edu/projects/hudine/resource/data/data.html#Data\
 # I have used the bulk download ICD 3-digit data
 # You will also need to download their paper:
-# "Hidalgo, Blumm,Barabasi and Christakis, A Dynamic Network Approach for the study of Human Phenotypes, 
+# "Hidalgo, Blumm, Barabasi and Christakis, A Dynamic Network Approach for the study of Human Phenotypes, 
 # Plos Computational Biology, April 2009, Vol5, issue 4, e1000353".
 
 library(linkcomm)
@@ -35,8 +35,9 @@ disease <- read.table('C:\\R-files\\disease\\AllNet5.net',header=FALSE);
 #icd9Explain(icd9DecimalToShort(disease[5000,1]),isShort = TRUE) # patient 5000, 1st disease
 #icd9Explain(icd9DecimalToShort(disease[5000,2]),isShort = TRUE) # patient 5000, 2nd disease
 
-# Scott Wilkes: Ovarian cancer risk with ovulation induction with clomiphene citrate.In clinical practice because no 
-# direct causal link is established (i.e. only association) we continue to use it (responsibly) a lot.
+# Scott Wilkes: Ovarian cancer risk with ovulation induction with clomiphene citrate.
+# In clinical practice because no direct causal link is established (i.e. only association) 
+# we continue to use it (responsibly) a lot.
 
 comorbidity <- disease[disease$V1 == 183,] 
 
