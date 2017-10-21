@@ -347,8 +347,13 @@ for(i in 1:length(mydiseases$Disease)){ # for every gene make an entry for each 
   #netdiseases[k,2] <- temp[j]
 } # we now have a SMALLER list of the connected diseases and associated genes
 
-# Save workspace at this point in R-files/disease/ and its called....
+#===========================================================================================
+# Saved workspace at this point in R-files/disease/ and its called....
 # GI-disease-Oct21st2017.RData
+
+# load it in using below line of code.
+load("C:/R-files/disease/GI-disease-Oct21st2017.RData")
+
 
 # Build a SMALL graph of the multiple (2+diseases) connected diseases
 # use igraph for conventional gene and diseases linkages
