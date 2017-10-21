@@ -29,12 +29,13 @@ Dproteins <- c("TNF","HRH2","APC","MLN","CDKN2A")   # crud<-c("7124","3274","324
 
 #x <- entrez_search(db="omim", term="126850[GENE]",retmax=2000)
 
+# Obtain ReactomePA pathways
 genelist <- bitr(Dproteins,fromType = "SYMBOL",toType="ENTREZID",OrgDb="org.Hs.eg.db")
 genelist <- genelist[2]
 genelist <- sapply(genelist, as.character)
 genelist <- as.character(unname(genelist, force = TRUE))
 genelist<- as.character(genelist)
-yy = enrichPathway(genelist, pvalueCutoff=0.1,organism="human",readable=TRUE)
+pathways <- enrichPathway(genelist, pvalueCutoff=0.1,organism="human",readable=TRUE)
 head(yy)
 
 temparticlecount <- count_articles(Dproteins) # how many articles written about these proteins?
@@ -128,9 +129,9 @@ count_articles <- function (CVDP){
 
 # R provides a tail and head command to view last six and first six elements, so why not a middle?
 middle <- function(mydata) {
-  len <- dim(mydata)
-  startpoint <- round(len[1]/2)
-  endpoint <- startpoint+6
+  len <- nrow(mydata)
+  startpoint <- round(len/2)
+  endpoint <- startpoint+5
   mydata[startpoint:endpoint,]
   
 }
