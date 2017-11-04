@@ -1,5 +1,6 @@
 # get_drugs.R
 # Ken McGarry 23/10/17
+#  
 
 library(dplyr)
 
@@ -18,9 +19,13 @@ drug_list <- get_drugs("C0024141",restrictedlist)  # umls code for systemic lupu
 drug_list <- get_drugs("C0029408",restrictedlist)  # umls code for Osteoarthritis
 drug_list <- get_drugs("C0003873",restrictedlist)  # umls code for Rheumatoid arthritis
 
-drug_list <- get_drugs_plus("C0013295",restrictedlist)  # A PEPTIC ULCER located in the DUODENUM.
+drug_list <- get_drugs_plus("C0013295",restrictedlist)  # Duodenal Ulcer.
+
+# work with following dataframes: indications; mappings; digestive; disgene; 
+# save(indications, mappings, digestive, disgene, file = "disease.RData")
 
 
-drug_list <- get_drugs_plus("C0002395",restrictedlist)  # umls code for Alzheimers
+
+
 
 
