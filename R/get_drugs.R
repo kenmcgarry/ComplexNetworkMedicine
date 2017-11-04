@@ -5,7 +5,7 @@
 library(dplyr)
 
 setwd("C:/R-files/disease")    # point to where my code lives
-load("indications.RData") # load in restrictedlist and indications data
+load("C06disease.RData") # load in required data - the contents will change regulary
 source("gi_functions.R")  # load in the functions required for finding lists of drugs 
 
 # Create a structure to hold all known drugs treating your particular disease of interest
@@ -22,7 +22,7 @@ drug_list <- get_drugs("C0003873",restrictedlist)  # umls code for Rheumatoid ar
 drug_list <- get_drugs_plus("C0013295",restrictedlist)  # Duodenal Ulcer.
 
 # work with following dataframes: indications; mappings; digestive; disgene; 
-# save(indications, mappings, digestive, disgene, file = "disease.RData")
+# save(indications, restrictedlist, mappings, digestive, disgene, file = "C06disease.RData")
 
 
 
