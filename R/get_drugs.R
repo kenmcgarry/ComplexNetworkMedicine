@@ -3,7 +3,7 @@
 
 library(dplyr)
 
-setwd("C:/R-files/sider")    # point to where my code lives
+setwd("C:/R-files/disease")    # point to where my code lives
 load("indications.RData") # load in restrictedlist and indications data
 source("gi_functions.R")  # load in the functions required for finding lists of drugs 
 
@@ -18,6 +18,9 @@ drug_list <- get_drugs("C0024141",restrictedlist)  # umls code for systemic lupu
 drug_list <- get_drugs("C0029408",restrictedlist)  # umls code for Osteoarthritis
 drug_list <- get_drugs("C0003873",restrictedlist)  # umls code for Rheumatoid arthritis
 
-get_drugs("C0013295",restrictedlist)  # A PEPTIC ULCER located in the DUODENUM.
+drug_list <- get_drugs_plus("C0013295",restrictedlist)  # A PEPTIC ULCER located in the DUODENUM.
+
+
+drug_list <- get_drugs_plus("C0002395",restrictedlist)  # umls code for Alzheimers
 
 
