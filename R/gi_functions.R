@@ -23,15 +23,19 @@ get_drugs_plus <- function(umls,rlist) {
   ilist <- filter(indications, umls_cui_from_meddra == umls) 
   mydrugs <- ilist # temp storage
   ilist <- setdiff(ilist$drugbank_name,rlist$drugbank_name)
-  ilist <- filter(mydrugs,drugbank_name == ilist)
+  options(warn=-1)
+  ilist <- filter(mydrugs,drugbank_name == ilist) # causes warning message
+  options(warn=0)
+  ilist <- ilist[!duplicated(ilist$drugbank_name),]
     
-  if(length(ilist) > 0){
-    for (j in 1:length(ilist)){
-      cat("\ndrug",j,"is", ilist[j])
+  if(nrow(ilist) > 0){
+    for (j in 1:nrow(ilist)){
+      cat("\ndrug",j,"is", ilist[j,2])
     }
+    ilist <- select(ilist,drugbank_id,drugbank_name,umls_cui_from_meddra,meddra_name)
     return(ilist)
   }else{
-    cat("\n","Sorry, no drugs found...check umls code is correct for your disease")
+    cat("\n","No drugs found...check umls code is correct for your disease or maybe no drugs for this disease")
     return(NULL)}
 }
 
