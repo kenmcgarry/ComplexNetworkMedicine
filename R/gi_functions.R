@@ -2,11 +2,11 @@
 
 ## --------------------- FUNCTION DEFINITIONS -----------------------
 
-# getdrugs() assumes that "indications" dataframe is already loaded. You must provide getdrugs() 
+# get_drug_names() assumes that "indications" dataframe is already loaded. You must provide getdrugs() 
 # with the "umls_cui_from_meddra" code for your disease. It will return the drugs known to be used...
 # e.g. C000239 is the code for Alzheimer's. Using the code is less error prone than typing in disease name.
 # The restricted list of drugs we cant use is passed to this function.
-get_drugs <- function(umls,rlist) {
+get_drug_names <- function(umls,rlist) {
   ilist <- filter(indications, umls_cui_from_meddra == umls) 
   ilist <- setdiff(ilist$drugbank_name,rlist$drugbank_name)
   if(length(ilist) > 0){
@@ -19,6 +19,11 @@ get_drugs <- function(umls,rlist) {
     return(NULL)}
 }
 
+# get_drugs_plus() assumes that "indications" dataframe is already loaded. You must provide getdrugs() 
+# with the "umls_cui_from_meddra" code for your disease. It will return the drugs known to be used...
+# e.g. C000239 is the code for Alzheimer's. Using the code is less error prone than typing in disease name.
+# The restricted list of drugs we cant use is passed to this function.
+# It returns the drug names plus other information.
 get_drugs_plus <- function(umls,rlist) {
   ilist <- filter(indications, umls_cui_from_meddra == umls) 
   mydrugs <- ilist # temp storage
@@ -38,6 +43,29 @@ get_drugs_plus <- function(umls,rlist) {
     cat("\n","No drugs found...check umls code is correct for your disease or maybe no drugs for this disease")
     return(NULL)}
 }
+
+# Convert the ID to umls code in order to access indications and obtain drug_id and drug_name, 
+# digestive dataframe is passed as id; use ID to match with MeshID and get umls
+id2umls <- function(id){
+  x <- vector(mode="character",length=nrow(id))
+  y <- mappings[1,] # instantiate a vector, 
+    
+  for (i in 1:nrow(id)){
+    x[i] <- id$ID[i] 
+    tempy <- filter(mappings, meshId == x[i])
+    if(nrow(tempy) > 0){
+      y[i,] <- tempy[1,]
+      y[i,]$umls <- gsub("umls:","",y[i,]$umls)
+    }
+   
+  }
+  y <- na.omit(y)  # get rid of NA where no Id's exist
+  return(y)
+}
+
+
+
+
 
 
 
