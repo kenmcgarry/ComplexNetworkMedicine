@@ -28,17 +28,16 @@ drug_list <- get_drugs_plus("C0013295",restrictedlist)  # Duodenal Ulcer.
 # 2. we need to get the drugs associated with each disease.
 
 disease_umls <- id2umls(digestive)  # get umls codes for each disease
+drug_list <- data.frame(drugbank_id=character(),drugbank_name=character(),umls_cui_from_meddra=character(),meddra_name=character())
 
 for (i in 1:nrow(disease_umls)){
-  drug_list <- get_drugs_plus(disease_umls[i,1],restrictedlist)  
-  cat("\n i is now ...",i)
+  drug_temp <- get_drugs_plus(disease_umls[i,1],restrictedlist) 
+  if (!is.null(drug_temp)){
+    drug_list <- rbind(drug_temp,drug_list)
+    cat("\n i is now ...",i)}
 }
 
-
-drug_list <- get_drugs_plus("C0333355",restrictedlist)
-
-
-
+drug_list <- add_meshcode(drug_list)
 
 
 
