@@ -25,17 +25,17 @@ drug_list <- get_drugs_plus("C0013295",restrictedlist)  # Duodenal Ulcer.
 # the key to linking these files is the "ID" in digestive also called "meshId" in mappings
 
 # 1. use digestive dataframe to parse through list of digestive diseases using the ID,
-# we need to get the drugs associated with each disease.
+# 2. we need to get the drugs associated with each disease.
 
 disease_umls <- id2umls(digestive)  # get umls codes for each disease
 
 for (i in 1:nrow(disease_umls)){
-  drug_list <- get_drugs_plus(disease_umls[i,1],restrictedlist)  # Duodenal Ulcer.
+  drug_list <- get_drugs_plus(disease_umls[i,1],restrictedlist)  
+  cat("\n i is now ...",i)
 }
 
 
-
-
+drug_list <- get_drugs_plus("C0333355",restrictedlist)
 
 
 
