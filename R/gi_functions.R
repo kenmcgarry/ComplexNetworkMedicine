@@ -28,10 +28,16 @@ get_drugs_plus <- function(umls,rlist) {
   ilist <- filter(indications, umls_cui_from_meddra == umls) 
   mydrugs <- ilist # temp storage
   ilist <- setdiff(ilist$drugbank_name,rlist$drugbank_name)
-  options(warn=-1)
-  ilist <- filter(mydrugs,drugbank_name == ilist) # causes warning message
-  options(warn=0)
-  ilist <- ilist[!duplicated(ilist$drugbank_name),]
+  
+  if(length(ilist) == 0){
+    cat("\n","No drugs found...check umls code is correct for your disease or maybe no drugs for this disease")
+    #cat("\n i is...",j)
+    return(NULL)}
+  
+    options(warn=-1)
+    ilist <- filter(mydrugs,drugbank_name == ilist) # causes warning message
+    options(warn=0)
+    ilist <- ilist[!duplicated(ilist$drugbank_name),]
     
   if(nrow(ilist) > 0){
     for (j in 1:nrow(ilist)){
@@ -41,6 +47,7 @@ get_drugs_plus <- function(umls,rlist) {
     return(ilist)
   }else{
     cat("\n","No drugs found...check umls code is correct for your disease or maybe no drugs for this disease")
+    #cat("\n i is...",j)
     return(NULL)}
 }
 
@@ -48,18 +55,19 @@ get_drugs_plus <- function(umls,rlist) {
 # digestive dataframe is passed as id; use ID to match with MeshID and get umls
 id2umls <- function(id){
   x <- vector(mode="character",length=nrow(id))
-  y <- mappings[1,] # instantiate a vector, 
+  y <- mappings[1,] # instantiate a temporary vector, 
     
   for (i in 1:nrow(id)){
     x[i] <- id$ID[i] 
-    tempy <- filter(mappings, meshId == x[i])
+    tempy <- filter(mappings, meshId == x[i])  # if tempy has meshid then keep, else ignore and do save it
     if(nrow(tempy) > 0){
       y[i,] <- tempy[1,]
       y[i,]$umls <- gsub("umls:","",y[i,]$umls)
+      #cat("\ni is ...",i)
     }
    
   }
-  y <- na.omit(y)  # get rid of NA where no Id's exist
+  y <- na.omit(y)  # get rid of records with NA where no umls Id's exist for the Mesh id's
   return(y)
 }
 
