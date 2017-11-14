@@ -126,7 +126,7 @@ get_disease_genes <- function(mydrugs){
   return(implicated)
 }
 
-rm(x,tempx,tempy,mydrugs)
+# rm(x,tempx,tempy,mydrugs)
 
 
 
