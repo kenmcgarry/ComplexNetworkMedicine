@@ -15,8 +15,8 @@ source("gi_functions.R")  # load in the functions required for finding lists of 
 # 1. Use "digestive" dataframe to parse through list of digestive diseases using the ID.
 # 2. We need to get the drugs associated with each disease.
 # 3. Get genes associated (if known) with each disease from "disgene" dataframe.
-# 4. Get 2nd shell protein interactions
-# 5. Get chemical structures of drugs and create fingerprints.
+# 4. Get chemical structures of drugs and create fingerprints.
+# 5. Get 2nd shell protein interactions
 
 # Code below perfoms stages 1 and 2 ----------
 disease_umls <- id2umls(digestive)  # get umls codes for each disease
@@ -36,7 +36,11 @@ gene_list <- get_disease_genes(drug_list)  # not all diseases will have implicat
 
 
 # Code for stage 4. ------------------------
-# Collect proteins known to interact with our long list of drugs and target proteins of those drugs
+# 
+
+
+# Code for stage 5. ------------------------
+# Collect proteins known to interact with our long list of drugs and with the targeted proteins of those drugs
 
 
 
