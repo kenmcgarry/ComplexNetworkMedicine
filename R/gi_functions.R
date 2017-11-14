@@ -78,7 +78,7 @@ add_meshcode <- function(drugs){
   #drugplus <- 0
   
   for (i in 1:nrow(drugs)){
-    tempx <- paste("umls:",drugs[i,3],sep="") # add the bloody "umls:" back, and magic numbers: beware
+    tempx <- paste("umls:",drugs[i,3],sep="") # add the bloody "umls:" back in, and some magic numbers.
     tempy <- filter(mappings, umls == tempx) 
     tempz <- filter(digestive, ID == tempy$meshId)
     x[i] <- tempz$MeSH
@@ -87,13 +87,46 @@ add_meshcode <- function(drugs){
   
   drugsplus <- cbind(drugs,x)   # add the x or Mesh values
   drugsplus <- cbind(drugsplus,y)   # add the y or ID values
-  
-  colnames(drugsplus)[5] <- "MeSH"
+  colnames(drugsplus)[5] <- "MeSH"   # change from x and y to better names
   colnames(drugsplus)[6] <- "ID"
   
   return(drugsplus)
 }
 
+
+# R provides a tail and head command to view last six and first six elements, so why not the middle six?
+middle <- function(mydata) {
+  len <- nrow(mydata)
+  startpoint <- round(len/2)
+  endpoint <- startpoint+5
+  mydata[startpoint:endpoint,]
+  
+}
+
+
+# Supply get_disease_genes() with a "drug_list" which has "umls_cui_from_meddra" field to tie 
+# with "diseaseId" in "disgene", For each disease see what genes are implicated and return dataframe
+get_disease_genes <- function(mydrugs){
+  implicated <-0 # instantiate
+  
+  disgene$diseaseId <- gsub("umls:","",disgene$diseaseId) # get rid of the bloody "umls:" from disgene for good!
+  mydrugs <- mydrugs[!duplicated(mydrugs[,c('umls_cui_from_meddra','meddra_name')]),]  # just keep unique diseases
+  mydrugs <- select(mydrugs,umls_cui_from_meddra,meddra_name, MeSH,ID)  # keep name and ids etc
+  
+  for (i in 1:nrow(mydrugs)){
+    tempx <- mydrugs[i,1]  # seek out the umls code
+    tempy <- filter(disgene, diseaseId == tempx) 
+    if(nrow(tempy) > 0){
+      cat("\nFound gene(s)!")
+      tempy <- select(tempy,diseaseId, geneName, diseaseName)
+      implicated <- rbind(tempy,implicated)
+    }
+  }
+
+  return(implicated)
+}
+
+rm(x,tempx,tempy,mydrugs)
 
 
 
