@@ -2,6 +2,11 @@
 
 library(ChemmineR)
 library(ChemmineOB)
+library(ape)
+library(sparcl)
+library(cluster) # used for kmeans and silhoutte plot
+library(xtable)
+library(gplots) 
 
 setwd("C:/R-files/bigfiles")
 sdfset <- read.SDFset("structures.sdf") # load in huge file of chemical structures (approx 7,000)
@@ -22,11 +27,25 @@ drugs <- unique(drug_list$drugbank_id)
 # we have problems with some drugs that are not in FP e.g. DB05436, DB01115, DB05291, SO remove them!
 badlist<- c("DB05436","DB01115","DB05291","DB07886","DB01398")
 drugs <- setdiff(drugs, badlist)
-fpdrugs <- fpset[drugs]   # extract our drugs chemical signatures from the many. 
+fpdrugs <- fpset[drugs]   # extract our drugs chemical signatures from the many. We now have 189 drugs left
 
 fpdrugs <- sample(fpdrugs)#randomize order of drugs
 params <- genParameters(fpdrugs)  # params is used to calculate similarity scores
+fpSim(fpset[[1]], fpset, top=25, parameters=params) 
+clusters <- cmp.cluster(db=fpdrugs, cutoff = c(0.7, 0.8, 0.9), quiet = TRUE)
 
+dummy <- cmp.cluster(db=fpset, cutoff=0, save.distances="distmat.rda", quiet=TRUE) 
+load("distmat.rda") 
+hc <- hclust(as.dist(distmat), method="single") 
+hc[["labels"]] <- cid(fpset) # Assign correct item labels 
+plot(as.dendrogram(hc), edgePar=list(col=4, lwd=2), horiz=T) 
+
+simMA <- sapply(cid(fpset), function(x) fpSim(fpset[x], fpset, sorted=FALSE))
+hc <- hclust(as.dist(1-simMA), method="single") 
+plot(as.dendrogram(hc), edgePar=list(col=4, lwd=2), horiz=TRUE)
+
+
+# NEEDS TO BE DEBUGGED FROM THIS POINT ON TO GET CHEM SIMILARITY
 results1 <- fpSim(fpdrugs[[71]], fpdrugs, top=77, parameters=params,method="Tanimoto") 
 results2 <- fpSim(fpdrugs[[73]], fpdrugs, top=77, parameters=params,method="Tanimoto") 
 results3 <- fpSim(fpdrugs[[74]], fpdrugs, top=77, parameters=params,method="Tanimoto") 
@@ -69,7 +88,6 @@ chemsinjoint <- ((chemsim$sim3 * 33.33) + (chemsim$sim1 * 33.33) + (chemsim$sim2
 chemsim <- cbind(chemsim,chemsinjoint)
 chemsim <- arrange(chemsim,desc(chemsinjoint))
 
-library(xtable)
 print.xtable(xtable(chemsim)) # displays tables for paper. 
 #print.xtable(xtable(results2))
 #print.xtable(xtable(results3))
@@ -79,9 +97,6 @@ simMA <- sapply(cid(fpdrugs), function(x) fpSim(x=fpdrugs[x], fpdrugs, sorted=TR
 colnames(simMA)<-drugnames
 rownames(simMA)<-drugnames
 
-library(ape)
-library(sparcl)
-library(cluster) # used for kmeans and silhoutte plot
 
 cl <- kmeans(simMA,10,nstart=10) #cl <- kmeans(simMA,10,nstart=5)
 sk <- silhouette(cl$cl,dist(simMA))
