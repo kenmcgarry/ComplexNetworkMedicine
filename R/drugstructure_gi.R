@@ -7,6 +7,7 @@ library(sparcl)
 library(cluster) # used for kmeans and silhoutte plot
 library(xtable)
 library(gplots) 
+library(scatterplot3d) 
 
 setwd("C:/R-files/bigfiles")
 sdfset <- read.SDFset("structures.sdf") # load in huge file of chemical structures (approx 7,000)
@@ -17,9 +18,10 @@ sdfset <- sdfset[valid]
 blockmatrix <- datablock2ma(datablocklist=datablock(sdfset))
 cid(sdfset) <- as.character(blockmatrix[,"DRUGBANK_ID"])
 
+
 ## Generate APset and FPset (note FPset: has better search performance)
 apset <- sdf2ap(sdfset)
-fpset <- desc2fp(apset, descnames=512, type="FPset")
+fpset <- desc2fp(apset, descnames=1024, type="FPset")
 
 # Overwrite drug names with our candidate drugs using drugbank_id
 drugs <- unique(drug_list$drugbank_id)
@@ -32,21 +34,28 @@ fpdrugs <- fpset[drugs]   # extract our drugs chemical signatures from the many.
 fpdrugs <- sample(fpdrugs)#randomize order of drugs
 params <- genParameters(fpdrugs)  # params is used to calculate similarity scores
 fpSim(fpset[[1]], fpset, top=25, parameters=params) 
-clusters <- cmp.cluster(db=fpdrugs, save.distances="distmat.rda",cutoff = c(0.7, 0.8, 0.9), quiet = TRUE)
 
-#dummy <- cmp.cluster(db=fpdrugs, cutoff=0, save.distances="distmat.rda", quiet=TRUE) 
+clusters <- cmp.cluster(fpdrugs, save.distances="distmat.rda",cutoff = c(0.7, 0.8, 0.9), quiet = TRUE)
+
+#dummy <- cmp.cluster(db=fpdrugs, cutoff=0.0, save.distances="distmat.rda", quiet=FALSE) 
 load("distmat.rda") 
-hc <- hclust(as.dist(distmat), method="single") 
-hc[["labels"]] <- cid(fpdrugs) # Assign correct item labels 
-plot(as.dendrogram(hc), edgePar=list(col=4, lwd=2), horiz=TRUE) 
 
 simMA <- sapply(cid(fpdrugs), function(x) fpSim(fpdrugs[x], fpdrugs, sorted=FALSE))
+# save(indications,restrictedlist,mappings,digestive,disgene,gene_list,drug_list,simMA,fpdrugs,drugnames,drugids, file = "C06disease-15thNov2017.RData")
+
 hc <- hclust(as.dist(1-simMA), method="single") 
 plot(as.dendrogram(hc), edgePar=list(col=4, lwd=2), horiz=FALSE)
 
-heatmap.2(1-distmat, Rowv=as.dendrogram(hc), Colv=as.dendrogram(hc), 
-          col=colorpanel(40, "darkblue", "yellow", "white"), 
-          density.info="none", trace="both")
+plot.new()
+heatmap.2((1-simMA), Rowv=as.dendrogram(hc), 
+                     Colv=as.dendrogram(hc), 
+                     #col=greenred(10),
+                    keysize = 2,
+                    key=TRUE,
+                    #col=bluered(256),
+                     col=colorpanel(40, "white","yellow", "darkblue"), 
+                     density.info="none", trace="none")
+# legend("topleft",)
 
 # NEEDS TO BE DEBUGGED FROM THIS POINT ON TO GET CHEM SIMILARITY
 results1 <- fpSim(fpdrugs[[71]], fpdrugs, top=77, parameters=params,method="Tanimoto") 
@@ -115,7 +124,8 @@ plot(sk)
 y <- cutree(hc,20) #10
 ColorDendrogram(hc,y=y,labels=drugnames,branchlength = 0.7,cex = 2)
 
-
+coord <- cluster.visualize(apset, clusters, size.cutoff=1, dimensions=3, quiet=TRUE) 
+scatterplot3d(coord) 
 
 
 
