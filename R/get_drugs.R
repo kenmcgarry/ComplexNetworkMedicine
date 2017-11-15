@@ -4,11 +4,11 @@
 library(dplyr)
 
 setwd("C:/R-files/disease")    # point to where my code lives
-load("C06disease-nov14th2017.RData") # load in required data - the contents will change regulary
+load("C06disease-15thNov2017.RData") # load in required data - the contents will change regulary
 source("gi_functions.R")  # load in the functions required for finding lists of drugs 
 
 # Work with following dataframes: indications; mappings; digestive; disgene; 
-# save(indications, restrictedlist, mappings, digestive, disgene, file = "C06disease.RData")
+# save(indications,restrictedlist,mappings,digestive,disgene,gene_list,drug_list,simMA,fpdrugs,drugnames,drugids, file = "C06disease-15thNov2017.RData")
 # the key to linking these files is the "ID" in digestive also called "meshId" in mappings
 
 # ----- Stages:  ----------
@@ -36,8 +36,17 @@ gene_list <- get_disease_genes(drug_list)  # not all diseases will have implicat
 
 
 # Code for stage 4. ------------------------
-# 
+# See drugstructure_gi.R for details
+# generated FingerPrints of 1024 bits for 189 drugs with chemical data
+# generated dendrogram plot and heatmap plot for the 189 drugs.
+# dataframes are: simMA; drugids; drugnames; fpdrugs; 
+# need the following packages: library(ChemmineR); library(ChemmineOB); library(ape); library(sparcl)
+# library(cluster); library(xtable); library(gplots); library(scatterplot3d) 
 
+plot_chemsim()
+
+
+# THE ABOVE CODE IS ONLY PART COMPLETED AS WE NEED TO EXAMINE 2ND SHELL DRUGS AND COMPARE
 
 # Code for stage 5. ------------------------
 # Collect proteins known to interact with our long list of drugs and with the targeted proteins of those drugs
