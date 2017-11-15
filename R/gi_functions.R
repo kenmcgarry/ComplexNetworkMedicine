@@ -139,6 +139,33 @@ ID2name <- function(DBid){
   return(thenames)
 }
 
+plot_chemsim <- function(){
+  plot.new()
+  heatmap.2((1-simMA), Rowv=as.dendrogram(hc), 
+            Colv=as.dendrogram(hc), 
+            #col=greenred(10),
+            keysize = 2,
+            key=TRUE,
+            #col=bluered(256),
+            col=colorpanel(40, "white","yellow", "darkblue"), 
+            density.info="none", trace="none")
+  
+  # Creates the similarity score matrix and cluster them.  
+  colnames(simMA)<-drugnames
+  rownames(simMA)<-drugnames
+  hc <- hclust(as.dist(1-simMA), method="complete") 
+  plot(as.dendrogram(hc), edgePar=list(col=4, lwd=2), horiz=FALSE)
+  
+  cl <- kmeans(simMA,10,nstart=50) #cl <- kmeans(simMA,10,nstart=5)
+  sk <- silhouette(cl$cl,dist(simMA))
+  plot(sk)
+  
+  y <- cutree(hc,25) #10
+  ColorDendrogram(hc,y=y,labels=drugnames,branchlength = 0.7,cex = 2)  
+  
+  
+}
+
 # rm(x,tempx,tempy,mydrugs)
 
 # mydrugs[!duplicated(mydrugs[,c('umls_cui_from_meddra','meddra_name')]),] 
