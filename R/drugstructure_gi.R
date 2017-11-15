@@ -19,7 +19,7 @@ cid(sdfset) <- as.character(blockmatrix[,"DRUGBANK_ID"])
 
 ## Generate APset and FPset (note FPset: has better search performance)
 apset <- sdf2ap(sdfset)
-fpset <- desc2fp(apset, descnames=1024, type="FPset")
+fpset <- desc2fp(apset, descnames=512, type="FPset")
 
 # Overwrite drug names with our candidate drugs using drugbank_id
 drugs <- unique(drug_list$drugbank_id)
@@ -32,18 +32,21 @@ fpdrugs <- fpset[drugs]   # extract our drugs chemical signatures from the many.
 fpdrugs <- sample(fpdrugs)#randomize order of drugs
 params <- genParameters(fpdrugs)  # params is used to calculate similarity scores
 fpSim(fpset[[1]], fpset, top=25, parameters=params) 
-clusters <- cmp.cluster(db=fpdrugs, cutoff = c(0.7, 0.8, 0.9), quiet = TRUE)
+clusters <- cmp.cluster(db=fpdrugs, save.distances="distmat.rda",cutoff = c(0.7, 0.8, 0.9), quiet = TRUE)
 
-dummy <- cmp.cluster(db=fpset, cutoff=0, save.distances="distmat.rda", quiet=TRUE) 
+#dummy <- cmp.cluster(db=fpdrugs, cutoff=0, save.distances="distmat.rda", quiet=TRUE) 
 load("distmat.rda") 
 hc <- hclust(as.dist(distmat), method="single") 
-hc[["labels"]] <- cid(fpset) # Assign correct item labels 
-plot(as.dendrogram(hc), edgePar=list(col=4, lwd=2), horiz=T) 
+hc[["labels"]] <- cid(fpdrugs) # Assign correct item labels 
+plot(as.dendrogram(hc), edgePar=list(col=4, lwd=2), horiz=TRUE) 
 
-simMA <- sapply(cid(fpset), function(x) fpSim(fpset[x], fpset, sorted=FALSE))
+simMA <- sapply(cid(fpdrugs), function(x) fpSim(fpdrugs[x], fpdrugs, sorted=FALSE))
 hc <- hclust(as.dist(1-simMA), method="single") 
-plot(as.dendrogram(hc), edgePar=list(col=4, lwd=2), horiz=TRUE)
+plot(as.dendrogram(hc), edgePar=list(col=4, lwd=2), horiz=FALSE)
 
+heatmap.2(1-distmat, Rowv=as.dendrogram(hc), Colv=as.dendrogram(hc), 
+          col=colorpanel(40, "darkblue", "yellow", "white"), 
+          density.info="none", trace="both")
 
 # NEEDS TO BE DEBUGGED FROM THIS POINT ON TO GET CHEM SIMILARITY
 results1 <- fpSim(fpdrugs[[71]], fpdrugs, top=77, parameters=params,method="Tanimoto") 
@@ -92,19 +95,22 @@ print.xtable(xtable(chemsim)) # displays tables for paper.
 #print.xtable(xtable(results2))
 #print.xtable(xtable(results3))
 
-# Creates the similarity score matrix and clusters them.
+# Convert drugbank ids to drugnames.
+drugnames <- ID2name(drugs)
+
+# Creates the similarity score matrix and cluster them.  
 simMA <- sapply(cid(fpdrugs), function(x) fpSim(x=fpdrugs[x], fpdrugs, sorted=TRUE)) 
 colnames(simMA)<-drugnames
 rownames(simMA)<-drugnames
 
 
-cl <- kmeans(simMA,10,nstart=10) #cl <- kmeans(simMA,10,nstart=5)
+cl <- kmeans(simMA,10,nstart=50) #cl <- kmeans(simMA,10,nstart=5)
 sk <- silhouette(cl$cl,dist(simMA))
 plot(sk)
 
-par(mar=c(3, 3, 3, 3))
-hc <- hclust(as.dist(1-simMA), method="complete")
-plot(as.phylo(hc), cex = 0.9, label.offset = 0.01)
+#par(mar=c(3, 3, 3, 3))
+#hc <- hclust(as.dist(1-simMA), method="complete")
+#plot(as.phylo(hc), cex = 0.9, label.offset = 0.01)#
 
 y <- cutree(hc,20) #10
 ColorDendrogram(hc,y=y,labels=drugnames,branchlength = 0.7,cex = 2)
