@@ -126,8 +126,21 @@ get_disease_genes <- function(mydrugs){
   return(implicated)
 }
 
+
+# Convert drugbank IDs (DB00035) to drugnames (Desmopressin)
+ID2name <- function(DBid){
+  thenames <- vector(mode="character",length=length(DBid))
+  
+  for (i in 1:length(DBid)){
+    dname <- filter(indications, drugbank_id == DBid[i])
+    dname <- dname[!duplicated(dname[,'drugbank_name']),]
+    thenames[i] <- dname$drugbank_name
+  }
+  return(thenames)
+}
+
 # rm(x,tempx,tempy,mydrugs)
 
-
+# mydrugs[!duplicated(mydrugs[,c('umls_cui_from_meddra','meddra_name')]),] 
 
 
