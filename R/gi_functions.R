@@ -107,7 +107,7 @@ middle <- function(mydata) {
 # Supply get_disease_genes() with a "drug_list" which has "umls_cui_from_meddra" field to tie 
 # with "diseaseId" in "disgene", For each disease see what genes are implicated and return dataframe
 get_disease_genes <- function(mydrugs){
-  implicated <-0 # instantiate
+  implicated <-0 # instantiate, unfortunelay makes a zero entry, delete this at end of function.
   
   disgene$diseaseId <- gsub("umls:","",disgene$diseaseId) # get rid of the bloody "umls:" from disgene for good!
   mydrugs <- mydrugs[!duplicated(mydrugs[,c('umls_cui_from_meddra','meddra_name')]),]  # just keep unique diseases
@@ -122,7 +122,8 @@ get_disease_genes <- function(mydrugs){
       implicated <- rbind(tempy,implicated)
     }
   }
-
+  
+  implicated <- implicated[-nrow(implicated),]            # last entry is zero so remove it
   return(implicated)
 }
 
@@ -139,6 +140,7 @@ ID2name <- function(DBid){
   return(thenames)
 }
 
+# plot_chemsim() creates plots generated from the data computed by drugstructure_gi.R code .
 plot_chemsim <- function(){
   plot.new()
   heatmap.2((1-simMA), Rowv=as.dendrogram(hc), 
@@ -163,11 +165,8 @@ plot_chemsim <- function(){
   y <- cutree(hc,25) #10
   ColorDendrogram(hc,y=y,labels=drugnames,branchlength = 0.7,cex = 2)  
   
-  
 }
 
-# rm(x,tempx,tempy,mydrugs)
 
-# mydrugs[!duplicated(mydrugs[,c('umls_cui_from_meddra','meddra_name')]),] 
 
 
