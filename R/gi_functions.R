@@ -152,7 +152,7 @@ plot_chemsim <- function(){
   plot.new()
   
   hc <- hclust(as.dist(1-simMA), method="complete") 
-  par(cex=0.1)
+  #par(cex=0.1)
   heatmap.2((1-simMA), Rowv=as.dendrogram(hc), 
             Colv=as.dendrogram(hc), 
             #col=greenred(10),
@@ -174,7 +174,7 @@ plot_chemsim <- function(){
   
   y <- cutree(hc,25) #10
   par(cex=0.8)
-  ColorDendrogram(hc,y=y,labels=drugnames,branchlength = 0.7,cex = 0.1)  
+  ColorDendrogram(hc,y=y,labels=drugnames,branchlength = 0.7,cex = 0.7)  
   
 }
 
