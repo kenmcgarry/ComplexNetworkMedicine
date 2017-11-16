@@ -1,5 +1,12 @@
 # gi_functions.R
-
+library(ChemmineR)
+library(ChemmineOB)
+library(ape)
+library(sparcl)
+library(cluster) # used for kmeans and silhoutte plot
+library(xtable)
+library(gplots) 
+library(scatterplot3d) 
 ## --------------------- FUNCTION DEFINITIONS -----------------------
 
 # get_drug_names() assumes that "indications" dataframe is already loaded. You must provide getdrugs() 
@@ -143,6 +150,9 @@ ID2name <- function(DBid){
 # plot_chemsim() creates plots generated from the data computed by drugstructure_gi.R code .
 plot_chemsim <- function(){
   plot.new()
+  
+  hc <- hclust(as.dist(1-simMA), method="complete") 
+  par(cex=0.1)
   heatmap.2((1-simMA), Rowv=as.dendrogram(hc), 
             Colv=as.dendrogram(hc), 
             #col=greenred(10),
@@ -163,7 +173,8 @@ plot_chemsim <- function(){
   plot(sk)
   
   y <- cutree(hc,25) #10
-  ColorDendrogram(hc,y=y,labels=drugnames,branchlength = 0.7,cex = 2)  
+  par(cex=0.8)
+  ColorDendrogram(hc,y=y,labels=drugnames,branchlength = 0.7,cex = 0.1)  
   
 }
 
