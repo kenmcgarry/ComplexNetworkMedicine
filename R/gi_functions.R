@@ -7,6 +7,11 @@ library(cluster) # used for kmeans and silhoutte plot
 library(xtable)
 library(gplots) 
 library(scatterplot3d) 
+library(igraph)
+library(ROCR)
+library(VennDiagram)
+library(ggplot2)
+
 ## --------------------- FUNCTION DEFINITIONS -----------------------
 
 # get_drug_names() assumes that "indications" dataframe is already loaded. You must provide getdrugs() 
@@ -179,17 +184,18 @@ plot_chemsim <- function(){
 }
 
 
-# get diseases that are not C06 but connected by shared genes 
+# get diseases that are not C06 but connected to C06 by shared genes 
 get_linked_diseases <- function(dgenes){
   linked_diseases <- disgene[1,] # instantiate before use
   
-  for (i in 1:nrow(C6genes)){
-    gene <- C6genes[i,2]
+  for (i in 1:length(dgenes)){
+    #cat("\nlength of dgenes is ",length(dgenes))
+    gene <- dgenes[i]
     glist <- filter(disgene, geneName == gene)
-    if(glist > 0){
-      tempdis <- setdiff(glist$diseaseName,C6genes$diseaseName)
+    if(nrow(glist) > 0){
+      tempdis <- setdiff(glist$diseaseName,digestive$Term)
       for (j in 1:length(tempdis)){
-        glist <- filter(glist, diseaseName == tempdis[i])
+        glist <- filter(glist, diseaseName == tempdis[j])
         linked_diseases <- rbind(glist,linked_diseases)
       }
       #tempdis <- select(tempdis,diseaseId, geneName, diseaseName)

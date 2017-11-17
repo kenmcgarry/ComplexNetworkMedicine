@@ -4,11 +4,11 @@
 library(dplyr)
 
 setwd("C:/R-files/disease")    # point to where my code lives
-load("C06disease-15thNov2017.RData") # load in required data - the contents will change regulary
+load("C06disease-17thNov2017.RData") # load in required data - the contents will change regulary
 source("gi_functions.R")  # load in the functions required for finding lists of drugs 
 
 # Work with following dataframes: indications; mappings; digestive; disgene; 
-# save(indications,restrictedlist,mappings,digestive,disgene,gene_list,drug_list,simMA,fpdrugs,drugnames,drugids, file = "C06disease-15thNov2017.RData")
+# save(disease_umls,indications,restrictedlist,mappings,digestive,disgene,gene_list,drug_list,simMA,fpdrugs,drugnames,drugids, file = "C06disease-17thNov2017.RData")
 # the key to linking these files is the "ID" in digestive also called "meshId" in mappings
 
 # ----- Stages:  ----------
@@ -71,12 +71,15 @@ shell2_genes <- read.csv("C:\\R-files\\disease\\C06-shell2-low.csv",stringsAsFac
 # Keep interacting gene columns and confidence score, discard the other 13 variables.
 shell2_genes <- shell2_genes[,c("X.node1","node2","combined_score")]
 shell2_genes <- c(shell2_genes$X.node1,shell2_genes$node2)
+shell2_genes <- unique(shell2_genes)  
+shell2_genes <- setdiff(shell2_genes,gene_list$geneName) # we are left with 109 genes unique to shell2 and not related to C06
 
 # Now seek out the two shell levels of diseases
-shell1 <- get_linked_diseases(gene_list)  # diseases directly linked to C06 disease genes
+shell1 <- get_linked_diseases(gene_list$geneName)  # diseases directly linked to C06 disease genes
 
 shell2 <- get_linked_diseases(shell2_genes)  # diseases indirectly linked through 2nd shell genes
 
+         #get_linked_diseases("CTNS")  # diseases indirectly linked through 2nd shell genes
 
 
 
