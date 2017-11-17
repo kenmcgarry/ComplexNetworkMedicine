@@ -67,7 +67,7 @@ temptree <- file.path('C://R-files//disease//','meshtreefull.csv') %>% read.deli
 temptree <- temptree[,1:3]
 
 # load in 2nd shell genes from STITCH search
-shell2_genes <- read.csv("C:\\R-files\\disease\\C06-shell2-low.csv")
+shell2_genes <- read.csv("C:\\R-files\\disease\\C06-shell2-low.csv",stringsAsFactors = FALSE)  #important to make stringsAsFact false
 # Keep interacting gene columns and confidence score, discard the other 13 variables.
 shell2_genes <- shell2_genes[,c("X.node1","node2","combined_score")]
 shell2_genes <- c(shell2_genes$X.node1,shell2_genes$node2)
