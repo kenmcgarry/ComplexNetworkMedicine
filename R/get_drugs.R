@@ -34,7 +34,7 @@ unique(drug_list$drugbank_name) # how many unique drugs do we have?
 
 # Code for stage 3.--------------------------
 gene_list <- get_disease_genes(drug_list)  # not all diseases will have implicated genes, so list will shorter!
-                                                                                  # 55 in fact
+                                                                          # 55 in fact
 
 # Code for stage 4. ------------------------
 # See drugstructure_gi.R for details of processing........
@@ -61,6 +61,22 @@ write.table(unique(sort(gene_list$geneName)),"C:\\R-files\\disease\\C06genes.txt
 
 # STITCH can only find 820 out of 892 C06 genes connected to 907 2nd shell genes
 # with 15,736 interactions.
+
+# load in the mesh data, keep only first three variables.
+temptree <- file.path('C://R-files//disease//','meshtreefull.csv') %>% read.delim(na.strings='',sep=',',header=TRUE,comment.char="#")
+temptree <- temptree[,1:3]
+
+# load in 2nd shell genes from STITCH search
+
+
+
+# Now seek out the two shell levels of diseases
+shell1 <- get_linked_diseases(gene_list)  # diseases directly linked to C06 disease genes
+
+shell2 <- get_linked_diseases(shell2_genes)  # diseases indirectly linked through 2nd shell genes
+
+
+
 
 
 
