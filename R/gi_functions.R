@@ -179,5 +179,30 @@ plot_chemsim <- function(){
 }
 
 
+# get diseases that are not C06 but connected by shared genes 
+get_linked_diseases <- function(dgenes){
+  linked_diseases <- disgene[1,] # instantiate before use
+  
+  for (i in 1:nrow(C6genes)){
+    gene <- C6genes[i,2]
+    glist <- filter(disgene, geneName == gene)
+    if(glist > 0){
+      tempdis <- setdiff(glist$diseaseName,C6genes$diseaseName)
+      for (j in 1:length(tempdis)){
+        glist <- filter(glist, diseaseName == tempdis[i])
+        linked_diseases <- rbind(glist,linked_diseases)
+      }
+      #tempdis <- select(tempdis,diseaseId, geneName, diseaseName)
+      #linked_diseases <- rbind(tempdis,linked_diseases)
+    }
+  }
+  
+  linked_diseases <- linked_diseases[-nrow(linked_diseases),]     # last entry is zero so remove it
+  linked_diseases <- linked_diseases[!duplicated(linked_diseases[,'diseaseName']),]   # get rid of the many duplicates
+  return(linked_diseases)
+}
+
+
+
 
 
