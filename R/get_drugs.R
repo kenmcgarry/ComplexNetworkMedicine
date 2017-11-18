@@ -68,11 +68,14 @@ temptree <- temptree[,1:3]
 
 # load in 2nd shell genes from STITCH search
 shell2_genes <- read.csv("C:\\R-files\\disease\\C06-shell2-low.csv",stringsAsFactors = FALSE)  #important to make stringsAsFact false
+shell2_genes <- read.csv("C:\\R-files\\disease\\shell2_genes_low.csv",stringsAsFactors = FALSE)  #important to make stringsAsFact false
+
 # Keep interacting gene columns and confidence score, discard the other 13 variables.
 shell2_genes <- shell2_genes[,c("X.node1","node2","combined_score")]
 shell2_genes <- c(shell2_genes$X.node1,shell2_genes$node2)
 shell2_genes <- unique(shell2_genes)  
 shell2_genes <- setdiff(shell2_genes,gene_list$geneName) # we are left with 109 genes unique to shell2 and not related to C06
+write.table(unique(sort(shell2_genes)),"C:\\R-files\\disease\\shell2genes.txt",sep=",",row.names = FALSE,col.names = FALSE)
 
 # Now seek out the two shell levels of diseases
 shell1 <- get_linked_diseases(gene_list$geneName)  # diseases directly linked to C06 disease genes
@@ -82,7 +85,7 @@ shell2 <- get_linked_diseases(shell2_genes)  # diseases indirectly linked throug
          #get_linked_diseases("SMAD2")  # diseases indirectly linked through 2nd shell genes
 
 
-get_all_linked_diseases("TNF")
+get_all_linked_diseases("MLL3")
 
 
 
