@@ -209,6 +209,26 @@ get_linked_diseases <- function(dgenes){
 }
 
 
+# input  a gene or list of genes and get all diseases asscoiated with these genes 
+# really best just using JUST one gene.
+get_all_linked_diseases <- function(dgenes){
+  all_diseases <- disgene[1,] # instantiate before use
+  
+  for (i in 1:length(dgenes)){
+    gene <- dgenes[i]
+    glist <- filter(disgene, geneName == gene)
+    if(nrow(glist) > 0){
+        all_diseases <- rbind(glist,all_diseases)
+    }
+  }
+  
+  all_diseases <- all_diseases[-nrow(all_diseases),]     # last entry is zero so remove it
+  all_diseases <- all_diseases[!duplicated(all_diseases[,'diseaseName']),]   # get rid of the many duplicates
+  all_diseases <- select(all_diseases,diseaseId,geneId,geneName,diseaseName)  # drop "score" variable
+  all_diseases <- arrange(all_diseases,diseaseName)  # sort alphabetically
+  return(all_diseases)
+}
+
 
 
 
