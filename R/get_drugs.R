@@ -79,10 +79,10 @@ shell1 <- get_linked_diseases(gene_list$geneName)  # diseases directly linked to
 
 shell2 <- get_linked_diseases(shell2_genes)  # diseases indirectly linked through 2nd shell genes
 
-         #get_linked_diseases("CTNS")  # diseases indirectly linked through 2nd shell genes
+         #get_linked_diseases("SMAD2")  # diseases indirectly linked through 2nd shell genes
 
 
-
+get_all_linked_diseases("TNF")
 
 
 
