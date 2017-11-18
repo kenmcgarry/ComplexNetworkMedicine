@@ -186,6 +186,7 @@ plot_chemsim <- function(){
 
 # get diseases that are not C06 but connected to C06 by shared genes 
 get_linked_diseases <- function(dgenes){
+
   linked_diseases <- disgene[1,] # instantiate before use
   
   for (i in 1:length(dgenes)){
@@ -193,7 +194,7 @@ get_linked_diseases <- function(dgenes){
     gene <- dgenes[i]
     glist <- filter(disgene, geneName == gene)
     if(nrow(glist) > 0){
-      tempdis <- setdiff(glist$diseaseName,digestive$Term)
+      tempdis <- setdiff(glist$diseaseName,disease_umls$meshId)
       for (j in 1:length(tempdis)){
         glist <- filter(glist, diseaseName == tempdis[j])
         linked_diseases <- rbind(glist,linked_diseases)
@@ -205,6 +206,8 @@ get_linked_diseases <- function(dgenes){
   
   linked_diseases <- linked_diseases[-nrow(linked_diseases),]     # last entry is zero so remove it
   linked_diseases <- linked_diseases[!duplicated(linked_diseases[,'diseaseName']),]   # get rid of the many duplicates
+  linked_diseases <- select(linked_diseases,diseaseId,geneId,geneName,diseaseName)  # drop "score" variable
+  linked_diseases <- arrange(linked_diseases,diseaseName)  # sort alphabetically
   return(linked_diseases)
 }
 
