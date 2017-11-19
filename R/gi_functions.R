@@ -225,7 +225,7 @@ get_all_linked_diseases <- function(dgenes){
     }
   }
   
-  all_diseases <- all_diseases[-nrow(all_diseases),]     # last entry is zero so remove it
+  all_diseases <- all_diseases[-nrow(all_diseases),]     # last entry is fake so remove it
   all_diseases <- all_diseases[!duplicated(all_diseases[,'diseaseName']),]   # get rid of the many duplicates
   all_diseases <- select(all_diseases,diseaseId,geneId,geneName,diseaseName)  # drop "score" variable
   all_diseases <- arrange(all_diseases,diseaseName)  # sort alphabetically
