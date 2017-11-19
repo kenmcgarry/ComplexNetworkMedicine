@@ -84,8 +84,11 @@ shell2 <- get_linked_diseases(shell2_genes)  # diseases indirectly linked throug
 
          #get_linked_diseases("SMAD2")  # diseases indirectly linked through 2nd shell genes
 
+# Load in drug interactions
+drug_interactions <- read.csv("C:\\R-files\\disease\\drug_interactions.csv",stringsAsFactors = FALSE)  #important to make stringsAsFact false
+drug_interactions <- drug_interactions[,1:2]
 
-get_all_linked_diseases("MLL3")
+get_all_linked_diseases("MLL3") # test out new function
 
 
 
