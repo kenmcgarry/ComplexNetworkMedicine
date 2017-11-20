@@ -90,7 +90,8 @@ drug_interactions <- drug_interactions[,1:2]
 
 # get_all_linked_diseases("BRCA1") # test out new function
 
-
+##################################################################
+# Using LINKCOMM to detect disease modules
 
 
 

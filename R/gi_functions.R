@@ -233,6 +233,37 @@ get_all_linked_diseases <- function(dgenes){
   return(all_diseases)
 }
 
+# print tables in LaTex format for inclusion into paper
+print_tables <- function(){
+  temp_table <- disgene[,c(1,4:6)]
+  
+  tli.table <- xtable(head(temp_table))
+  #digits(tli.table)[c(2,6)] <- 0
+  print(tli.table,floating=FALSE)
+  
+  tli.table <- xtable((digestive[86:101,]))
+  #digits(tli.table)[c(2,6)] <- 0
+  print(tli.table,floating=FALSE)
+  
+  tli.table <- xtable(head(digestive))
+  #digits(tli.table)[c(2,6)] <- 0
+  print(tli.table,floating=FALSE)
+  
+  tli.table <- xtable(middle(drug_list))
+  #digits(tli.table)[c(2,6)] <- 0
+  print(tli.table,floating=FALSE)
+ 
+  tli.table <- xtable(filter(drug_list, MeSH == "C06.405"))
+  print(tli.table,floating=FALSE)
+  
+  tli.table <- xtable(filter(gene_list, MeSH == "C06.405"))
+  print(tli.table,floating=FALSE)
+  
+}
+
+
+
+
 
 
 
