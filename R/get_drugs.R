@@ -4,7 +4,7 @@
 library(dplyr) # majority of packages are loaded in by gi_functions.R
 
 setwd("C:/R-files/disease")    # point to where my code lives
-load("C06disease-17thNov2017.RData") # load in required data - the contents will change regulary
+load("C06disease-20thNov2017.RData") # load in required data - the contents will change regulary
 source("gi_functions.R")  # load in the functions required for finding lists of drugs 
 
 # Work with following dataframes: indications; mappings; digestive; disgene; 
@@ -93,8 +93,18 @@ drug_interactions <- drug_interactions[,1:2]
 ##################################################################
 # Using LINKCOMM to detect disease modules
 
+lc <- getLinkCommunities(drug_interactions, hcmethod = "single")
+print(lc)
+plot(lc, type = "graph", layout = layout.fruchterman.reingold)
+plot(lc, type = "graph", shownodesin = 2, node.pies = TRUE)
+plot(lc, type = "summary")
+cr <- getClusterRelatedness(lc, hcmethod = "ward")
 
+cc <- getCommunityCentrality(lc)
+head(sort(cc, decreasing = TRUE))
 
-
+oc <- getOCG.clusters(drug_interactions)  # sub(' ', '_', drug_interactions[,2], fixed = TRUE) 
+# sub(' ', '', drug_interactions[,2], fixed = TRUE)
+# drug_interactions <- gsub(' ', '_', drug_interactions[,1])
 
 
