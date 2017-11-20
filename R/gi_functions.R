@@ -11,6 +11,7 @@ library(igraph)
 library(ROCR)
 library(VennDiagram)
 library(ggplot2)
+library(linkcomm)
 
 ## --------------------- FUNCTION DEFINITIONS -----------------------
 
