@@ -12,6 +12,9 @@ library(ROCR)
 library(VennDiagram)
 library(ggplot2)
 library(linkcomm)
+library(clusterProfiler)
+library(org.Hs.eg.db)
+keytypes(org.Hs.eg.db)
 
 ## --------------------- FUNCTION DEFINITIONS -----------------------
 
@@ -256,13 +259,38 @@ print_tables <- function(){
   tli.table <- xtable(filter(drug_list, MeSH == "C06.405"))
   print(tli.table,floating=FALSE)
   
-  tli.table <- xtable(filter(gene_list, MeSH == "C06.405"))
+  tli.table <- xtable(filter(gene_list, diseaseId == "C0017178"))
   print(tli.table,floating=FALSE)
   
 }
 
+# goanalysis() will enrich a gene with GO terms
+# depends on clusterprofiler library and several other things...
+goanalysis <- function(yourgenes){
+  eg = bitr(yourgenes, fromType="SYMBOL", toType="ENTREZID", OrgDb="org.Hs.eg.db")
+  #head(eg)
+  
+  ego <- enrichGO(gene          = eg[,2],
+                  #universe      = names(geneList),
+                  OrgDb         = org.Hs.eg.db,
+                  ont           = "CC", # one of CC, BP or MF
+                  pAdjustMethod = "BH",
+                  pvalueCutoff  = 0.01,
+                  qvalueCutoff  = 0.05,
+                  readable      = TRUE)
+  
+  return(ego)
+}
 
+# KEGG over-representation test
+kegganalysis <- function(yourgenes){
+  eg = bitr(yourgenes, fromType="SYMBOL", toType="ENTREZID", OrgDb="org.Hs.eg.db")
+  kk <- enrichKEGG(gene         = eg[,2],
+                   organism     = 'hsa',
+                   pvalueCutoff = 0.05)
 
+  return(kk)
+}
 
 
 
