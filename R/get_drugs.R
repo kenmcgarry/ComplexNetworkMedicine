@@ -92,19 +92,37 @@ drug_interactions <- drug_interactions[,1:2]
 
 ##################################################################
 # Using LINKCOMM to detect disease modules
+# 1. drug modules
+# 2. 1st shell gene modules
+# 3. 2nd shell gene modules
+
 
 lc <- getLinkCommunities(drug_interactions, hcmethod = "single")
 print(lc)
+head(lc$numclusters)
+
 plot(lc, type = "graph", layout = layout.fruchterman.reingold)
 plot(lc, type = "graph", shownodesin = 2, node.pies = TRUE)
 plot(lc, type = "summary")
-cr <- getClusterRelatedness(lc, hcmethod = "ward")
+
+cr <- getClusterRelatedness(lc, hcmethod = "ward.D")
+
+mc <- meta.communities(lc, hcmethod = "ward.D", deepSplit = 0)
 
 cc <- getCommunityCentrality(lc)
 head(sort(cc, decreasing = TRUE))
 
+cm <- getCommunityConnectedness(lc, conn = "modularity")
+plot(lc, type = "commsumm", summary = "modularity")
+
 oc <- getOCG.clusters(drug_interactions)  # sub(' ', '_', drug_interactions[,2], fixed = TRUE) 
 # sub(' ', '', drug_interactions[,2], fixed = TRUE)
 # drug_interactions <- gsub(' ', '_', drug_interactions[,1])
+
+
+
+
+
+
 
 
