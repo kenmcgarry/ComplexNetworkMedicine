@@ -4,7 +4,7 @@
 library(dplyr) # majority of packages are loaded in by gi_functions.R
 
 setwd("C:/R-files/disease")    # point to where my code lives
-load("C06disease-20thNov2017.RData") # load in required data - the contents will change regulary
+load("C06disease-22ndNov2017.RData") # load in required data - the contents will change regulary
 source("gi_functions.R")  # load in the functions required for finding lists of drugs 
 
 # Work with following dataframes: indications; mappings; digestive; disgene; 
@@ -104,23 +104,38 @@ head(lc$numclusters)
 plot(lc, type = "graph", layout = layout.fruchterman.reingold)
 plot(lc, type = "graph", shownodesin = 2, node.pies = TRUE)
 plot(lc, type = "summary")
+plot(lc, type = "con")
+
 
 cr <- getClusterRelatedness(lc, hcmethod = "ward.D")
-
 mc <- meta.communities(lc, hcmethod = "ward.D", deepSplit = 0)
-
 cc <- getCommunityCentrality(lc)
+cm <- getCommunityConnectedness(lc, conn = "modularity")
+
 head(sort(cc, decreasing = TRUE))
 
-cm <- getCommunityConnectedness(lc, conn = "modularity")
 plot(lc, type = "commsumm", summary = "modularity")
+plot(lc, type = "commsumm", summary = "con")
+
+
+# matrix plot
+plotLinkCommMembers(lc, nodes = head(names(lc$numclusters), 20),
+                    pal = brewer.pal(11, "Spectral"), shape = "rect", total = TRUE,
+                    fontsize = 11, nspace = 3.5, maxclusters = 20)
+
+
 
 oc <- getOCG.clusters(drug_interactions)  # sub(' ', '_', drug_interactions[,2], fixed = TRUE) 
 # sub(' ', '', drug_interactions[,2], fixed = TRUE)
 # drug_interactions <- gsub(' ', '_', drug_interactions[,1])
 
+##################################################################
+## GO and KEGG enrichment
+goa <- go_analysis(shell2_genes)
+barplot(goa, drop=TRUE, showCategory=12)
 
-
+kega <- kegg_analysis(shell2_genes)
+barplot(kega, drop=TRUE, showCategory=12)
 
 
 
