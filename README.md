@@ -23,4 +23,4 @@ covering disease-disease relationships through the incomplete human interactome,
 > Vidal, M., Cusick, M. and Barabasi, A. [2011], Interactome networks and human disease, Cell
 144(6), 986-998.
 
-## Project updated 19th November 2017
+## Project updated 23rd November 2017
