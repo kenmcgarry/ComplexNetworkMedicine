@@ -1,11 +1,12 @@
 # get_drugs.R
-# Ken McGarry updated: 15/11/17
+# Ken McGarry updated: 23/11/17
 
 library(dplyr) # majority of packages are loaded in by gi_functions.R
 
 setwd("C:/R-files/disease")    # point to where my code lives
 load("C06disease-22ndNov2017.RData") # load in required data - the contents will change regulary
 source("gi_functions.R")  # load in the functions required for finding lists of drugs 
+source("gi_run.R")   # some routine code
 
 # Work with following dataframes: indications; mappings; digestive; disgene; 
 # save(disease_umls,indications,restrictedlist,mappings,digestive,disgene,gene_list,drug_list,simMA,fpdrugs,drugnames,drugids, file = "C06disease-17thNov2017.RData")
