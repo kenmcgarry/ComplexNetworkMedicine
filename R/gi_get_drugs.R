@@ -87,7 +87,7 @@ drug_interactions <- read.csv("C:\\R-files\\disease\\drug_interactions.csv",stri
 drug_interactions <- drug_interactions[,1:2]
 
 # load 1st shell interactions
-shell1_interactions <- read.csv("C:\\R-files\\disease\\shell2_genes_low.csv",stringsAsFactors = FALSE)  #important to make stringsAsFact false
+shell1_interactions <- read.csv("C:\\R-files\\disease\\C06-shell1-low.csv",stringsAsFactors = FALSE)  #important to make stringsAsFact false
 shell1_interactions <- shell1_interactions[,1:2]
 
 # load 1st shell interactions
@@ -103,18 +103,28 @@ shell2_interactions <- shell2_interactions[,1:2]
 # 2. 1st shell gene modules
 # 3. 2nd shell gene modules
 
-
-
+d1 <- getLinkCommunities(drug_interactions, hcmethod = "single")
+s1 <- getLinkCommunities(shell1_interactions, hcmethod = "single")
 s2 <- getLinkCommunities(shell2_interactions, hcmethod = "single")
+
 print(s2)
 head(s2$numclusters)
 plot(s2, type = "graph", shownodesin = 2, node.pies = TRUE)
 plot(s2, type = "summary")
 oc <- getOCG.clusters(shell2_interactions) 
 plot(oc, type = "graph", shownodesin = 7, scale.vertices = 0.1)
+cent <- getCommunityCentrality(s2)
+plot(cc)
+
+cmd1 <- getCommunityConnectedness(d1, conn = "modularity")
+ccd1 <- getCommunityConnectedness(d1, conn = "conn")
+cm1 <- getCommunityConnectedness(s1, conn = "modularity")
+cc1 <- getCommunityConnectedness(s1, conn = "conn")
+cm2 <- getCommunityConnectedness(s2, conn = "modularity")
+cc2 <- getCommunityConnectedness(s2, conn = "conn")
 
 # matrix plot
-plotLinkCommMembers(s2, nodes = head(names(lc$numclusters), 20),
+plotLinkCommMembers(s1, nodes = head(names(lc$numclusters), 20),
                     pal = brewer.pal(11, "Spectral"), shape = "rect", total = TRUE,
                     fontsize = 11, nspace = 3.5, maxclusters = 20)
 
@@ -128,7 +138,7 @@ plot(lc, type = "con")
 
 cr <- getClusterRelatedness(lc, hcmethod = "ward.D")
 mc <- meta.communities(lc, hcmethod = "ward.D", deepSplit = 0)
-cc <- getCommunityCentrality(lc)
+cent <- getCommunityCentrality(s2)
 cm <- getCommunityConnectedness(lc, conn = "modularity")
 
 head(sort(cc, decreasing = TRUE))
