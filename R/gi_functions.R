@@ -1,4 +1,5 @@
 # gi_functions.R
+library(dplyr) 
 library(ChemmineR)
 library(ChemmineOB)
 library(ape)
@@ -266,7 +267,8 @@ print_tables <- function(){
 
 # goanalysis() will enrich a gene with GO terms
 # depends on clusterprofiler library and several other things...
-goanalysis <- function(yourgenes){
+# http://www.bioconductor.org/packages/release/bioc/vignettes/clusterProfiler/inst/doc/clusterProfiler.html#go-analysis
+go_analysis <- function(yourgenes){
   eg = bitr(yourgenes, fromType="SYMBOL", toType="ENTREZID", OrgDb="org.Hs.eg.db")
   #head(eg)
   
@@ -282,8 +284,9 @@ goanalysis <- function(yourgenes){
   return(ego)
 }
 
+
 # KEGG over-representation test
-kegganalysis <- function(yourgenes){
+kegg_analysis <- function(yourgenes){
   eg = bitr(yourgenes, fromType="SYMBOL", toType="ENTREZID", OrgDb="org.Hs.eg.db")
   kk <- enrichKEGG(gene         = eg[,2],
                    organism     = 'hsa',
