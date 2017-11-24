@@ -16,7 +16,7 @@ plot(d1$pdens,
 
 # This plot is for the Community Connectedness Versus Community Modularity
 # assumes LinkComm has been used to create S2 structure
-plot(cm1,cc1,
+plot(cmd1,ccd1,
      xlab="Community modularity",
      ylab="Community connectedness",
      lty=1,
