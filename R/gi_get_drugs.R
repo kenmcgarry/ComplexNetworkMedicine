@@ -183,18 +183,18 @@ barplot(goa, drop=TRUE, showCategory=20)
 kega <- kegg_analysis(shell2_genes)
 barplot(kega, drop=TRUE, showCategory=20)
 
-
 # Tables for paper. 
 tempgoa <- head(goa,row.names=FALSE)
 tempgoa <- tempgoa[,1:5]
 print(xtable(tempgoa, display=c("s","s","s","s","s","g")), math.style.exponents = TRUE,include.rownames = FALSE)
 
-
 tempkega <- tail(kega,row.names=FALSE)
 tempkega <- tempkega[,1:5]
 print(xtable(tempkega, display=c("s","s","s","s","s","g")), math.style.exponents = TRUE,include.rownames = FALSE)
 
-rm(goa,kega)
+
+
+rm(goa,kega,tli.table)
 
 
 
