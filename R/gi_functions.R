@@ -269,14 +269,14 @@ print_tables <- function(){
 # goanalysis() will enrich a gene with GO terms
 # depends on clusterprofiler library and several other things...
 # http://www.bioconductor.org/packages/release/bioc/vignettes/clusterProfiler/inst/doc/clusterProfiler.html#go-analysis
-go_analysis <- function(yourgenes){
+go_analysis <- function(yourgenes,ontotype){
   eg = bitr(yourgenes, fromType="SYMBOL", toType="ENTREZID", OrgDb="org.Hs.eg.db")
   #head(eg)
   
   ego <- enrichGO(gene          = eg[,2],
                   #universe      = names(geneList),
                   OrgDb         = org.Hs.eg.db,
-                  ont           = "CC", # one of CC, BP or MF
+                  ont           = ontotype, # one of CC, BP or MF
                   pAdjustMethod = "BH",
                   pvalueCutoff  = 0.01,
                   qvalueCutoff  = 0.05,
@@ -297,5 +297,30 @@ kegg_analysis <- function(yourgenes){
 }
 
 
+# getDiseaseModules() pass it the linkcomm structure, the appropriate data will be
+# converted into a dataframe - ready to be passed to GO enrichment functions before
+# sending it to GObubble for analysis and display.
+getDiseaseModules <- function(linkdata){
+  category <- c("MF","BP","CC")
+  enrich <- c("GO:0017091", "AU-rich element binding","1/1", "23/16982", "0.001354375","RU12","FU")
+    
+  for (i in 1:5){#linkdata$clusters){
+    items <- getNodesIn(linkdata, clusterids = i)
+    for (k in 1:length(items)){
+      for (j in 1:length(category)){
+        temp_enrich <- go_analysis(items[i],category[j])
+          if(nrow(temp_enrich)>0){
+            temp_enrich <- temp_enrich[,c(1:5,8)]
+            temp_enrich[,7] <- category[j]
+            enrich <- rbind(enrich,temp_enrich)}
+      }
+    }
+  }
+  
+  # Fix the dataframe, add z-score, rename V7
+  # qnorm(1 - (pval/2)) # convert p-value into z-score
+  
+  return(DM)
+}
 
 
