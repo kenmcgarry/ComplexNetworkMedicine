@@ -302,17 +302,18 @@ kegg_analysis <- function(yourgenes){
 # sending it to GObubble for analysis and display.
 getDiseaseModules <- function(linkdata){
   category <- c("MF","BP","CC")
-  enrich <- c("GO:0017091", "AU-rich element binding","1/1", "23/16982", "0.001354375","RU12","FU")
+  enrich <- c("GO:0017091", "AU-rich element binding","1/1", "23/16982", "0.001354375","RU12","FU",99)
     
-  for (i in 1:5){#linkdata$clusters){
+  for (i in 1:2){#linkdata$clusters){        # i=num of disease modules
     items <- getNodesIn(linkdata, clusterids = i)
-    for (k in 1:length(items)){
-      for (j in 1:length(category)){
-        temp_enrich <- go_analysis(items[i],category[j])
-          if(nrow(temp_enrich)>0){
-            temp_enrich <- temp_enrich[,c(1:5,8)]
-            temp_enrich[,7] <- category[j]
-            enrich <- rbind(enrich,temp_enrich)}
+    for (k in 1:length(items)){              # k=num genes in disease module
+      for (j in 1:length(category)){  # enrich from MF, BP and CC
+        temp_enrich <- go_analysis(items[k],category[j])
+        if(!is.null(temp_enrich) || nrow(temp_enrich)>0){
+          temp_enrich <- temp_enrich[,c(1:5,8)]
+          temp_enrich[,7] <- category[j]       # add the category e.g MF
+          temp_enrich[,8] <- i              # add the disease module number (i.e. cluster number)
+          enrich <- rbind(enrich,temp_enrich)}
       }
     }
   }
@@ -320,7 +321,7 @@ getDiseaseModules <- function(linkdata){
   # Fix the dataframe, add z-score, rename V7
   # qnorm(1 - (pval/2)) # convert p-value into z-score
   
-  return(DM)
+  return(enrich)
 }
 
 
