@@ -114,14 +114,33 @@ plot(s2, type = "summary")
 oc <- getOCG.clusters(shell2_interactions) 
 plot(oc, type = "graph", shownodesin = 7, scale.vertices = 0.1)
 cent <- getCommunityCentrality(s2)
-plot(cc)
+plot(cent)
 
-cmd1 <- getCommunityConnectedness(d1, conn = "modularity")
-ccd1 <- getCommunityConnectedness(d1, conn = "conn")
-cm1 <- getCommunityConnectedness(s1, conn = "modularity")
-cc1 <- getCommunityConnectedness(s1, conn = "conn")
-cm2 <- getCommunityConnectedness(s2, conn = "modularity")
-cc2 <- getCommunityConnectedness(s2, conn = "conn")
+plot_pdens(d1$pdens)
+plot_pdens(s1$pdens)
+plot_pdens(s2$pdens)
+
+commod <- getCommunityConnectedness(d1, conn = "modularity")
+comcon<- getCommunityConnectedness(d1, conn = "conn")
+plot_com(commod,comcon)
+
+commod <- getCommunityConnectedness(s1, conn = "modularity")
+comcon<- getCommunityConnectedness(s1, conn = "conn")
+plot_com(commod,comcon)
+
+commod <- getCommunityConnectedness(s2, conn = "modularity")
+comcon<- getCommunityConnectedness(s2, conn = "conn")
+plot_com(commod,comcon)
+
+cent <- getCommunityCentrality(d1)
+plot_centrality(cent,"drug index")
+
+cent <- getCommunityCentrality(s1)
+plot_centrality(cent,"gene index")
+
+cent <- getCommunityCentrality(s2)
+plot_centrality(cent,"gene index")
+
 
 # matrix plot
 plotLinkCommMembers(s1, nodes = head(names(lc$numclusters), 20),
@@ -163,6 +182,24 @@ barplot(goa, drop=TRUE, showCategory=20)
 
 kega <- kegg_analysis(shell2_genes)
 barplot(kega, drop=TRUE, showCategory=20)
+
+
+# Tables for paper. 
+tempgoa <- head(goa,row.names=FALSE)
+tempgoa <- tempgoa[,1:5]
+print(xtable(tempgoa, display=c("s","s","s","s","s","g")), math.style.exponents = TRUE,include.rownames = FALSE)
+
+
+tempkega <- tail(kega,row.names=FALSE)
+tempkega <- tempkega[,1:5]
+print(xtable(tempkega, display=c("s","s","s","s","s","g")), math.style.exponents = TRUE,include.rownames = FALSE)
+
+rm(goa,kega)
+
+
+
+
+
 
 
 
