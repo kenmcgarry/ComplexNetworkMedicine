@@ -16,6 +16,7 @@ library(linkcomm)
 library(clusterProfiler)
 library(org.Hs.eg.db)
 keytypes(org.Hs.eg.db)
+library(GOplot)
 
 ## --------------------- FUNCTION DEFINITIONS -----------------------
 
