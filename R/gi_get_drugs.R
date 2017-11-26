@@ -4,7 +4,7 @@
 # packages are loaded in by gi_functions.R
 
 setwd("C:/R-files/disease")    # point to where my code lives
-load("C06disease-22ndNov2017.RData") # load in required data - the contents will change regulary
+load("C06disease-25thNov2017.RData") # load in required data - the contents will change regulary
 source("gi_functions.R")  # load in the functions required for finding lists of drugs 
 source("gi_run.R")   # some routine code to load in.
 
@@ -106,6 +106,13 @@ shell2_interactions <- shell2_interactions[,1:2]
 d1 <- getLinkCommunities(drug_interactions, hcmethod = "single")
 s1 <- getLinkCommunities(shell1_interactions, hcmethod = "single")
 s2 <- getLinkCommunities(shell2_interactions, hcmethod = "single")
+
+d1mods <- getDiseaseModules(d1)
+s1mods <- getDiseaseModules(s1)
+s2mods <- getDiseaseModules(s2)
+
+
+
 
 print(s2)
 head(s2$numclusters)

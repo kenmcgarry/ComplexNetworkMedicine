@@ -309,7 +309,7 @@ getDiseaseModules <- function(linkdata){
     for (k in 1:length(items)){              # k=num genes in disease module
       for (j in 1:length(category)){  # enrich from MF, BP and CC
         temp_enrich <- go_analysis(items[k],category[j])
-        if(!is.null(temp_enrich) || nrow(temp_enrich)>0){
+        if(!is.null(temp_enrich) && nrow(temp_enrich)>0){
           temp_enrich <- temp_enrich[,c(1:5,8)]
           temp_enrich[,7] <- category[j]       # add the category e.g MF
           temp_enrich[,8] <- i              # add the disease module number (i.e. cluster number)
@@ -318,9 +318,21 @@ getDiseaseModules <- function(linkdata){
     }
   }
   
-  # Fix the dataframe, add z-score, rename V7
-  # qnorm(1 - (pval/2)) # convert p-value into z-score
-  
+  # Fix the dataframe: add z-score, rename V7, add disease module number
+  # To match what GOplot i.e. GObubble expects to find
+  names(enrich)[names(enrich)=="Description"] <- "term"
+  names(enrich)[names(enrich)=="pvalue"] <- "adj_pval"
+  names(enrich)[names(enrich)=="V7"] <- "category"
+  names(enrich)[names(enrich)=="V8"] <- "DiseaseModule"
+  names(enrich)[names(enrich)=="geneID"] <- "genes"
+  # convert p-value into "zscore", rename "pvalue" to "adj_pval" 
+  namevector <- "zscore"
+  enrich[ , namevector] <- qnorm(1 - (adj_pval/2))
+  namevector <- "logFC"
+  enrich[ , namevector] <- qnorm(1 - (adj_pval/2))
+  namevector <- "count"
+  enrich[ , namevector] <- 0  # Number genes attached to this term.
+
   return(enrich)
 }
 
