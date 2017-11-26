@@ -331,9 +331,21 @@ getDiseaseModules <- function(linkdata){
   namevector <- "logFC"
   enrich[ , namevector] <- qnorm(1 - (adj_pval/2))
   namevector <- "count"
-  enrich[ , namevector] <- 0  # Number genes attached to this term.
+  enrich[ , namevector] <- 0  # Number of genes attached to this term.
+  
+  enrich <- enrich[-1, ]     # 1st entry is rubbish so remove it
+  # How many terms do we have for each disease module?
+  countn <- unique(enrich$DiseaseModule) # How many disease modules are there?
+  for (j in 1:length(countn)){
+    temp_enrich <- filter(enrich,DiseaseModule == (countn[j]))
+    nterm <- unique(enrich$term)
+    filter(enrich,term == "heart development")
+  }
 
   return(enrich)
 }
+
+
+#  tempy <- filter(mappings, umls == tempx)
 
 
