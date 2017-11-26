@@ -327,19 +327,25 @@ getDiseaseModules <- function(linkdata){
   names(enrich)[names(enrich)=="geneID"] <- "genes"
   # convert p-value into "zscore", rename "pvalue" to "adj_pval" 
   namevector <- "zscore"
-  enrich[ , namevector] <- qnorm(1 - (adj_pval/2))
+  enrich[ , namevector] <- qnorm(1 - as.numeric(enrich$adj_pval)/2)
   namevector <- "logFC"
-  enrich[ , namevector] <- qnorm(1 - (adj_pval/2))
+  enrich[ , namevector] <- qnorm(1 - as.numeric(enrich$adj_pval)/2)
   namevector <- "count"
   enrich[ , namevector] <- 0  # Number of genes attached to this term.
+  enrich$adj_pval <- as.numeric(enrich$adj_pval)
   
   enrich <- enrich[-1, ]     # 1st entry is rubbish so remove it
-  # How many terms do we have for each disease module?
+  # Set "count" for each term
   countn <- unique(enrich$DiseaseModule) # How many disease modules are there?
   for (j in 1:length(countn)){
     temp_enrich <- filter(enrich,DiseaseModule == (countn[j]))
-    nterm <- unique(enrich$term)
-    filter(enrich,term == "heart development")
+    nterm <- unique(temp_enrich$term) # How many unique terms do we have for this disease module?
+    for (k in 1:length(nterm)){
+      tcount <- nrow(filter(enrich,term == nterm[k]))
+      enrich %>%
+        mutate(count=replace(count, (term ==nterm[k] && DiseaseModule == j),tcount ))
+      }
+    
   }
 
   return(enrich)

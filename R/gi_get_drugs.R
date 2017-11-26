@@ -199,7 +199,9 @@ tempkega <- tail(kega,row.names=FALSE)
 tempkega <- tempkega[,1:5]
 print(xtable(tempkega, display=c("s","s","s","s","s","g")), math.style.exponents = TRUE,include.rownames = FALSE)
 
-GOBubble(tempgoa, labels = 3)
+dismods <- getDiseaseModules(s2)
+dismods <- dplyr::select(enrich,category,ID,term,count,genes,logFC,adj_pval,zscore)
+GOBubble(dismods, labels = 3)
 
 rm(goa,kega,tli.table,EC)
 
