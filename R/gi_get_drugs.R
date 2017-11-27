@@ -4,7 +4,7 @@
 # packages are loaded in by gi_functions.R
 
 setwd("C:/R-files/disease")    # point to where my code lives
-load("C06disease-27thNov2017.RData") # load in required data - the contents will change regulary
+load("C06disease-27thNov-pm-2017.RData") # load in required data - the contents will change regulary
 source("gi_functions.R")  # load in the functions required for finding lists of drugs 
 source("gi_run.R")   # some routine code to load in.
 
@@ -200,10 +200,11 @@ tempkega <- tempkega[,1:5]
 print(xtable(tempkega, display=c("s","s","s","s","s","g")), math.style.exponents = TRUE,include.rownames = FALSE)
 
 dismods <- getDiseaseModules(s2)
-#dismods <- enrich
+enrich <- dismods
+
 dismods <- dplyr::select(enrich,category,ID,term,count,genes,logFC,adj_pval,zscore)
 GOBubble(dismods, labels = 3)
-GOBubble(circ, labels = 3)
+# GOBubble(circ, labels = 3)
 #rm(goa,kega,tli.table,EC)
 
 
