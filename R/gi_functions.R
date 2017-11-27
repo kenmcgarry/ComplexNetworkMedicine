@@ -303,8 +303,11 @@ kegg_analysis <- function(yourgenes){
 getDiseaseModules <- function(linkdata){
   category <- c("MF","BP","CC")
   enrich <- c("GO:0017091", "AU-rich element binding","1/1", "23/16982", "0.001354375","RU12","FU",99)
+  
+  # remove modules with fewer than 20 genes - as per Menche 2015 paper
+  linkdata$clusters <- Filter(function(x)length(x) > 20, linkdata$clusters)
     
-  for (i in 1:2){#linkdata$clusters){        # i=num of disease modules
+  for (i in 1:length(linkdata$clusters)){        # i=num of disease modules
     items <- getNodesIn(linkdata, clusterids = i)
     for (k in 1:length(items)){              # k=num genes in disease module
       for (j in 1:length(category)){  # enrich from MF, BP and CC
@@ -329,7 +332,7 @@ getDiseaseModules <- function(linkdata){
   namevector <- "zscore"
   enrich[ , namevector] <- qnorm(1 - as.numeric(enrich$adj_pval)/2)
   namevector <- "logFC"
-  enrich[ , namevector] <- qnorm(1 - as.numeric(enrich$adj_pval)/2)
+  enrich[ , namevector] <- runif(nrow(enrich), -2, 3)#10#qnorm(1 - as.numeric(enrich$adj_pval)/2)
   namevector <- "count"
   enrich[ , namevector] <- 0  # Number of genes attached to this term.
   enrich$adj_pval <- as.numeric(enrich$adj_pval)
@@ -342,9 +345,8 @@ getDiseaseModules <- function(linkdata){
     nterm <- unique(temp_enrich$term) # How many unique terms do we have for this disease module?
     for (k in 1:length(nterm)){
       tcount <- nrow(filter(enrich,term == nterm[k]))
-      enrich %>%
-        mutate(count=replace(count, (term ==nterm[k] && DiseaseModule == j),tcount ))
-      }
+      enrich$count[enrich$term == nterm[k] & enrich$DiseaseModule == j] <- tcount
+    }
     
   }
 
