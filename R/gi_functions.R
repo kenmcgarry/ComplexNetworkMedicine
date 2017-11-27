@@ -17,6 +17,7 @@ library(clusterProfiler)
 library(org.Hs.eg.db)
 keytypes(org.Hs.eg.db)
 library(GOplot)
+library(scales)
 
 ## --------------------- FUNCTION DEFINITIONS -----------------------
 
@@ -306,7 +307,8 @@ getDiseaseModules <- function(linkdata){
   
   # remove modules with fewer than 20 genes - as per Menche 2015 paper
   linkdata$clusters <- Filter(function(x)length(x) > 20, linkdata$clusters)
-    
+  return(linkdata) 
+   
   for (i in 1:length(linkdata$clusters)){        # i=num of disease modules
     items <- getNodesIn(linkdata, clusterids = i)
     for (k in 1:length(items)){              # k=num genes in disease module
