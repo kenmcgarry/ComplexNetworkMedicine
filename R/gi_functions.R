@@ -356,6 +356,17 @@ getDiseaseModules <- function(linkdata){
 }
 
 
-#  tempy <- filter(mappings, umls == tempx)
+# create_dm_table() will generate the latex stuff based on annoations and ranking 
+# methods to create the disease module table for the paper.
+
+
+
+
+
+
+
+
+
+
 
 
