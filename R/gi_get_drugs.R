@@ -5,7 +5,7 @@
 # Packages are loaded in by gi_functions.R
 
 setwd("C:/R-files/disease")    # point to where my code lives
-load("C06disease-29thNov-am-2017.RData") # load in required data - the contents will change regulary
+load("C06disease-29thNov-pm-2017.RData") # load in required data - the contents will change regulary
 source("gi_functions.R")  # load in the functions required for finding lists of drugs 
 source("gi_run.R")   # some routine code to load in.
 source("gi_plots.R")
@@ -197,12 +197,12 @@ print(xtable(tempkega, display=c("s","s","s","s","s","g")), math.style.exponents
 
 
 # Annotate the SHELL 1, disease modules with GO terms
-dismods1 <- getDiseaseModules(s1)  # crashed out after 8 hours on full dataset
+dismods1_temp2 <- getDiseaseModules(s1)  # crashed out after 8 hours on full dataset
 enrich1 <- dismods1  # Keep a copy of full data, as GOBubble only uses a subset of it
 dismods1 <- dplyr::select(enrich1,category,ID,term,count,genes,logFC,adj_pval,zscore)
 
 # Annotate the SHELL 2, disease modules with GO terms
-dismods2 <- getDiseaseModules(s2)
+dismods2 <- getDiseaseModules(s2) # SHIT HAPPENS - FIND OUT WHERE BAD NAME OCCURS
 enrich2 <- dismods2  # Keep a copy of full data, as GOBubble only uses a subset of it
 dismods2 <- dplyr::select(enrich2,category,ID,term,count,genes,logFC,adj_pval,zscore)
 

@@ -273,7 +273,7 @@ print_tables <- function(){
 go_analysis <- function(yourgenes,ontotype){
   eg = bitr(yourgenes, fromType="SYMBOL", toType="ENTREZID", OrgDb="org.Hs.eg.db")
   #head(eg)
-  
+  cat("\n",eg[,2]," ",yourgenes)
   ego <- enrichGO(gene          = eg[,2],
                   #universe      = names(geneList),
                   OrgDb         = org.Hs.eg.db,
@@ -311,7 +311,7 @@ getDiseaseModules <- function(linkdata){
   #return(linkdata) 
   
   #for (i in 1:length(linkdata$clusters)){        # i=num of disease modules 
-  for (i in 1:10){        # i=num of disease modules
+  for (i in 21:25){        # i=num of disease modules
     items <- getNodesIn(linkdata, clusterids = i)
     for (k in 1:length(items)){              # k=num genes in disease module
       for (j in 1:length(category)){  # enrich from MF, BP and CC
