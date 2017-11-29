@@ -307,9 +307,11 @@ getDiseaseModules <- function(linkdata){
   
   # remove modules with fewer than 20 genes - as per Menche 2015 paper
   linkdata$clusters <- Filter(function(x)length(x) > 20, linkdata$clusters)
-  return(linkdata) 
-   
-  for (i in 1:length(linkdata$clusters)){        # i=num of disease modules
+  cat("\nFound ",length(linkdata$clusters), " usable modules.")
+  #return(linkdata) 
+  
+  #for (i in 1:length(linkdata$clusters)){        # i=num of disease modules 
+  for (i in 1:10){        # i=num of disease modules
     items <- getNodesIn(linkdata, clusterids = i)
     for (k in 1:length(items)){              # k=num genes in disease module
       for (j in 1:length(category)){  # enrich from MF, BP and CC
@@ -356,9 +358,20 @@ getDiseaseModules <- function(linkdata){
 }
 
 
-# create_dm_table() will generate the latex stuff based on annoations and ranking 
-# methods to create the disease module table for the paper.
+# print_dm_table() will generate the latex stuff based on annoations and ranking 
+# methods to create the disease module table for the paper, containing:
+#   C06/DX0 numbers
+#   GO enrichment counts
+#   KEGG enrichment counts
+#   Biological plausibility ranking
+#   Current drugs / DX0 drug reposition candidates
+#   components/complexity
 
+print_dm_table <- function(){
+  
+  
+  
+}
 
 
 
