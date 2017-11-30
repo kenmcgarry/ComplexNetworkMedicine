@@ -271,9 +271,9 @@ print_tables <- function(){
 # depends on clusterprofiler library and several other things...
 # http://www.bioconductor.org/packages/release/bioc/vignettes/clusterProfiler/inst/doc/clusterProfiler.html#go-analysis
 go_analysis <- function(yourgenes,ontotype){
+  cat("\n",yourgenes)
   eg = bitr(yourgenes, fromType="SYMBOL", toType="ENTREZID", OrgDb="org.Hs.eg.db")
-  #head(eg)
-  cat("\n",eg[,2]," ",yourgenes)
+  
   ego <- enrichGO(gene          = eg[,2],
                   #universe      = names(geneList),
                   OrgDb         = org.Hs.eg.db,
@@ -310,9 +310,15 @@ getDiseaseModules <- function(linkdata){
   cat("\nFound ",length(linkdata$clusters), " usable modules.")
   #return(linkdata) 
   
-  #for (i in 1:length(linkdata$clusters)){        # i=num of disease modules 
-  for (i in 21:25){        # i=num of disease modules
+  #for (i in 1:length(linkdata$clusters)){        # i=num of disease modules
+  indexstart<- 30 ; indexend <- 31;
+  temp_i <- vector(mode="integer", length=indexend-indexstart);
+  z <-1
+  
+  for (i in indexstart:indexend){        # i=num of disease modules
     items <- getNodesIn(linkdata, clusterids = i)
+    temp_i[z] <- i
+    z <- z +1
     for (k in 1:length(items)){              # k=num genes in disease module
       for (j in 1:length(category)){  # enrich from MF, BP and CC
         temp_enrich <- go_analysis(items[k],category[j])
@@ -340,22 +346,32 @@ getDiseaseModules <- function(linkdata){
   namevector <- "count"
   enrich[ , namevector] <- 0  # Number of genes attached to this term.
   enrich$adj_pval <- as.numeric(enrich$adj_pval)
-  
   enrich <- enrich[-1, ]     # 1st entry is rubbish so remove it
+ 
   # Set "count" for each term
-  countn <- unique(enrich$DiseaseModule) # How many disease modules are there?
-  for (j in 1:length(countn)){
-    temp_enrich <- filter(enrich,DiseaseModule == (countn[j]))
-    nterm <- unique(temp_enrich$term) # How many unique terms do we have for this disease module?
-    for (k in 1:length(nterm)){
-      tcount <- nrow(filter(enrich,term == nterm[k]))
-      enrich$count[enrich$term == nterm[k] & enrich$DiseaseModule == j] <- tcount
-    }
-    
-  }
+  enrich <- setcount(enrich,temp_i)
 
   return(enrich)
 }
+
+# setcount() gets a count of the terms assigned to each disease module.
+setcount <- function(dms,ind){
+  #countn <- unique(dms$DiseaseModule) # How many disease modules are there?
+  countn <- length(ind) # How many disease modules are there? based on index range?
+  cat("\nThere are ",countn," disease modules..numbered from",ind)
+  for (j in 1:length(countn)){
+    cat("\nJ is now",j)
+    temp_dms <- filter(dms,DiseaseModule == (ind[j]))
+    nterm <- unique(temp_dms$term) # How many unique terms do we have for this disease module?
+    for (k in 1:length(nterm)){
+      tcount <- nrow(filter(dms,term == nterm[k]))
+      dms$count[dms$term == nterm[k] & dms$DiseaseModule == (ind[j])] <- tcount
+      cat("\nFor DM",ind[j]," tcount is ",tcount)
+    }
+  }
+  
+  return(dms)
+} 
 
 
 # print_dm_table() will generate the latex stuff based on annoations and ranking 
@@ -368,7 +384,15 @@ getDiseaseModules <- function(linkdata){
 #   components/complexity
 
 print_dm_table <- function(){
-  
+  countn <- unique(enrich$DiseaseModule) # How many disease modules are there?
+  for (j in 1:length(countn)){
+    temp_enrich <- filter(enrich,DiseaseModule == (countn[j]))
+    nterm <- unique(temp_enrich$term) # How many unique terms do we have for this disease module?
+    for (k in 1:length(nterm)){
+      tcount <- nrow(filter(enrich,term == nterm[k]))
+      enrich$count[enrich$term == nterm[k] & enrich$DiseaseModule == j] <- tcount
+    }
+  }
   
   
 }

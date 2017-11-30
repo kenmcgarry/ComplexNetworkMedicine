@@ -197,12 +197,12 @@ print(xtable(tempkega, display=c("s","s","s","s","s","g")), math.style.exponents
 
 
 # Annotate the SHELL 1, disease modules with GO terms
-dismods1_temp2 <- getDiseaseModules(s1)  # crashed out after 8 hours on full dataset
+dismods1_temp4 <- getDiseaseModules(s1)  # crashed out after 8 hours on full dataset
 enrich1 <- dismods1  # Keep a copy of full data, as GOBubble only uses a subset of it
 dismods1 <- dplyr::select(enrich1,category,ID,term,count,genes,logFC,adj_pval,zscore)
 
 # Annotate the SHELL 2, disease modules with GO terms
-dismods2 <- getDiseaseModules(s2) # SHIT HAPPENS - FIND OUT WHERE BAD NAME OCCURS
+dismods2 <- getDiseaseModules(s2) # 
 enrich2 <- dismods2  # Keep a copy of full data, as GOBubble only uses a subset of it
 dismods2 <- dplyr::select(enrich2,category,ID,term,count,genes,logFC,adj_pval,zscore)
 
@@ -215,8 +215,6 @@ GOBubble(reduced_dismods2, labels = 2, ID=TRUE)                                #
 reduced_dismods1 <- reduce_overlap(dismods1, overlap = 2)
 reduced_dismods1$zscore <- runif(length(reduced_dismods1$zscore), -3.0, 2.5) # bit of a fiddle this..but
 GOBubble(sample_n(reduced_dismods1,50), labels = 2, ID=TRUE)                    # but need to spread out bubbles
-
-
 
 
 
