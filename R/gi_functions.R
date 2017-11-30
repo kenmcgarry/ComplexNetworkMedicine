@@ -301,17 +301,28 @@ kegg_analysis <- function(yourgenes){
 # getDiseaseModules() pass it the linkcomm structure, the appropriate data will be
 # converted into a dataframe - ready to be passed to GO enrichment functions before
 # sending it to GObubble for analysis and display.
-getDiseaseModules <- function(linkdata){
+getDiseaseModules <- function(linkdata,batch){
   category <- c("MF","BP","CC")
   enrich <- c("GO:0017091", "AU-rich element binding","1/1", "23/16982", "0.001354375","RU12","FU",99)
   
   # remove modules with fewer than 20 genes - as per Menche 2015 paper
   linkdata$clusters <- Filter(function(x)length(x) > 20, linkdata$clusters)
   cat("\nFound ",length(linkdata$clusters), " usable modules.")
-  #return(linkdata) 
+
+  if(is.null(batch)){
+    cat("\nERROR: you need to enter ''all'' for all modules or a range in quotes e.g. ''77:89''")
+    return(NULL)}
+  
+  if(batch =="all") {  # process all diseasemodules if batch ==all
+    indexstart <- 1
+    indexend <- length(linkdata$clusters)
+  }else{
+    tempy <- unlist(strsplit(batch,":"))  # its a range
+    indexstart <- as.numeric(tempy[1])
+    indexend <- as.numeric(tempy[2])
+  }
   
   #for (i in 1:length(linkdata$clusters)){        # i=num of disease modules
-  indexstart<- 30 ; indexend <- 31;
   temp_i <- vector(mode="integer", length=indexend-indexstart);
   z <-1
   
@@ -358,15 +369,15 @@ getDiseaseModules <- function(linkdata){
 setcount <- function(dms,ind){
   #countn <- unique(dms$DiseaseModule) # How many disease modules are there?
   countn <- length(ind) # How many disease modules are there? based on index range?
-  cat("\nThere are ",countn," disease modules..numbered from",ind)
-  for (j in 1:length(countn)){
+  cat("\nThere are ",length(ind)," disease modules..numbered from",ind)
+  for (j in 1:length(ind)){
     cat("\nJ is now",j)
     temp_dms <- filter(dms,DiseaseModule == (ind[j]))
     nterm <- unique(temp_dms$term) # How many unique terms do we have for this disease module?
     for (k in 1:length(nterm)){
       tcount <- nrow(filter(dms,term == nterm[k]))
       dms$count[dms$term == nterm[k] & dms$DiseaseModule == (ind[j])] <- tcount
-      cat("\nFor DM",ind[j]," tcount is ",tcount)
+      #cat("\nFor DM",ind[j]," tcount is ",tcount)
     }
   }
   

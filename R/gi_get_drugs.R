@@ -197,24 +197,26 @@ print(xtable(tempkega, display=c("s","s","s","s","s","g")), math.style.exponents
 
 
 # Annotate the SHELL 1, disease modules with GO terms
-dismods1_temp4 <- getDiseaseModules(s1)  # crashed out after 8 hours on full dataset
+dismods1 <- getDiseaseModules(s1,"13:13")  # crashed out after 8 hours on full dataset
 enrich1 <- dismods1  # Keep a copy of full data, as GOBubble only uses a subset of it
 dismods1 <- dplyr::select(enrich1,category,ID,term,count,genes,logFC,adj_pval,zscore)
+head(dismods1)
 
 # Annotate the SHELL 2, disease modules with GO terms
-dismods2 <- getDiseaseModules(s2) # 
+dismods2 <- getDiseaseModules(s2,"all") # 'all' modules, '1:67' or '45:77' (a range) 
 enrich2 <- dismods2  # Keep a copy of full data, as GOBubble only uses a subset of it
 dismods2 <- dplyr::select(enrich2,category,ID,term,count,genes,logFC,adj_pval,zscore)
 
 # use GOBubble plot to display GO enrichment. reduce_overlap() produces the key terms
 # sample_n from dplyr package randomly selects a subset
+reduced_dismods1 <- reduce_overlap(dismods1, overlap = 2)
+reduced_dismods1$zscore <- runif(length(reduced_dismods1$zscore), -3.0, 2.5) # bit of a fiddle this..but
+GOBubble(sample_n(reduced_dismods1,50), labels = 2, ID=TRUE)                    # but need to spread out bubbles
+
 reduced_dismods2 <- reduce_overlap(dismods2, overlap = 2)
 reduced_dismods2$zscore <- runif(length(reduced_dismods2$zscore), -3.0, 2.5) # bit of a fiddle this..but
 GOBubble(reduced_dismods2, labels = 2, ID=TRUE)                                # but need to spread out bubbles
 
-reduced_dismods1 <- reduce_overlap(dismods1, overlap = 2)
-reduced_dismods1$zscore <- runif(length(reduced_dismods1$zscore), -3.0, 2.5) # bit of a fiddle this..but
-GOBubble(sample_n(reduced_dismods1,50), labels = 2, ID=TRUE)                    # but need to spread out bubbles
 
 
 
