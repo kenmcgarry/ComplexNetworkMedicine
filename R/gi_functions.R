@@ -192,7 +192,7 @@ plot_chemsim <- function(){
 
 
 # get_linked_diseases() that are not C06 but connected to C06 by shared genes. Modified to include all
-# drugs associated with a disorder. 30/11/17
+# diseases associated with a disorder, 30/11/17 Need to inclued drugs associated with disorders.
 get_linked_diseases <- function(dgenes){
   linked_diseases <- disgene[1,] # instantiate before use
   
@@ -202,18 +202,13 @@ get_linked_diseases <- function(dgenes){
     glist <- filter(disgene, geneName == gene)  # This bit is OK
     if(nrow(glist) > 0){
       linked_diseases <- rbind(linked_diseases,glist) }
-      #tempdis <- select(tempdis,diseaseId, geneName, diseaseName)
-      #linked_diseases <- rbind(tempdis,linked_diseases)
-  
   }
   
   linked_diseases <- arrange(linked_diseases,diseaseName)  # sort alphabetically
-  linked_diseases <- linked_diseases[,c(1,2,4,6)]
+  linked_diseases <- linked_diseases[,c(1,2,4,6)]            # keep only key variables
   linked_diseases  <- linked_diseases[!(duplicated(linked_diseases[c("diseaseName","geneName")]) | duplicated(linked_diseases[c("diseaseName","geneName")], fromLast = TRUE)), ]
-  #linked_diseases <- 
   linked_diseases <- linked_diseases[-nrow(linked_diseases),]     # last entry is zero so remove it
-  #linked_diseases <- linked_diseases[!duplicated(linked_diseases[,'diseaseName']),]   # get rid of the many duplicates
-  #linked_diseases <- select(linked_diseases,diseaseId,geneId,geneName,diseaseName)  # drop "score" variable
+  linked_diseases <- anti_join(linked_diseases, disease_umls, by="diseaseName") # If C06 disorders appear , remove them.
   
   return(linked_diseases)
 }
