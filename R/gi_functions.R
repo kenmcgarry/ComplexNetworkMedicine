@@ -206,6 +206,8 @@ get_linked_diseases <- function(dgenes){
   
   linked_diseases <- arrange(linked_diseases,diseaseName)  # sort alphabetically
   linked_diseases <- linked_diseases[,c(1,2,4,6)]            # keep only key variables
+  # The complicated line below removes duplicate entries, there are quite a few and Im not sure how they got in.
+  # but if diseasename and gene name in the same row occur then keep only one copy,
   linked_diseases  <- linked_diseases[!(duplicated(linked_diseases[c("diseaseName","geneName")]) | duplicated(linked_diseases[c("diseaseName","geneName")], fromLast = TRUE)), ]
   linked_diseases <- linked_diseases[-nrow(linked_diseases),]     # last entry is zero so remove it
   linked_diseases <- anti_join(linked_diseases, disease_umls, by="diseaseName") # If C06 disorders appear , remove them.
@@ -390,16 +392,10 @@ setcount <- function(dms,ind){
 #   components/complexity
 
 print_dm_table <- function(){
-  countn <- unique(enrich$DiseaseModule) # How many disease modules are there?
-  for (j in 1:length(countn)){
-    temp_enrich <- filter(enrich,DiseaseModule == (countn[j]))
-    nterm <- unique(temp_enrich$term) # How many unique terms do we have for this disease module?
-    for (k in 1:length(nterm)){
-      tcount <- nrow(filter(enrich,term == nterm[k]))
-      enrich$count[enrich$term == nterm[k] & enrich$DiseaseModule == j] <- tcount
-    }
-  }
-  
+
+  dm.table <- xtable(head(temp_table))
+  #digits(tli.table)[c(2,6)] <- 0
+  print(dm.table,floating=FALSE)
   
 }
 

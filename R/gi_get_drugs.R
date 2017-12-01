@@ -5,7 +5,7 @@
 # Packages are loaded in by gi_functions.R
 
 setwd("C:/R-files/disease")    # point to where my code lives
-load("C06disease-29thNov-pm-2017.RData") # load in required data - the contents will change regulary
+load("C06disease-30thNov-pm-2017.RData") # load in required data - the contents will change regulary
 source("gi_functions.R")  # load in the functions required for finding lists of drugs 
 source("gi_run.R")   # some routine code to load in.
 source("gi_plots.R")
@@ -125,15 +125,15 @@ plot_pdens(s2$pdens)
 
 commod <- getCommunityConnectedness(d1, conn = "modularity")
 comcon<- getCommunityConnectedness(d1, conn = "conn")
-plot_com(commod,comcon)
+plot_com(commod,comcon,"Drug module community")
 
 commod <- getCommunityConnectedness(s1, conn = "modularity")
 comcon<- getCommunityConnectedness(s1, conn = "conn")
-plot_com(commod,comcon)
+plot_com(commod,comcon,"1st Shell gene community")
 
 commod <- getCommunityConnectedness(s2, conn = "modularity")
 comcon<- getCommunityConnectedness(s2, conn = "conn")
-plot_com(commod,comcon)
+plot_com(commod,comcon,"2nd Shell gene community")
 
 cent <- getCommunityCentrality(d1)
 plot_centrality(cent,"drug index")
@@ -180,8 +180,6 @@ plotLinkCommMembers(lc, nodes = head(names(lc$numclusters), 20),
 
 ##################################################################
 ## GO and KEGG enrichment
-goa <- go_analysis(shell2_genes)
-barplot(goa, drop=TRUE, showCategory=20)
 
 kega <- kegg_analysis(shell2_genes)
 barplot(kega, drop=TRUE, showCategory=20)
@@ -207,8 +205,8 @@ dismods2 <- getDiseaseModules(s2,"all") # 'all' modules, '1:67' or '45:77' (a ra
 enrich2 <- dismods2  # Keep a copy of full data, as GOBubble only uses a subset of it
 dismods2 <- dplyr::select(enrich2,category,ID,term,count,genes,logFC,adj_pval,zscore)
 
-# use GOBubble plot to display GO enrichment. reduce_overlap() produces the key terms
-# sample_n from dplyr package randomly selects a subset
+# GOBubble plot will display GO enrichment. reduce_overlap() (if used) produces the key terms
+# sample_n randomly selects a subset.
 reduced_dismods1 <- reduce_overlap(dismods1, overlap = 2)
 reduced_dismods1$zscore <- runif(length(reduced_dismods1$zscore), -3.0, 2.5) # bit of a fiddle this..but
 GOBubble(sample_n(reduced_dismods1,50), labels = 2, ID=TRUE)                    # but need to spread out bubbles
