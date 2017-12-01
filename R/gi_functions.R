@@ -21,6 +21,13 @@ library(scales)
 
 ## --------------------- FUNCTION DEFINITIONS -----------------------
 
+firstup <- function(x) {
+  substr(x, 1, 1) <- toupper(substr(x, 1, 1))
+  return(x)
+}
+
+
+
 # get_drug_names() assumes that "indications" dataframe is already loaded. You must provide getdrugs() 
 # with the "umls_cui_from_meddra" code for your disease. It will return the drugs known to be used...
 # e.g. C000239 is the code for Alzheimer's. Using the code is less error prone than typing in disease name.
