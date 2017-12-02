@@ -5,7 +5,7 @@
 # Packages are loaded in by gi_functions.R
 
 setwd("C:/R-files/disease")    # point to where my code lives
-load("C06disease-30thNov-pm-2017.RData") # load in required data - the contents will change regulary
+load("C06disease-2ndDecember-pm-2017.RData") # load in required data - the contents will change regulary
 source("gi_functions.R")  # load in the functions required for finding lists of drugs 
 source("gi_run.R")   # some routine code to load in.
 source("gi_plots.R")
@@ -220,10 +220,24 @@ reduced_dismods2$zscore <- runif(length(reduced_dismods2$zscore), -3.0, 2.5) # b
 GOBubble(reduced_dismods2, labels = 2, ID=TRUE)                                # but need to spread out bubbles
 
 
+# Now compare similarities (if any) between disease modules using GO terms
+# ontologySimliarity by Daniel Greene
+data(go)
+data(gene_GO_terms)
+data(GO_IC)
+
+os_terms <- gene_GO_terms[terms_by_disease_module]
+os_names <- go$name[os_terms$EXOSC8]
+
+terms_by_disease_module <- split(enrich2$ID,enrich2$DiseaseModule)
+
+sim_matrix <- get_sim_grid(ontology=go,information_content=GO_IC,term_sets=os_terms)
+sim_matrix <- get_sim_grid(ontology=go,information_content=GO_IC,term_sets=terms_by_disease_module)
+
+pairwise_similarity_matrix <- get_sim_grid(ontology=go,information_content=GO_IC, term_sets=terms_by_disease_module)
 
 
-
-
+rm(piss,shite,go,GO_IC,gene_GO_terms,os_names,os_terms)
 
 
 

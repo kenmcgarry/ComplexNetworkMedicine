@@ -18,9 +18,12 @@ library(org.Hs.eg.db)
 keytypes(org.Hs.eg.db)
 library(GOplot)
 library(scales)
+library(ontologySimilarity)
+library(ontologyIndex)
 
 ## --------------------- FUNCTION DEFINITIONS -----------------------
 
+# Makes first letter uppercase
 firstup <- function(x) {
   substr(x, 1, 1) <- toupper(substr(x, 1, 1))
   return(x)
