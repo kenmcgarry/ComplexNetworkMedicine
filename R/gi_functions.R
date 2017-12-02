@@ -26,6 +26,22 @@ firstup <- function(x) {
   return(x)
 }
 
+# the cosine formula gives a similarity. It is 1 if the vectors are pointing in the same direction. 
+# Distance measures need the value to be 0 when vectors are the same so 1 - similarity = distance. 
+# Many uses need distance rather than similarity 
+cosineDist1 <- function(x){
+  as.dist(1 - x%*%t(x)/(sqrt(rowSums(x^2) %*% t(rowSums(x^2))))) 
+}
+
+
+# This vesrion uses the dot product matrix, to compute the cosine similarity matrix: 
+# Input S is the matrix of dot product, dt is dataset. Divide the dot product by the norms of vectors. 
+cosineDist2 <- function(S){
+  doc_norm <- apply(as.matrix(dt),1,function(x) norm(as.matrix(x),"f")) 
+  divide_one_norm <- S/doc_norm 
+  cosine <- t(divide_one_norm)/doc_norm
+  return (cosine)
+}
 
 
 # get_drug_names() assumes that "indications" dataframe is already loaded. You must provide getdrugs() 
