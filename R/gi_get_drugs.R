@@ -10,6 +10,10 @@ source("gi_functions.R")  # load in the functions required for finding lists of 
 source("gi_run.R")   # some routine code to load in.
 source("gi_plots.R")
 
+cat("\nIF THIS APPEARS: ''Error in plot.new() : figure margins too large'' ",
+    "\nIt JUST MEANS THE PLOTS WINDOW IS TOO SMALL- ITS NOT REALLY AN ERROR!!")
+
+
 # Work with following dataframes: indications; mappings; digestive; disgene; 
 # save(disease_umls,indications,restrictedlist,mappings,digestive,disgene,gene_list,drug_list,simMA,fpdrugs,drugnames,drugids, file = "C06disease-17thNov2017.RData")
 # the key to linking these files is the "ID" in digestive also called "meshId" in mappings
