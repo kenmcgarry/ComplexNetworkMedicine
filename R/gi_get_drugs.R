@@ -222,6 +222,9 @@ GOBubble(reduced_dismods2, labels = 2, ID=TRUE)                                #
 
 # Now compare similarities (if any) between disease modules using GO terms
 # ontologySimliarity by Daniel Greene
+# https://cran.r-project.org/web/packages/ontologySimilarity/vignettes/ontologySimilarity-GO-example.html
+# https://cran.r-project.org/web/packages/ontologySimilarity/vignettes/ontologySimilarity-introduction.html
+
 library(ontologySimilarity)
 library(ontologyIndex)
 data(go)
@@ -229,8 +232,8 @@ data(gene_GO_terms)
 data(GO_IC)
 
 
-enrich2 <- enrich2[enrich2$ID %in% go$id,] # ensure missing terms are removed
-enrich2 <- enrich2[enrich2$ID %in% attributes(GO_IC)$name,] # ensure missing terms are removed
+enrich2 <- enrich2[enrich2$ID %in% go$id,] # ensure missing GO terms are removed
+enrich2 <- enrich2[enrich2$ID %in% attributes(GO_IC)$name,] # ensure missing IC terms are removed
 
 terms_by_disease_module <- split(enrich2$ID,enrich2$DiseaseModule)  # do split by disease module
 terms_by_disease_module <- unname(terms_by_disease_module)   # Daniel Greens functions do not like names
