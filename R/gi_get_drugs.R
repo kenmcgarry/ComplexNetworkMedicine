@@ -222,22 +222,22 @@ GOBubble(reduced_dismods2, labels = 2, ID=TRUE)                                #
 
 # Now compare similarities (if any) between disease modules using GO terms
 # ontologySimliarity by Daniel Greene
+library(ontologySimilarity)
+library(ontologyIndex)
 data(go)
 data(gene_GO_terms)
 data(GO_IC)
 
-os_terms <- gene_GO_terms[terms_by_disease_module]
-os_names <- go$name[os_terms$EXOSC8]
 
-terms_by_disease_module <- split(enrich2$ID,enrich2$DiseaseModule)
+enrich2 <- enrich2[enrich2$ID %in% go$id,] # ensure missing terms are removed
+enrich2 <- enrich2[enrich2$ID %in% attributes(GO_IC)$name,] # ensure missing terms are removed
 
-sim_matrix <- get_sim_grid(ontology=go,information_content=GO_IC,term_sets=os_terms)
+terms_by_disease_module <- split(enrich2$ID,enrich2$DiseaseModule)  # do split by disease module
+terms_by_disease_module <- unname(terms_by_disease_module)   # Daniel Greens functions do not like names
 sim_matrix <- get_sim_grid(ontology=go,information_content=GO_IC,term_sets=terms_by_disease_module)
 
-pairwise_similarity_matrix <- get_sim_grid(ontology=go,information_content=GO_IC, term_sets=terms_by_disease_module)
 
 
-rm(piss,shite,go,GO_IC,gene_GO_terms,os_names,os_terms)
 
 
 
