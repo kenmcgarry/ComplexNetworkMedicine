@@ -199,7 +199,7 @@ print(xtable(tempkega, display=c("s","s","s","s","s","g")), math.style.exponents
 
 
 # Annotate the SHELL 1, disease modules with GO terms
-dismods1 <- getDiseaseModules(s1,"13:13")  # crashed out after 8 hours on full dataset
+dismods1 <- getDiseaseModules(s1,"all")  # crashed out after 8 hours on full dataset
 enrich1 <- dismods1  # Keep a copy of full data, as GOBubble only uses a subset of it
 dismods1 <- dplyr::select(enrich1,category,ID,term,count,genes,logFC,adj_pval,zscore)
 head(dismods1)
@@ -227,6 +227,7 @@ GOBubble(reduced_dismods2, labels = 2, ID=TRUE)                                #
 
 library(ontologySimilarity)
 library(ontologyIndex)
+library(infotheo)
 data(go)
 data(gene_GO_terms)
 data(GO_IC)
@@ -240,7 +241,28 @@ terms_by_disease_module <- unname(terms_by_disease_module)   # Remove names for 
 sim_matrix <- get_sim_grid(ontology=go,information_content=GO_IC,term_sets=terms_by_disease_module)
 
 
+# Calculate mutual information from the similarity matrix
+  commun <- sim_matrix
+  nbins <- sqrt(NROW(commun))
+  dat <- infotheo::discretize(commun,"equalwidth", nbins) # use full package extension
+  IXY <- infotheo::mutinformation(dat,method= "emp")
+  IXY2 <-infotheo::mutinformation(dat[,1],dat[,2])
+  H <- infotheo::entropy(infotheo::discretize(commun[,1]),method="shrink")
+  cat("\nH = ",H)
+  
+  rowMeans(sim_matrix)
+  
+  for (i in 1:nrow(sim_matrix)){
+    cat("\nH = ",infotheo::mutinformation(dat[,i],dat[,i]))
+    
+  }
 
 
-
-
+# Rethink enrichment process - use Daniel Greene's system
+crappy <- gene_GO_terms[gene_list$geneName]
+crappy <- go$name[gene_GO_terms$CTNS]
+attributes(crappy[1])$name
+  
+  
+  
+  
