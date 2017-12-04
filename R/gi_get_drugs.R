@@ -231,12 +231,12 @@ data(go)
 data(gene_GO_terms)
 data(GO_IC)
 
-
+# I have 4-6 GO terms that dont appear in Daniels database so.... 
 enrich2 <- enrich2[enrich2$ID %in% go$id,] # ensure missing GO terms are removed
 enrich2 <- enrich2[enrich2$ID %in% attributes(GO_IC)$name,] # ensure missing IC terms are removed
 
 terms_by_disease_module <- split(enrich2$ID,enrich2$DiseaseModule)  # do split by disease module
-terms_by_disease_module <- unname(terms_by_disease_module)   # Daniel Greens functions do not like names
+terms_by_disease_module <- unname(terms_by_disease_module)   # Remove names for the moment
 sim_matrix <- get_sim_grid(ontology=go,information_content=GO_IC,term_sets=terms_by_disease_module)
 
 

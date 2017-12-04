@@ -10,7 +10,7 @@ names(drug_targets)[names(drug_targets)=="GENE"] <- "Gene"
 drug_targets <- drug_targets[,c(1,4,6)]  # We only need three variables
 drug_targets$DrugName <- firstup(drug_targets$DrugName)   # convert first letter to uppercase to match existing data
 
-# These lines of code is not hard coded - it is used to generate the details for table 2 in the paper!
+# These lines of code are hand coded - it is used to generate the details for table 2 in the paper!
 # I entered drug name one at a time and obtained details for the table.
 tli.table <- xtable(filter(drug_targets,DrugName == "Erythromycin"))
 print(tli.table,floating=FALSE)
