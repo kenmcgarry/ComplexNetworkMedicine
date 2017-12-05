@@ -1,12 +1,11 @@
 # get_drugs.R
 # Ken McGarry updated: 23/11/17
-# DISCLAIMER: This code is not the best written or conceived - hence it will run
-# slowly on some machines. 
+# DISCLAIMER: This code is not the best written or conceived - hence it will run slowly on some machines. 
 # Packages are loaded in by gi_functions.R
 
 setwd("C:/R-files/disease")    # point to where my code lives
 load("C06disease-2ndDecember-pm-2017.RData") # load in required data - the contents will change regulary
-source("gi_functions.R")  # load in the functions required for finding lists of drugs 
+source("gi_functions.R")  # load in the functions required for finding lists of drugs. 
 source("gi_run.R")   # some routine code to load in.
 source("gi_plots.R")
 
@@ -83,10 +82,21 @@ write.table(unique(sort(shell2_genes)),"C:\\R-files\\disease\\shell2genes.txt",s
 
 # Now seek out the two shell levels of diseases
 shell1 <- get_linked_diseases(gene_list$geneName)  # diseases directly linked to C06 disease genes
-
 shell2 <- get_linked_diseases(shell2_genes)  # diseases indirectly linked through 2nd shell genes
 
-         #get_linked_diseases("SMAD2")  # diseases indirectly linked through 2nd shell genes
+shell2Diseases <-  # For the moment, Only keep diseases with at least FIVE shared genes
+  shell2 %>%
+    add_count(diseaseName,sort=TRUE) %>%
+    filter(n > 5)
+
+shell1Diseases <-  # For the moment, Only keep diseases with at least FIVE shared genes
+  shell1 %>%
+  add_count(diseaseName,sort=TRUE) %>%
+  filter(n > 5)
+  
+  
+  
+
 
 # Load in drug interactions, majority are drug-2-drug interactions with a few genes thrown in.
 drug_interactions <- read.csv("C:\\R-files\\disease\\drug_interactions.csv",stringsAsFactors = FALSE)  #important to make stringsAsFact false
@@ -241,7 +251,7 @@ terms_by_disease_module <- unname(terms_by_disease_module)   # Remove names for 
 sim_matrix <- get_sim_grid(ontology=go,information_content=GO_IC,term_sets=terms_by_disease_module)
 
 
-# Calculate mutual information from the similarity matrix
+# Calculate mutual information from the similarity matrix, provides a score of sorts for each disease module
   commun <- sim_matrix
   nbins <- sqrt(NROW(commun))
   dat <- infotheo::discretize(commun,"equalwidth", nbins) # use full package extension
@@ -254,15 +264,15 @@ sim_matrix <- get_sim_grid(ontology=go,information_content=GO_IC,term_sets=terms
   
   for (i in 1:nrow(sim_matrix)){
     cat("\nH = ",infotheo::mutinformation(dat[,i],dat[,i]))
-    
   }
 
 
-# Rethink enrichment process - use Daniel Greene's system
-crappy <- gene_GO_terms[gene_list$geneName]
-crappy <- go$name[gene_GO_terms$CTNS]
-attributes(crappy[1])$name
+# Rethink enrichment process - use Daniel Greene's lookup system, its a quantum leap quicker than Guangchangs!
+snappy <- gene_GO_terms[gene_list$geneName]
+snappy <- go$name[gene_GO_terms$CTNS]
+attributes(snappy[1])$name
+  
+snappy <- gene_GO_terms[getNodesIn(s2, clusterids = 1)] 
   
   
-  
-  
+
