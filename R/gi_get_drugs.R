@@ -264,24 +264,24 @@ sim_matrix <- get_sim_grid(ontology=go,information_content=GO_IC,term_sets=terms
 
 # Calculate mutual information from the similarity matrix, provides a score of sorts for each disease module
   commun <- sim_matrix
-  nbins <- sqrt(NROW(commun))
-  dat <- infotheo::discretize(commun,"equalwidth", nbins) # use full package extension
+  nbins <- sqrt(NROW(sim_matrix))
+  dat <- infotheo::discretize(sim_matrix,"equalwidth", nbins) # use full package extension
   IXY <- infotheo::mutinformation(dat,method= "emp")
   IXY2 <-infotheo::mutinformation(dat[,1],dat[,2])
-  H <- infotheo::entropy(infotheo::discretize(commun[,1]),method="shrink")
+  H <- infotheo::entropy(infotheo::discretize(sim_matrix[1,]),method="shrink")
   cat("\nH = ",H)
   
-  rowMeans(sim_matrix)
+  #rowMeans(sim_matrix)
+  IXY <- colSums(IXY)
   
   for (i in 1:nrow(sim_matrix)){
-    cat("\nModule[",i,"] biological value = ",infotheo::mutinformation(dat[,i],dat[,i]))
+    cat("\nModule[",i,"] biological value = ",IXY[i])#infotheo::mutinformation(dat[,i],dat[,i]))
   }
 
 # Rethink enrichment process - use Daniel Greene's lookup system, its a quantum leap quicker than Guangchangs!
 snappy <- gene_GO_terms[gene_list$geneName]
 snappy <- go$name[gene_GO_terms$CTNS]
 attributes(snappy[1])$name
-  
 snappy <- gene_GO_terms[getNodesIn(s2, clusterids = 1)] 
   
   
