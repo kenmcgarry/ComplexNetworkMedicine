@@ -8,6 +8,7 @@ load("C06disease-2ndDecember-pm-2017.RData") # load in required data - the conte
 source("gi_functions.R")  # load in the functions required for finding lists of drugs. 
 source("gi_run.R")   # some routine code to load in.
 source("gi_plots.R")
+source("meshtree_new.R")
 
 cat("\nIF THIS APPEARS: ''Error in plot.new() : figure margins too large'' ",
     "\nIt JUST MEANS THE PLOTS WINDOW IS TOO SMALL- ITS NOT REALLY AN ERROR!!")
@@ -89,12 +90,22 @@ shell2Diseases <-  # For the moment, Only keep diseases with at least FIVE share
     add_count(diseaseName,sort=TRUE) %>%
     filter(n > 5)
 
-shell1Diseases <-  # For the moment, Only keep diseases with at least FIVE shared genes
+shell1Diseases <-  # For the moment, Only keep diseases with at least TEN shared genes
   shell1 %>%
   add_count(diseaseName,sort=TRUE) %>%
-  filter(n > 5)
+  filter(n > 15)
+
+unique(shell1Diseases$diseaseName)
+unique(shell2Diseases$diseaseName)
+write.table(unique(sort(shell1Diseases$diseaseName)),"C:\\R-files\\disease\\shell1diseases.csv",sep=",",row.names = FALSE,col.names = FALSE)
+write.table(unique(sort(shell2Diseases$diseaseName)),"C:\\R-files\\disease\\shell2diseases.csv",sep=",",row.names = FALSE,col.names = FALSE)
+
+
+# This bit is next!
+shell1Drugs <- get_drug_names(shell1Diseases$diseaseId[51],restrictedlist)  # umls code for YOUR disease
   
-  
+#indicationsALL  <- file.path('C://R-files//sider', 'meddra_all_indications.tsv.gz') %>% read.delim(na.strings='',header = TRUE,stringsAsFactors=FALSE)
+
   
 
 
@@ -227,7 +238,7 @@ GOBubble(sample_n(reduced_dismods1,50), labels = 2, ID=TRUE)                    
 
 reduced_dismods2 <- reduce_overlap(dismods2, overlap = 2)
 reduced_dismods2$zscore <- runif(length(reduced_dismods2$zscore), -3.0, 2.5) # bit of a fiddle this..but
-GOBubble(reduced_dismods2, labels = 2, ID=TRUE)                                # but need to spread out bubbles
+GOBubble(sample_n(reduced_dismods2,50), labels = 2, ID=TRUE)                                # but need to spread out bubbles
 
 
 # Now compare similarities (if any) between disease modules using GO terms
@@ -263,9 +274,8 @@ sim_matrix <- get_sim_grid(ontology=go,information_content=GO_IC,term_sets=terms
   rowMeans(sim_matrix)
   
   for (i in 1:nrow(sim_matrix)){
-    cat("\nH = ",infotheo::mutinformation(dat[,i],dat[,i]))
+    cat("\nModule[",i,"] biological value = ",infotheo::mutinformation(dat[,i],dat[,i]))
   }
-
 
 # Rethink enrichment process - use Daniel Greene's lookup system, its a quantum leap quicker than Guangchangs!
 snappy <- gene_GO_terms[gene_list$geneName]
