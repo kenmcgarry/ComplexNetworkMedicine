@@ -8,6 +8,7 @@ use_rentrez <- function(mygenes){
   
   for (i in 1:length(mygenes)){
     onegene <- mygenes[i]
+    #cat("\nlength mygenes=",length(mygenes))
     gene_search <- entrez_search(db="gene", term=str_c("(",onegene,"[GENE]) AND (Homo sapiens[ORGN])"))
   
     if(!is.null(gene_search$ids)){
