@@ -8,7 +8,7 @@ load("C06disease-2ndDecember-pm-2017.RData") # load in required data - the conte
 source("gi_functions.R")  # load in the functions required for finding lists of drugs. 
 source("gi_run.R")   # some routine code to load in.
 source("gi_plots.R")
-source("meshtree_new.R")
+
 
 cat("\nIF THIS APPEARS: ''Error in plot.new() : figure margins too large'' ",
     "\nIt JUST MEANS THE PLOTS WINDOW IS TOO SMALL- ITS NOT REALLY AN ERROR!!")
@@ -95,14 +95,35 @@ shell1Diseases <-  # For the moment, Only keep diseases with at least TEN shared
   add_count(diseaseName,sort=TRUE) %>%
   filter(n > 15)
 
-unique(shell1Diseases$diseaseName)
-unique(shell2Diseases$diseaseName)
+unique(shell1Diseases$diseaseName) # how many different shell1 associated non-C06 diseases do we have?
+unique(shell2Diseases$diseaseName)  # how many different shell2 associated non-C06 diseases do we have?
+
+# create text files of non-C06 disease names
 write.table(unique(sort(shell1Diseases$diseaseName)),"C:\\R-files\\disease\\shell1diseases.csv",sep=",",row.names = FALSE,col.names = FALSE)
 write.table(unique(sort(shell2Diseases$diseaseName)),"C:\\R-files\\disease\\shell2diseases.csv",sep=",",row.names = FALSE,col.names = FALSE)
 
+# create lists of non-C06 disease genes, for upload to STITCH (to make non_C06 disease modules)
+# start with specifically named shell1 related non-C06's. Write to interactions folder.
+nonC06_s1 <- shell1Diseases %>%
+  filter(diseaseName == "Alzheimer's Disease") %>%
+  dplyr::select(geneName) 
+write.table(nonC06_s1,"C:\\R-files\\disease\\interactions\\alz.csv",sep=",",row.names = FALSE,col.names = FALSE)
+
+nonC06_s1 <- shell1Diseases %>%
+  filter(diseaseName == "Asthma") %>%
+  dplyr::select(geneName) 
+write.table(nonC06_s1,"C:\\R-files\\disease\\interactions\\asth.csv",sep=",",row.names = FALSE,col.names = FALSE)
+
+nonC06_s1 <- shell1Diseases %>%
+  filter(diseaseName == "Autistic Disorder") %>%
+  dplyr::select(geneName) 
+write.table(nonC06_s1,"C:\\R-files\\disease\\interactions\\aut.csv",sep=",",row.names = FALSE,col.names = FALSE)
+
+
+
 
 # This bit is next!
-shell1Drugs <- get_drug_names(shell1Diseases$diseaseId[51],restrictedlist)  # umls code for YOUR disease
+shell1Drugs <- get_drug_names(shell1Diseases$diseaseId[30],restrictedlist)  # umls code for YOUR disease
   
 #indicationsALL  <- file.path('C://R-files//sider', 'meddra_all_indications.tsv.gz') %>% read.delim(na.strings='',header = TRUE,stringsAsFactors=FALSE)
 
@@ -279,10 +300,10 @@ sim_matrix <- get_sim_grid(ontology=go,information_content=GO_IC,term_sets=terms
   }
 
 # Rethink enrichment process - use Daniel Greene's lookup system, its a quantum leap quicker than Guangchangs!
-snappy <- gene_GO_terms[gene_list$geneName]
-snappy <- go$name[gene_GO_terms$CTNS]
-attributes(snappy[1])$name
-snappy <- gene_GO_terms[getNodesIn(s2, clusterids = 1)] 
+#snappy <- gene_GO_terms[gene_list$geneName]
+#snappy <- go$name[gene_GO_terms$CTNS]
+#attributes(snappy[1])$name
+#snappy <- gene_GO_terms[getNodesIn(s2, clusterids = 1)] 
   
   
 

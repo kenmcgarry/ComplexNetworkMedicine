@@ -20,6 +20,8 @@ library(GOplot)
 library(scales)
 library(ontologySimilarity)
 library(ontologyIndex)
+library(rentrez)
+library(stringr)
 
 ## --------------------- FUNCTION DEFINITIONS -----------------------
 
@@ -52,6 +54,8 @@ cosineDist2 <- function(S){
 # e.g. C000239 is the code for Alzheimer's. Using the code is less error prone than typing in disease name.
 # The restricted list of drugs we cant use is passed to this function.
 get_drug_names <- function(umls,rlist) {
+  umls <- gsub("umls:","",umls) # get rid of the bloody "umls:" in the string
+  cat("\nCode is..",umls)
   ilist <- filter(indications, umls_cui_from_meddra == umls) 
   ilist <- setdiff(ilist$drugbank_name,rlist$drugbank_name)
   if(length(ilist) > 0){
@@ -406,6 +410,23 @@ setcount <- function(dms,ind){
   
   return(dms)
 } 
+
+# getdrugs() assumes that "indications" dataframe is already loaded. You must provide getdrugs() 
+# with the "umls_cui_from_meddra" code for your disease. It will return the drugs known to be used...
+# e.g. C000239 is the code for Alzheimer's. Using the code is less error prone than typing in disease name.
+# The restricted list of drugs we cant use is passed to this function.
+get_drugs <- function(umls,rlist) {
+  ilist <- filter(indications, umls_cui_from_meddra == umls)
+  ilist <- setdiff(ilist$drugbank_name,rlist$drugbank_name)
+  if(length(ilist) > 0){
+    for (j in 1:length(ilist)){
+      cat("\ndrug",j,"is", ilist[j])
+    }
+    return(ilist)
+  }else{
+    cat("\n","Sorry, no drugs found...check umls code is correct for your disease")
+    return(NULL)}
+}
 
 
 # print_dm_table() will generate the latex stuff based on annoations and ranking 
