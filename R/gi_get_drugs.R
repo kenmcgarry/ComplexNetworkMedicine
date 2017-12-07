@@ -4,10 +4,11 @@
 # Packages are loaded in by gi_functions.R
 
 setwd("C:/R-files/disease")    # point to where my code lives
-load("C06disease-2ndDecember-pm-2017.RData") # load in required data - the contents will change regulary
+load("C06disease-7thDecember-am-2017.RData") # load in required data - the contents will change regulary
 source("gi_functions.R")  # load in the functions required for finding lists of drugs. 
 source("gi_run.R")   # some routine code to load in.
 source("gi_plots.R")
+source("use_rentrez.R")
 
 
 cat("\nIF THIS APPEARS: ''Error in plot.new() : figure margins too large'' ",
@@ -107,23 +108,36 @@ write.table(unique(sort(shell2Diseases$diseaseName)),"C:\\R-files\\disease\\shel
 nonC06_s1 <- shell1Diseases %>%
   filter(diseaseName == "Alzheimer's Disease") %>%
   dplyr::select(geneName) 
-write.table(nonC06_s1,"C:\\R-files\\disease\\interactions\\alz.csv",sep=",",row.names = FALSE,col.names = FALSE)
+
+#write.table(nonC06_s1,"C:\\R-files\\disease\\interactions\\alz.csv",sep=",",row.names = FALSE,col.names = FALSE)
 
 nonC06_s1 <- shell1Diseases %>%
   filter(diseaseName == "Asthma") %>%
   dplyr::select(geneName) 
-write.table(nonC06_s1,"C:\\R-files\\disease\\interactions\\asth.csv",sep=",",row.names = FALSE,col.names = FALSE)
+#write.table(nonC06_s1,"C:\\R-files\\disease\\interactions\\asth.csv",sep=",",row.names = FALSE,col.names = FALSE)
 
 nonC06_s1 <- shell1Diseases %>%
   filter(diseaseName == "Autistic Disorder") %>%
   dplyr::select(geneName) 
-write.table(nonC06_s1,"C:\\R-files\\disease\\interactions\\aut.csv",sep=",",row.names = FALSE,col.names = FALSE)
+#write.table(nonC06_s1,"C:\\R-files\\disease\\interactions\\aut.csv",sep=",",row.names = FALSE,col.names = FALSE)
 
+# ALZHEIMERS DISEASE MODULE DETECTION
+# use_rentrez() here rather than use files uploaded to STITCH/STRING
+tempinteractions <- use_rentrez(nonC06_s1$geneName)
+tempinteractions[,1] <- str_to_upper(tempinteractions[,1])
+alz <- getLinkCommunities(tempinteractions, hcmethod = "single")
+# Annotate the SHELL 1, disease modules with GO terms
+alzmods <- getDiseaseModules(alz,"all")  #
+alzmods_enrich <- alzmods  # Keep a copy of full data, as GOBubble only uses a subset of it
+alzmods <- dplyr::select(alzmods_enrich,category,ID,term,count,genes,logFC,adj_pval,zscore)
+reduced_alzmods <- reduce_overlap(alzmods, overlap = 2)
+reduced_alzmods$zscore <- runif(length(reduced_alzmods$zscore), -3.0, 2.5) # bit of a fiddle this..but spread out zscore
+GOBubble(sample_n(reduced_alzmods,50), labels = 2, ID=TRUE)   
 
 
 
 # This bit is next!
-shell1Drugs <- get_drug_names(shell1Diseases$diseaseId[30],restrictedlist)  # umls code for YOUR disease
+shell1Drugs <- get_drug_names(shell1Diseases$diseaseId[10],restrictedlist)  # umls code for YOUR disease
   
 #indicationsALL  <- file.path('C://R-files//sider', 'meddra_all_indications.tsv.gz') %>% read.delim(na.strings='',header = TRUE,stringsAsFactors=FALSE)
 
