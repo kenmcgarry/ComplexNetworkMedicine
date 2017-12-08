@@ -105,28 +105,29 @@ write.table(unique(sort(shell2Diseases$diseaseName)),"C:\\R-files\\disease\\shel
 
 # create lists of non-C06 disease genes, for upload to STITCH (to make non_C06 disease modules)
 # start with specifically named shell1 related non-C06's. Write to interactions folder.
-nonC06_s1 <- shell1Diseases %>%
+nonC06_alz <- shell1Diseases %>%
   filter(diseaseName == "Alzheimer's Disease") %>%
   dplyr::select(geneName) 
 
 #write.table(nonC06_s1,"C:\\R-files\\disease\\interactions\\alz.csv",sep=",",row.names = FALSE,col.names = FALSE)
 
-nonC06_s1 <- shell1Diseases %>%
+nonC06_asth <- shell1Diseases %>%
   filter(diseaseName == "Asthma") %>%
   dplyr::select(geneName) 
 #write.table(nonC06_s1,"C:\\R-files\\disease\\interactions\\asth.csv",sep=",",row.names = FALSE,col.names = FALSE)
 
-nonC06_s1 <- shell1Diseases %>%
+nonC06_aut <- shell1Diseases %>%
   filter(diseaseName == "Autistic Disorder") %>%
   dplyr::select(geneName) 
 #write.table(nonC06_s1,"C:\\R-files\\disease\\interactions\\aut.csv",sep=",",row.names = FALSE,col.names = FALSE)
 
 # ALZHEIMERS DISEASE MODULE DETECTION
 # use_rentrez() here rather than use files uploaded to STITCH/STRING
-tempinteractions <- use_rentrez(nonC06_s1$geneName)
-tempinteractions[,1] <- str_to_upper(tempinteractions[,1])
-alz <- getLinkCommunities(tempinteractions, hcmethod = "single")
-# Annotate the SHELL 1, disease modules with GO terms
+tempinteractions <- use_rentrez(nonC06_alz$geneName)
+tempinteractions[,1] <- str_to_upper(tempinteractions[,1])  # NCBI returns a few genes that have lowercase letters
+alz <- getLinkCommunities(tempinteractions, hcmethod = "single")  # consider cutting density partition manually
+alz <- newLinkCommsAt(alz, cutat = 0.7) # cut it at 0.8
+# Annotate the disease modules with GO terms
 alzmods <- getDiseaseModules(alz,"all")  #
 alzmods_enrich <- alzmods  # Keep a copy of full data, as GOBubble only uses a subset of it
 alzmods <- dplyr::select(alzmods_enrich,category,ID,term,count,genes,logFC,adj_pval,zscore)
@@ -135,14 +136,11 @@ reduced_alzmods$zscore <- runif(length(reduced_alzmods$zscore), -3.0, 2.5) # bit
 GOBubble(sample_n(reduced_alzmods,50), labels = 2, ID=TRUE)   
 
 
+# ERROR: ATP5PF
 
 # This bit is next!
-shell1Drugs <- get_drug_names(shell1Diseases$diseaseId[10],restrictedlist)  # umls code for YOUR disease
-  
+#shell1Drugs <- get_drug_names(shell1Diseases$diseaseId[10],restrictedlist)  # umls code for YOUR disease
 #indicationsALL  <- file.path('C://R-files//sider', 'meddra_all_indications.tsv.gz') %>% read.delim(na.strings='',header = TRUE,stringsAsFactors=FALSE)
-
-  
-
 
 # Load in drug interactions, majority are drug-2-drug interactions with a few genes thrown in.
 drug_interactions <- read.csv("C:\\R-files\\disease\\drug_interactions.csv",stringsAsFactors = FALSE)  #important to make stringsAsFact false
@@ -160,7 +158,7 @@ shell2_interactions <- shell2_interactions[,1:2]
 # get_all_linked_diseases("BRCA1") # test out new function
 
 ##################################################################
-# Using LINKCOMM to detect disease modules
+# Using LINKCOMM to detect C06 disease modules
 # 1. drug modules
 # 2. 1st shell gene modules
 # 3. 2nd shell gene modules
