@@ -4,7 +4,7 @@
 # Packages are loaded in by gi_functions.R
 
 setwd("C:/R-files/disease")    # point to where my code lives
-load("C06disease-7thDecember-am-2017.RData") # load in required data - the contents will change regulary
+load("C06disease-8thDecember-pm-2017.RData") # load in required data - the contents will change regulary
 source("gi_functions.R")  # load in the functions required for finding lists of drugs. 
 source("gi_run.R")   # some routine code to load in.
 source("gi_plots.R")
@@ -125,8 +125,13 @@ nonC06_aut <- shell1Diseases %>%
 # use_rentrez() here rather than use files uploaded to STITCH/STRING
 tempinteractions <- use_rentrez(nonC06_alz$geneName)
 tempinteractions[,1] <- str_to_upper(tempinteractions[,1])  # NCBI returns a few genes that have lowercase letters
+
+# remove bad gene names that cause getDiseaseModules to crash
+tempinteractions <- subset(tempinteractions, a!="ATP5PF")
+tempinteractions <- subset(tempinteractions, a!="ATP5IF1")
+
 alz <- getLinkCommunities(tempinteractions, hcmethod = "single")  # consider cutting density partition manually
-alz <- newLinkCommsAt(alz, cutat = 0.7) # cut it at 0.8
+alz <- newLinkCommsAt(alz, cutat = 0.7) # cut it at 0.7
 # Annotate the disease modules with GO terms
 alzmods <- getDiseaseModules(alz,"all")  #
 alzmods_enrich <- alzmods  # Keep a copy of full data, as GOBubble only uses a subset of it
@@ -136,7 +141,7 @@ reduced_alzmods$zscore <- runif(length(reduced_alzmods$zscore), -3.0, 2.5) # bit
 GOBubble(sample_n(reduced_alzmods,50), labels = 2, ID=TRUE)   
 
 
-# ERROR: ATP5PF
+# ERROR: ATP5PF, ATP5IF1
 
 # This bit is next!
 #shell1Drugs <- get_drug_names(shell1Diseases$diseaseId[10],restrictedlist)  # umls code for YOUR disease
@@ -286,6 +291,40 @@ data(go)
 data(gene_GO_terms)
 data(GO_IC)
 
+# This is a far quicker version of getDiseaseModules(). This version uses the ontologySimilarity packages
+# by Daniel Green. NB for the moment cannot do bubbleplot as we cannot as yet generate p-values or zscores.
+createDiseaseModules <- function(linkdata){
+  tempgenes <- names(gene_GO_terms)
+  #enrich <- c("GO:0017666", "Satanic like behaviour","1/1", "23/666", "0.00135666","RU12","FU",99) #instantiate.
+  enrich <- data.frame(terms=0,CC=0,BP=0,MF=0)
+  # remove modules with fewer than 20 genes - as per Menche 2015 paper
+  linkdata$clusters <- Filter(function(x)length(x) > 20, linkdata$clusters)
+  cat("\nFound ",length(linkdata$clusters), " usable modules.")
+   
+  for (i in 1:length(linkdata$clusters)){
+    tempnodes <- getNodesIn(linkdata, clusterids = i)
+    tempnodes <- tempnodes[tempnodes %in% tempgenes]
+    tempgo <- gene_GO_terms[tempnodes]
+    cc <- go$id[go$name == "cellular_component"]
+    bp <- go$id[go$name == "biological_process"]
+    mf <- go$id[go$name == "molecular_function"]
+    
+    temp_cc <- lapply(tempgo, function(x) intersection_with_descendants(go, roots=cc, x))
+    temp_bp <- lapply(tempgo, function(x) intersection_with_descendants(go, roots=bp, x))
+    temp_mf <- lapply(tempgo, function(x) intersection_with_descendants(go, roots=mf, x))
+      
+    temp <- data.frame(check.names=FALSE, `terms`=sapply(tempgo, length), 
+                         `CC`=sapply(temp_cc, length),
+                         `BP`=sapply(temp_bp, length),
+                         `MF`=sapply(temp_mf, length))
+    
+    enrich <- rbind(enrich,temp)
+  }
+  return(enrich)
+}
+
+
+# COMPARE WITH OTHER MODULES
 # I have 4-6 GO terms that dont appear in Daniels database so.... 
 enrich2 <- enrich2[enrich2$ID %in% go$id,] # ensure missing GO terms are removed
 enrich2 <- enrich2[enrich2$ID %in% attributes(GO_IC)$name,] # ensure missing IC terms are removed
