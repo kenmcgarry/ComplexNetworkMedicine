@@ -1,4 +1,5 @@
-# ComplexNetworkMedicine       ## Project updated 8th December 2017
+# ComplexNetworkMedicine       
+## Project updated 8th December 2017
 In this work we use link clustering and network theory to explore the dynamic nature of diseases, the genes implicated with them and the drugs used to treat them. We investigate the hypothesis that many human diseases or disorders are linked by common genetic modules, therefore a defect in one of any of the cooperating genes in a module may lead to a specific disease or related symptom. Furthermore, although faulty genes need not be directly shared between diseases they can interact with similar proteins in the network neighborhood. Thus, some diseases are indirectly linked and any analysis of disease genes must take this into account. We build our networks using data and information extracted from the STITCH protein and drug interaction databases, OMIM disease database, lists of diseases categorized by MeSH and the drugbank repository. We demonstrate how the detection of overlapping clusters allows us to identify modules of cooperating proteins and ultimately, understand their role in disease with respect to targeting drugs more effectively. 
 
 ![Alt Text](https://user-images.githubusercontent.com/11558110/29874468-c4ac615a-8d8e-11e7-8098-b3f18460bdf6.jpg)
