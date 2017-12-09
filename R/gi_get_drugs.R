@@ -306,7 +306,7 @@ createDiseaseModules <- function(linkdata){
     tempnodes <- getNodesIn(linkdata, clusterids = i,type="names")
     if(length(tempnodes) >= 20){
       j <- j+1
-      cat("\nj =...",j)
+      #cat("\nj =...",j)
       tempnodes <- tempnodes[tempnodes %in% tempgenes]
       tempgo <- gene_GO_terms[tempnodes]
       cc <- go$id[go$name == "cellular_component"]
@@ -315,25 +315,56 @@ createDiseaseModules <- function(linkdata){
       temp_cc <- lapply(tempgo, function(x) intersection_with_descendants(go, roots=cc, x))
       temp_bp <- lapply(tempgo, function(x) intersection_with_descendants(go, roots=bp, x))
       temp_mf <- lapply(tempgo, function(x) intersection_with_descendants(go, roots=mf, x))
-      tmp_enrich <- data.frame(unlist(temp_cc),stringsAsFactors=FALSE)  # GO ID's
-      cat("\nCBIND...all variables")
-      tmp_enrich <- cbind(tmp_enrich,rownames(tmp_enrich),stringsAsFactors=FALSE) # gene names
-      tmp_enrich <- cbind(tmp_enrich,rep(j,length(unlist(temp_cc))))               # diseasemodule number
-      tmp_enrich <- cbind(tmp_enrich,rep(0.01,length(unlist(temp_cc))))            # adj_pval
-      tmp_enrich <- cbind(tmp_enrich,rep(3.2,length(unlist(temp_cc))))             # zscore
-      tmp_enrich <- cbind(tmp_enrich,rep("CC",length(unlist(temp_cc))),stringsAsFactors=FALSE) # category
-      tmp_enrich <- cbind(tmp_enrich,unname(go$name[unlist(temp_cc)]),stringsAsFactors=FALSE)
+      tmp_enrich_c <- data.frame(unlist(temp_cc),stringsAsFactors=FALSE)  # GO ID's
+      #cat("\nCBIND...CC")
+      tmp_enrich_c <- cbind(tmp_enrich_c,rownames(tmp_enrich_c),stringsAsFactors=FALSE) # gene names
+      tmp_enrich_c <- cbind(tmp_enrich_c,rep(j,length(unlist(temp_cc))))               # diseasemodule number
+      tmp_enrich_c <- cbind(tmp_enrich_c,rep(0.01,length(unlist(temp_cc))))            # adj_pval
+      tmp_enrich_c <- cbind(tmp_enrich_c,rep(3.2,length(unlist(temp_cc))))             # zscore
+      tmp_enrich_c <- cbind(tmp_enrich_c,rep("CC",length(unlist(temp_cc))),stringsAsFactors=FALSE) # category
+      tmp_enrich_c <- cbind(tmp_enrich_c,unname(go$name[unlist(temp_cc)]),stringsAsFactors=FALSE)
     
-      colnames(tmp_enrich)[1] <- "ID"; colnames(tmp_enrich)[2] <- "genes"; colnames(tmp_enrich)[3] <- "DiseaseModule" 
-      colnames(tmp_enrich)[4] <- "adj_pval"; colnames(tmp_enrich)[5] <- "zscore"; colnames(tmp_enrich)[6] <- "category" 
-      colnames(tmp_enrich)[7] <- "term" 
-      rownames(tmp_enrich) <- c()
-      cat("\nCBIND....enrich with tmp_enrich")
-      enrich <- rbind(enrich,tmp_enrich)
+      tmp_enrich_b <- data.frame(unlist(temp_bp),stringsAsFactors=FALSE)  # GO ID's
+      #cat("\nCBIND...BP")
+      tmp_enrich_b <- cbind(tmp_enrich_b,rownames(tmp_enrich_b),stringsAsFactors=FALSE) # gene names
+      tmp_enrich_b <- cbind(tmp_enrich_b,rep(j,length(unlist(temp_bp))))               # diseasemodule number
+      tmp_enrich_b <- cbind(tmp_enrich_b,rep(0.01,length(unlist(temp_bp))))            # adj_pval
+      tmp_enrich_b <- cbind(tmp_enrich_b,rep(3.2,length(unlist(temp_bp))))             # zscore
+      tmp_enrich_b <- cbind(tmp_enrich_b,rep("BP",length(unlist(temp_bp))),stringsAsFactors=FALSE) # category
+      tmp_enrich_b <- cbind(tmp_enrich_b,unname(go$name[unlist(temp_bp)]),stringsAsFactors=FALSE)
+
+      tmp_enrich_m <- data.frame(unlist(temp_mf),stringsAsFactors=FALSE)  # GO ID's
+      #cat("\nCBIND...MF")
+      tmp_enrich_m <- cbind(tmp_enrich_m,rownames(tmp_enrich_m),stringsAsFactors=FALSE) # gene names
+      tmp_enrich_m <- cbind(tmp_enrich_m,rep(j,length(unlist(temp_mf))))               # diseasemodule number
+      tmp_enrich_m <- cbind(tmp_enrich_m,rep(0.01,length(unlist(temp_mf))))            # adj_pval
+      tmp_enrich_m <- cbind(tmp_enrich_m,rep(3.2,length(unlist(temp_mf))))             # zscore
+      tmp_enrich_m <- cbind(tmp_enrich_m,rep("MF",length(unlist(temp_mf))),stringsAsFactors=FALSE) # category
+      tmp_enrich_m <- cbind(tmp_enrich_m,unname(go$name[unlist(temp_mf)]),stringsAsFactors=FALSE)
+      
+      colnames(tmp_enrich_b)[1] <- "ID"; colnames(tmp_enrich_b)[2] <- "genes"; colnames(tmp_enrich_b)[3] <- "DiseaseModule" 
+      colnames(tmp_enrich_b)[4] <- "adj_pval"; colnames(tmp_enrich_b)[5] <- "zscore"; colnames(tmp_enrich_b)[6] <- "category" 
+      colnames(tmp_enrich_b)[7] <- "term" 
+      rownames(tmp_enrich_b) <- c()
+      
+      colnames(tmp_enrich_c)[1] <- "ID"; colnames(tmp_enrich_c)[2] <- "genes"; colnames(tmp_enrich_c)[3] <- "DiseaseModule" 
+      colnames(tmp_enrich_c)[4] <- "adj_pval"; colnames(tmp_enrich_c)[5] <- "zscore"; colnames(tmp_enrich_c)[6] <- "category" 
+      colnames(tmp_enrich_c)[7] <- "term" 
+      rownames(tmp_enrich_c) <- c()
+
+      colnames(tmp_enrich_m)[1] <- "ID"; colnames(tmp_enrich_m)[2] <- "genes"; colnames(tmp_enrich_m)[3] <- "DiseaseModule" 
+      colnames(tmp_enrich_m)[4] <- "adj_pval"; colnames(tmp_enrich_m)[5] <- "zscore"; colnames(tmp_enrich_m)[6] <- "category" 
+      colnames(tmp_enrich_m)[7] <- "term" 
+      rownames(tmp_enrich_m) <- c()
+      
+      #cat("\nRBIND....CC , BF & MF to enrich")
+      enrich <- rbind(enrich,tmp_enrich_c)
+      enrich <- rbind(enrich,tmp_enrich_b)
+      enrich <- rbind(enrich,tmp_enrich_m)
       #temp <- data.frame(check.names=FALSE, `terms`=sapply(tempgo, length),`CC`=sapply(temp_cc, length),
       #                   `BP`=sapply(temp_bp, length),`MF`=sapply(temp_mf, length))
     }
-    #enrich <- cbind(enrich,tmp_enrich)
+    #enrich <- cbind(enrich,tmp_enrich_c)
   }
   return(enrich)
 }
