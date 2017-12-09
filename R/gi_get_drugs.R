@@ -295,30 +295,45 @@ data(GO_IC)
 # by Daniel Green. NB for the moment cannot do bubbleplot as we cannot as yet generate p-values or zscores.
 createDiseaseModules <- function(linkdata){
   tempgenes <- names(gene_GO_terms)
-  #enrich <- c("GO:0017666", "Satanic like behaviour","1/1", "23/666", "0.00135666","RU12","FU",99) #instantiate.
-  enrich <- data.frame(terms=0,CC=0,BP=0,MF=0)
+  enrich <- data.frame(ID="GO:0000666", genes="RU12",DiseaseModule=666,adj_pval=0.001,zscore=6.001,
+                       category="FU",term="Satanic like behaviour",stringsAsFactors=FALSE) #instantiate.
   # remove modules with fewer than 20 genes - as per Menche 2015 paper
-  linkdata$clusters <- Filter(function(x)length(x) > 20, linkdata$clusters)
-  cat("\nFound ",length(linkdata$clusters), " usable modules.")
-   
+  newclusters <- Filter(function(x)length(x) > 20, linkdata$clusters)
+  cat("\nFound ",length(newclusters), " usable modules.")
+  j<- 0  # set counter for clusters bigger than 20 
+  
   for (i in 1:length(linkdata$clusters)){
-    tempnodes <- getNodesIn(linkdata, clusterids = i)
-    tempnodes <- tempnodes[tempnodes %in% tempgenes]
-    tempgo <- gene_GO_terms[tempnodes]
-    cc <- go$id[go$name == "cellular_component"]
-    bp <- go$id[go$name == "biological_process"]
-    mf <- go$id[go$name == "molecular_function"]
+    tempnodes <- getNodesIn(linkdata, clusterids = i,type="names")
+    if(length(tempnodes) >= 20){
+      j <- j+1
+      cat("\nj =...",j)
+      tempnodes <- tempnodes[tempnodes %in% tempgenes]
+      tempgo <- gene_GO_terms[tempnodes]
+      cc <- go$id[go$name == "cellular_component"]
+      bp <- go$id[go$name == "biological_process"]
+      mf <- go$id[go$name == "molecular_function"] 
+      temp_cc <- lapply(tempgo, function(x) intersection_with_descendants(go, roots=cc, x))
+      temp_bp <- lapply(tempgo, function(x) intersection_with_descendants(go, roots=bp, x))
+      temp_mf <- lapply(tempgo, function(x) intersection_with_descendants(go, roots=mf, x))
+      tmp_enrich <- data.frame(unlist(temp_cc),stringsAsFactors=FALSE)  # GO ID's
+      cat("\nCBIND...all variables")
+      tmp_enrich <- cbind(tmp_enrich,rownames(tmp_enrich),stringsAsFactors=FALSE) # gene names
+      tmp_enrich <- cbind(tmp_enrich,rep(j,length(unlist(temp_cc))))               # diseasemodule number
+      tmp_enrich <- cbind(tmp_enrich,rep(0.01,length(unlist(temp_cc))))            # adj_pval
+      tmp_enrich <- cbind(tmp_enrich,rep(3.2,length(unlist(temp_cc))))             # zscore
+      tmp_enrich <- cbind(tmp_enrich,rep("CC",length(unlist(temp_cc))),stringsAsFactors=FALSE) # category
+      tmp_enrich <- cbind(tmp_enrich,unname(go$name[unlist(temp_cc)]),stringsAsFactors=FALSE)
     
-    temp_cc <- lapply(tempgo, function(x) intersection_with_descendants(go, roots=cc, x))
-    temp_bp <- lapply(tempgo, function(x) intersection_with_descendants(go, roots=bp, x))
-    temp_mf <- lapply(tempgo, function(x) intersection_with_descendants(go, roots=mf, x))
-      
-    temp <- data.frame(check.names=FALSE, `terms`=sapply(tempgo, length), 
-                         `CC`=sapply(temp_cc, length),
-                         `BP`=sapply(temp_bp, length),
-                         `MF`=sapply(temp_mf, length))
-    
-    enrich <- rbind(enrich,temp)
+      colnames(tmp_enrich)[1] <- "ID"; colnames(tmp_enrich)[2] <- "genes"; colnames(tmp_enrich)[3] <- "DiseaseModule" 
+      colnames(tmp_enrich)[4] <- "adj_pval"; colnames(tmp_enrich)[5] <- "zscore"; colnames(tmp_enrich)[6] <- "category" 
+      colnames(tmp_enrich)[7] <- "term" 
+      rownames(tmp_enrich) <- c()
+      cat("\nCBIND....enrich with tmp_enrich")
+      enrich <- rbind(enrich,tmp_enrich)
+      #temp <- data.frame(check.names=FALSE, `terms`=sapply(tempgo, length),`CC`=sapply(temp_cc, length),
+      #                   `BP`=sapply(temp_bp, length),`MF`=sapply(temp_mf, length))
+    }
+    #enrich <- cbind(enrich,tmp_enrich)
   }
   return(enrich)
 }
@@ -335,17 +350,13 @@ sim_matrix <- get_sim_grid(ontology=go,information_content=GO_IC,term_sets=terms
 
 
 # Calculate mutual information from the similarity matrix, provides a score of sorts for each disease module
-  commun <- sim_matrix
+
   nbins <- sqrt(NROW(sim_matrix))
   dat <- infotheo::discretize(sim_matrix,"equalwidth", nbins) # use full package extension
   IXY <- infotheo::mutinformation(dat,method= "emp")
   IXY2 <-infotheo::mutinformation(dat[,1],dat[,2])
   H <- infotheo::entropy(infotheo::discretize(sim_matrix[1,]),method="shrink")
-  cat("\nH = ",H)
-  
-  #rowMeans(sim_matrix)
-  IXY <- colSums(IXY)
-  
+
   for (i in 1:nrow(sim_matrix)){
     cat("\nModule[",i,"] biological value = ",IXY[i])#infotheo::mutinformation(dat[,i],dat[,i]))
   }
