@@ -4,7 +4,7 @@
 # Packages are loaded in by gi_functions.R
 
 setwd("C:/R-files/disease")    # point to where my code lives
-load("C06disease-8thDecember-pm-2017.RData") # load in required data - the contents will change regulary
+load("C06disease-9thDecember-pm-2017.RData") # load in required data - the contents will change regulary
 source("gi_functions.R")  # load in the functions required for finding lists of drugs. 
 source("gi_run.R")   # some routine code to load in.
 source("gi_plots.R")
@@ -109,17 +109,13 @@ nonC06_alz <- shell1Diseases %>%
   filter(diseaseName == "Alzheimer's Disease") %>%
   dplyr::select(geneName) 
 
-#write.table(nonC06_s1,"C:\\R-files\\disease\\interactions\\alz.csv",sep=",",row.names = FALSE,col.names = FALSE)
-
 nonC06_asth <- shell1Diseases %>%
   filter(diseaseName == "Asthma") %>%
   dplyr::select(geneName) 
-#write.table(nonC06_s1,"C:\\R-files\\disease\\interactions\\asth.csv",sep=",",row.names = FALSE,col.names = FALSE)
 
 nonC06_aut <- shell1Diseases %>%
   filter(diseaseName == "Autistic Disorder") %>%
   dplyr::select(geneName) 
-#write.table(nonC06_s1,"C:\\R-files\\disease\\interactions\\aut.csv",sep=",",row.names = FALSE,col.names = FALSE)
 
 # ALZHEIMERS DISEASE MODULE DETECTION
 # use_rentrez() here rather than use files uploaded to STITCH/STRING
@@ -158,9 +154,6 @@ shell1_interactions <- shell1_interactions[,1:2]
 # load 1st shell interactions
 shell2_interactions <- read.csv("C:\\R-files\\disease\\shell2_genes_low.csv",stringsAsFactors = FALSE)  #important to make stringsAsFact false
 shell2_interactions <- shell2_interactions[,1:2]
-
-
-# get_all_linked_diseases("BRCA1") # test out new function
 
 ##################################################################
 # Using LINKCOMM to detect C06 disease modules
