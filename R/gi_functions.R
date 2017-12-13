@@ -487,12 +487,16 @@ createDiseaseModules <- function(linkdata){
       #cat("\nRBIND....CC , BF & MF to enrich")
       enrich <- rbind(enrich,tmp_enrich_c)
       enrich <- rbind(enrich,tmp_enrich_b)
-      enrich <- rbind(enrich,tmp_enrich_m)
-      #temp <- data.frame(check.names=FALSE, `terms`=sapply(tempgo, length),`CC`=sapply(temp_cc, length),
-      #                   `BP`=sapply(temp_bp, length),`MF`=sapply(temp_mf, length))
     }
-    #enrich <- cbind(enrich,tmp_enrich_c)
   }
+  enrich <- enrich[-1, ]     # 1st entry is rubbish so remove it
+  tmp_count <- table(enrich$ID)  # obtain a count of how many times each GO ID appears.
+  idcount <- vector(mode="integer",length=nrow(enrich))
+  
+  idcount <- as.vector(tmp_count)[match(enrich$ID, names(tmp_count))] # almost too clever
+  enrich <- cbind(enrich,idcount)
+  colnames(enrich)[8] <- "count"   
+
   return(enrich)
 }
 

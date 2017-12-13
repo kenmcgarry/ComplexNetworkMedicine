@@ -118,19 +118,17 @@ nonC06_aut <- shell1Diseases %>%
   dplyr::select(geneName) 
 
 # ALZHEIMERS DISEASE MODULE DETECTION
-# use_rentrez() here rather than use files downloaded from STITCH/STRING
+# use_rentrez() here rather than use files downloaded from STITCH/STRING to get PPI's
 tempinteractions <- use_rentrez(nonC06_alz$geneName)
 tempinteractions[,1] <- str_to_upper(tempinteractions[,1])  # NCBI returns a few genes that have lowercase letters
-
 # remove bad gene names that cause getDiseaseModules to crash
 tempinteractions <- subset(tempinteractions, a!="ATP5PF")
 tempinteractions <- subset(tempinteractions, a!="ATP5IF1")
-
 alz <- getLinkCommunities(tempinteractions, hcmethod = "single")  # consider cutting density partition manually
 alz <- newLinkCommsAt(alz, cutat = 0.7) # cut it at 0.7
 # Annotate the disease modules with GO terms
 alzmods <- getDiseaseModules(alz,"all")  #
-alzmods_enrich <- alzmods  # Keep a copy of full data, as GOBubble only uses a subset of it
+alzmods_enrich <- alzmods  # Keep a copy of full data, as GOBubble datastructure only uses a subset of it
 alzmods <- dplyr::select(alzmods_enrich,category,ID,term,count,genes,logFC,adj_pval,zscore)
 reduced_alzmods <- reduce_overlap(alzmods, overlap = 2)
 reduced_alzmods$zscore <- runif(length(reduced_alzmods$zscore), -3.0, 2.5) # bit of a fiddle this..but spread out zscore
@@ -139,10 +137,6 @@ GOBubble(sample_n(reduced_alzmods,50), labels = 2, ID=TRUE)
 
 
 # ERROR: ATP5PF, ATP5IF1
-
-# This bit is next!
-#shell1Drugs <- get_drug_names(shell1Diseases$diseaseId[10],restrictedlist)  # umls code for YOUR disease
-#indicationsALL  <- file.path('C://R-files//sider', 'meddra_all_indications.tsv.gz') %>% read.delim(na.strings='',header = TRUE,stringsAsFactors=FALSE)
 
 # Load in drug interactions, majority are drug-2-drug interactions with a few genes thrown in.
 drug_interactions <- read.csv("C:\\R-files\\disease\\drug_interactions.csv",stringsAsFactors = FALSE)  #important to make stringsAsFact false
@@ -232,11 +226,8 @@ plotLinkCommMembers(lc, nodes = head(names(lc$numclusters), 20),
                     fontsize = 11, nspace = 3.5, maxclusters = 20)
 
 
-
- 
-
-##################################################################
-## GO and KEGG enrichment
+###############################################################################
+## GO and KEGG enrichment - creates large datastructures so created when needed
 
 kega <- kegg_analysis(shell2_genes)
 barplot(kega, drop=TRUE, showCategory=20)
@@ -250,6 +241,8 @@ tempkega <- tail(kega,row.names=FALSE)
 tempkega <- tempkega[,1:5]
 print(xtable(tempkega, display=c("s","s","s","s","s","g")), math.style.exponents = TRUE,include.rownames = FALSE)
 
+# rm(kega,goa,tempgoa,tempkega)
+#################################################################################
 
 # Annotate the SHELL 1, disease modules with GO terms
 dismods1 <- getDiseaseModules(s1,"all")  # crashed out after 8 hours on full dataset
@@ -270,7 +263,7 @@ GOBubble(sample_n(reduced_dismods1,50), labels = 2, ID=TRUE)                    
 
 reduced_dismods2 <- reduce_overlap(dismods2, overlap = 2)
 reduced_dismods2$zscore <- runif(length(reduced_dismods2$zscore), -3.0, 2.5) # bit of a fiddle this..but
-GOBubble(sample_n(reduced_dismods2,50), labels = 2, ID=TRUE)                                # but need to spread out bubbles
+GOBubble(sample_n(reduced_dismods2,50), labels = 2, ID=TRUE)                    # but need to spread out bubbles
 
 
 # COMPARE WITH OTHER MODULES
