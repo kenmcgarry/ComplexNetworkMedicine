@@ -419,10 +419,10 @@ setcount <- function(dms,ind){
 } 
 
 # This is a far quicker version of getDiseaseModules(). This version uses the ontologySimilarity packages
-# by Daniel Green. NB for the moment cannot do bubbleplot as we cannot as yet generate p-values or zscores.
+# by Daniel Green. 
 createDiseaseModules <- function(linkdata){
   tempgenes <- names(gene_GO_terms)
-  enrich <- data.frame(ID="GO:0000666", genes="RU12",DiseaseModule=666,adj_pval=0.001,zscore=6.001,
+  enrich <- data.frame(ID="GO:0000666", genes="RU12",DiseaseModule=666,adj_pval=0.001,zscore=6.001,logFC=0.2,
                        category="FU",term="Satanic like behaviour",stringsAsFactors=FALSE) #instantiate.
   # remove modules with fewer than 20 genes - as per Menche 2015 paper
   newclusters <- Filter(function(x)length(x) > 20, linkdata$clusters)
@@ -448,6 +448,7 @@ createDiseaseModules <- function(linkdata){
       tmp_enrich_c <- cbind(tmp_enrich_c,rep(j,length(unlist(temp_cc))))               # diseasemodule number
       tmp_enrich_c <- cbind(tmp_enrich_c,rep(0.01,length(unlist(temp_cc))))            # adj_pval
       tmp_enrich_c <- cbind(tmp_enrich_c,rep(3.2,length(unlist(temp_cc))))             # zscore
+      tmp_enrich_c <- cbind(tmp_enrich_c,rep(0.2,length(unlist(temp_cc))))             # logFC
       tmp_enrich_c <- cbind(tmp_enrich_c,rep("CC",length(unlist(temp_cc))),stringsAsFactors=FALSE) # category
       tmp_enrich_c <- cbind(tmp_enrich_c,unname(go$name[unlist(temp_cc)]),stringsAsFactors=FALSE)
       
@@ -457,6 +458,7 @@ createDiseaseModules <- function(linkdata){
       tmp_enrich_b <- cbind(tmp_enrich_b,rep(j,length(unlist(temp_bp))))               # diseasemodule number
       tmp_enrich_b <- cbind(tmp_enrich_b,rep(0.01,length(unlist(temp_bp))))            # adj_pval
       tmp_enrich_b <- cbind(tmp_enrich_b,rep(3.2,length(unlist(temp_bp))))             # zscore
+      tmp_enrich_b <- cbind(tmp_enrich_b,rep(0.2,length(unlist(temp_bp))))             # logFC
       tmp_enrich_b <- cbind(tmp_enrich_b,rep("BP",length(unlist(temp_bp))),stringsAsFactors=FALSE) # category
       tmp_enrich_b <- cbind(tmp_enrich_b,unname(go$name[unlist(temp_bp)]),stringsAsFactors=FALSE)
       
@@ -466,22 +468,38 @@ createDiseaseModules <- function(linkdata){
       tmp_enrich_m <- cbind(tmp_enrich_m,rep(j,length(unlist(temp_mf))))               # diseasemodule number
       tmp_enrich_m <- cbind(tmp_enrich_m,rep(0.01,length(unlist(temp_mf))))            # adj_pval
       tmp_enrich_m <- cbind(tmp_enrich_m,rep(3.2,length(unlist(temp_mf))))             # zscore
+      tmp_enrich_m <- cbind(tmp_enrich_m,rep(0.2,length(unlist(temp_mf))))             # logFC
       tmp_enrich_m <- cbind(tmp_enrich_m,rep("MF",length(unlist(temp_mf))),stringsAsFactors=FALSE) # category
       tmp_enrich_m <- cbind(tmp_enrich_m,unname(go$name[unlist(temp_mf)]),stringsAsFactors=FALSE)
       
-      colnames(tmp_enrich_b)[1] <- "ID"; colnames(tmp_enrich_b)[2] <- "genes"; colnames(tmp_enrich_b)[3] <- "DiseaseModule" 
-      colnames(tmp_enrich_b)[4] <- "adj_pval"; colnames(tmp_enrich_b)[5] <- "zscore"; colnames(tmp_enrich_b)[6] <- "category" 
-      colnames(tmp_enrich_b)[7] <- "term" 
+      colnames(tmp_enrich_b)[1] <- "ID"; 
+      colnames(tmp_enrich_b)[2] <- "genes"; 
+      colnames(tmp_enrich_b)[3] <- "DiseaseModule" 
+      colnames(tmp_enrich_b)[4] <- "adj_pval"; 
+      colnames(tmp_enrich_b)[5] <- "zscore"; 
+      colnames(tmp_enrich_b)[6] <- "logFC"; 
+      colnames(tmp_enrich_b)[7] <- "category" 
+      colnames(tmp_enrich_b)[8] <- "term" 
       rownames(tmp_enrich_b) <- c()
       
-      colnames(tmp_enrich_c)[1] <- "ID"; colnames(tmp_enrich_c)[2] <- "genes"; colnames(tmp_enrich_c)[3] <- "DiseaseModule" 
-      colnames(tmp_enrich_c)[4] <- "adj_pval"; colnames(tmp_enrich_c)[5] <- "zscore"; colnames(tmp_enrich_c)[6] <- "category" 
-      colnames(tmp_enrich_c)[7] <- "term" 
+      colnames(tmp_enrich_c)[1] <- "ID"; 
+      colnames(tmp_enrich_c)[2] <- "genes"; 
+      colnames(tmp_enrich_c)[3] <- "DiseaseModule" 
+      colnames(tmp_enrich_c)[4] <- "adj_pval"; 
+      colnames(tmp_enrich_c)[5] <- "zscore"; 
+      colnames(tmp_enrich_c)[6] <- "logFC"; 
+      colnames(tmp_enrich_c)[7] <- "category" 
+      colnames(tmp_enrich_c)[8] <- "term" 
       rownames(tmp_enrich_c) <- c()
       
-      colnames(tmp_enrich_m)[1] <- "ID"; colnames(tmp_enrich_m)[2] <- "genes"; colnames(tmp_enrich_m)[3] <- "DiseaseModule" 
-      colnames(tmp_enrich_m)[4] <- "adj_pval"; colnames(tmp_enrich_m)[5] <- "zscore"; colnames(tmp_enrich_m)[6] <- "category" 
-      colnames(tmp_enrich_m)[7] <- "term" 
+      colnames(tmp_enrich_m)[1] <- "ID"; 
+      colnames(tmp_enrich_m)[2] <- "genes"; 
+      colnames(tmp_enrich_m)[3] <- "DiseaseModule" 
+      colnames(tmp_enrich_m)[4] <- "adj_pval"; 
+      colnames(tmp_enrich_m)[5] <- "zscore"; 
+      colnames(tmp_enrich_m)[6] <- "logFC"; 
+      colnames(tmp_enrich_m)[7] <- "category" 
+      colnames(tmp_enrich_m)[8] <- "term" 
       rownames(tmp_enrich_m) <- c()
       
       #cat("\nRBIND....CC , BF & MF to enrich")
@@ -495,7 +513,7 @@ createDiseaseModules <- function(linkdata){
   
   idcount <- as.vector(tmp_count)[match(enrich$ID, names(tmp_count))] # almost too clever
   enrich <- cbind(enrich,idcount)
-  colnames(enrich)[8] <- "count"   
+  colnames(enrich)[9] <- "count"   
 
   return(enrich)
 }

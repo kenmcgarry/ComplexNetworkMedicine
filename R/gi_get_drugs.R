@@ -135,8 +135,25 @@ reduced_alzmods$zscore <- runif(length(reduced_alzmods$zscore), -3.0, 2.5) # bit
 
 GOBubble(sample_n(reduced_alzmods,50), labels = 2, ID=TRUE)   
 
+# ASTHMA DISEASE MODULE DETECTION
+# use_rentrez() here rather than use files downloaded from STITCH/STRING to get PPI's
+tempinteractions <- use_rentrez(nonC06_asth$geneName)
+tempinteractions[,1] <- str_to_upper(tempinteractions[,1])  # NCBI returns a few genes that have lowercase letters
+# remove bad gene names that cause getDiseaseModules to crash
+#tempinteractions <- subset(tempinteractions, a!="ATP5PF")
+#tempinteractions <- subset(tempinteractions, a!="ATP5IF1")
+asth <- getLinkCommunities(tempinteractions, hcmethod = "single")  # consider cutting density partition manually
+asth <- newLinkCommsAt(asth, cutat = 0.7) # cut it at 0.7
+# Annotate the disease modules with GO terms
+asthmods <- createDiseaseModules(asth)  #
+asthmods_enrich <- asthmods  # Keep a copy of full data, as GOBubble datastructure only uses a subset of it
+asthmods <- dplyr::select(asthmods_enrich,category,ID,term,count,genes,logFC,adj_pval,zscore)
+reduced_asthmods <- reduce_overlap(asthmods, overlap = 1)
+reduced_asthmods$zscore <- runif(length(reduced_asthmods$zscore), -3.0, 2.5) # bit of a fiddle this..but spread out zscore
+GOBubble(sample_n(reduced_asthmods,50), labels = 2, ID=TRUE)   
 
-# ERROR: ATP5PF, ATP5IF1
+
+
 
 # Load in drug interactions, majority are drug-2-drug interactions with a few genes thrown in.
 drug_interactions <- read.csv("C:\\R-files\\disease\\drug_interactions.csv",stringsAsFactors = FALSE)  #important to make stringsAsFact false
