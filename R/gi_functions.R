@@ -22,6 +22,13 @@ library(ontologySimilarity)
 library(ontologyIndex)
 library(rentrez)
 library(stringr)
+# huge amount of data gets loaded in here onwards!
+library(ontologySimilarity)
+library(ontologyIndex)
+library(infotheo)
+data(go)
+data(gene_GO_terms)
+data(GO_IC)
 
 ## --------------------- FUNCTION DEFINITIONS -----------------------
 
@@ -410,6 +417,85 @@ setcount <- function(dms,ind){
   
   return(dms)
 } 
+
+# This is a far quicker version of getDiseaseModules(). This version uses the ontologySimilarity packages
+# by Daniel Green. NB for the moment cannot do bubbleplot as we cannot as yet generate p-values or zscores.
+createDiseaseModules <- function(linkdata){
+  tempgenes <- names(gene_GO_terms)
+  enrich <- data.frame(ID="GO:0000666", genes="RU12",DiseaseModule=666,adj_pval=0.001,zscore=6.001,
+                       category="FU",term="Satanic like behaviour",stringsAsFactors=FALSE) #instantiate.
+  # remove modules with fewer than 20 genes - as per Menche 2015 paper
+  newclusters <- Filter(function(x)length(x) > 20, linkdata$clusters)
+  cat("\nFound ",length(newclusters), " usable modules.")
+  j<- 0  # set counter for clusters bigger than 20 
+  
+  for (i in 1:length(linkdata$clusters)){
+    tempnodes <- getNodesIn(linkdata, clusterids = i,type="names")
+    if(length(tempnodes) >= 20){
+      j <- j+1
+      #cat("\nj =...",j)
+      tempnodes <- tempnodes[tempnodes %in% tempgenes]  # remove genes that do not exist in GO data 
+      tempgo <- gene_GO_terms[tempnodes]
+      cc <- go$id[go$name == "cellular_component"]
+      bp <- go$id[go$name == "biological_process"]
+      mf <- go$id[go$name == "molecular_function"] 
+      temp_cc <- lapply(tempgo, function(x) intersection_with_descendants(go, roots=cc, x))
+      temp_bp <- lapply(tempgo, function(x) intersection_with_descendants(go, roots=bp, x))
+      temp_mf <- lapply(tempgo, function(x) intersection_with_descendants(go, roots=mf, x))
+      tmp_enrich_c <- data.frame(unlist(temp_cc),stringsAsFactors=FALSE)  # GO ID's
+      #cat("\nCBIND...CC")
+      tmp_enrich_c <- cbind(tmp_enrich_c,rownames(tmp_enrich_c),stringsAsFactors=FALSE) # gene names
+      tmp_enrich_c <- cbind(tmp_enrich_c,rep(j,length(unlist(temp_cc))))               # diseasemodule number
+      tmp_enrich_c <- cbind(tmp_enrich_c,rep(0.01,length(unlist(temp_cc))))            # adj_pval
+      tmp_enrich_c <- cbind(tmp_enrich_c,rep(3.2,length(unlist(temp_cc))))             # zscore
+      tmp_enrich_c <- cbind(tmp_enrich_c,rep("CC",length(unlist(temp_cc))),stringsAsFactors=FALSE) # category
+      tmp_enrich_c <- cbind(tmp_enrich_c,unname(go$name[unlist(temp_cc)]),stringsAsFactors=FALSE)
+      
+      tmp_enrich_b <- data.frame(unlist(temp_bp),stringsAsFactors=FALSE)  # GO ID's
+      #cat("\nCBIND...BP")
+      tmp_enrich_b <- cbind(tmp_enrich_b,rownames(tmp_enrich_b),stringsAsFactors=FALSE) # gene names
+      tmp_enrich_b <- cbind(tmp_enrich_b,rep(j,length(unlist(temp_bp))))               # diseasemodule number
+      tmp_enrich_b <- cbind(tmp_enrich_b,rep(0.01,length(unlist(temp_bp))))            # adj_pval
+      tmp_enrich_b <- cbind(tmp_enrich_b,rep(3.2,length(unlist(temp_bp))))             # zscore
+      tmp_enrich_b <- cbind(tmp_enrich_b,rep("BP",length(unlist(temp_bp))),stringsAsFactors=FALSE) # category
+      tmp_enrich_b <- cbind(tmp_enrich_b,unname(go$name[unlist(temp_bp)]),stringsAsFactors=FALSE)
+      
+      tmp_enrich_m <- data.frame(unlist(temp_mf),stringsAsFactors=FALSE)  # GO ID's
+      #cat("\nCBIND...MF")
+      tmp_enrich_m <- cbind(tmp_enrich_m,rownames(tmp_enrich_m),stringsAsFactors=FALSE) # gene names
+      tmp_enrich_m <- cbind(tmp_enrich_m,rep(j,length(unlist(temp_mf))))               # diseasemodule number
+      tmp_enrich_m <- cbind(tmp_enrich_m,rep(0.01,length(unlist(temp_mf))))            # adj_pval
+      tmp_enrich_m <- cbind(tmp_enrich_m,rep(3.2,length(unlist(temp_mf))))             # zscore
+      tmp_enrich_m <- cbind(tmp_enrich_m,rep("MF",length(unlist(temp_mf))),stringsAsFactors=FALSE) # category
+      tmp_enrich_m <- cbind(tmp_enrich_m,unname(go$name[unlist(temp_mf)]),stringsAsFactors=FALSE)
+      
+      colnames(tmp_enrich_b)[1] <- "ID"; colnames(tmp_enrich_b)[2] <- "genes"; colnames(tmp_enrich_b)[3] <- "DiseaseModule" 
+      colnames(tmp_enrich_b)[4] <- "adj_pval"; colnames(tmp_enrich_b)[5] <- "zscore"; colnames(tmp_enrich_b)[6] <- "category" 
+      colnames(tmp_enrich_b)[7] <- "term" 
+      rownames(tmp_enrich_b) <- c()
+      
+      colnames(tmp_enrich_c)[1] <- "ID"; colnames(tmp_enrich_c)[2] <- "genes"; colnames(tmp_enrich_c)[3] <- "DiseaseModule" 
+      colnames(tmp_enrich_c)[4] <- "adj_pval"; colnames(tmp_enrich_c)[5] <- "zscore"; colnames(tmp_enrich_c)[6] <- "category" 
+      colnames(tmp_enrich_c)[7] <- "term" 
+      rownames(tmp_enrich_c) <- c()
+      
+      colnames(tmp_enrich_m)[1] <- "ID"; colnames(tmp_enrich_m)[2] <- "genes"; colnames(tmp_enrich_m)[3] <- "DiseaseModule" 
+      colnames(tmp_enrich_m)[4] <- "adj_pval"; colnames(tmp_enrich_m)[5] <- "zscore"; colnames(tmp_enrich_m)[6] <- "category" 
+      colnames(tmp_enrich_m)[7] <- "term" 
+      rownames(tmp_enrich_m) <- c()
+      
+      #cat("\nRBIND....CC , BF & MF to enrich")
+      enrich <- rbind(enrich,tmp_enrich_c)
+      enrich <- rbind(enrich,tmp_enrich_b)
+      enrich <- rbind(enrich,tmp_enrich_m)
+      #temp <- data.frame(check.names=FALSE, `terms`=sapply(tempgo, length),`CC`=sapply(temp_cc, length),
+      #                   `BP`=sapply(temp_bp, length),`MF`=sapply(temp_mf, length))
+    }
+    #enrich <- cbind(enrich,tmp_enrich_c)
+  }
+  return(enrich)
+}
+
 
 # getdrugs() assumes that "indications" dataframe is already loaded. You must provide getdrugs() 
 # with the "umls_cui_from_meddra" code for your disease. It will return the drugs known to be used...
