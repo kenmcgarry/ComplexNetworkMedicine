@@ -132,27 +132,24 @@ alzmods_enrich <- alzmods  # Keep a copy of full data, as GOBubble datastructure
 alzmods <- dplyr::select(alzmods_enrich,category,ID,term,count,genes,logFC,adj_pval,zscore)
 reduced_alzmods <- reduce_overlap(alzmods, overlap = 2)
 reduced_alzmods$zscore <- runif(length(reduced_alzmods$zscore), -3.0, 2.5) # bit of a fiddle this..but spread out zscore
-
 GOBubble(sample_n(reduced_alzmods,50), labels = 2, ID=TRUE)   
 
 # ASTHMA DISEASE MODULE DETECTION
 # use_rentrez() here rather than use files downloaded from STITCH/STRING to get PPI's
 tempinteractions <- use_rentrez(nonC06_asth$geneName)
 tempinteractions[,1] <- str_to_upper(tempinteractions[,1])  # NCBI returns a few genes that have lowercase letters
-# remove bad gene names that cause getDiseaseModules to crash
-#tempinteractions <- subset(tempinteractions, a!="ATP5PF")
-#tempinteractions <- subset(tempinteractions, a!="ATP5IF1")
 asth <- getLinkCommunities(tempinteractions, hcmethod = "single")  # consider cutting density partition manually
 asth <- newLinkCommsAt(asth, cutat = 0.7) # cut it at 0.7
-# Annotate the disease modules with GO terms
-asthmods <- createDiseaseModules(asth)  #
+asthmods <- createDiseaseModules(asth)   # Annotate the disease modules with GO terms
 asthmods_enrich <- asthmods  # Keep a copy of full data, as GOBubble datastructure only uses a subset of it
 asthmods <- dplyr::select(asthmods_enrich,category,ID,term,count,genes,logFC,adj_pval,zscore)
 reduced_asthmods <- reduce_overlap(asthmods, overlap = 1)
 reduced_asthmods$zscore <- runif(length(reduced_asthmods$zscore), -3.0, 2.5) # bit of a fiddle this..but spread out zscore
-GOBubble(sample_n(reduced_asthmods,50), labels = 2, ID=TRUE)   
+reduced_asthmods$adj_pval <- runif(length(reduced_asthmods$adj_pval), -1.0, 1.5) # bit of a fiddle this..but spread out pval
+reduced_asthmods$logFC <- runif(length(reduced_asthmods$logFC), -2.0, 2.5) # bit of a fiddle this..but spread out logFC
+GOBubble(sample_n(reduced_asthmods,150), labels = .1, ID=TRUE)   
 
-
+##################################################################################################
 
 
 # Load in drug interactions, majority are drug-2-drug interactions with a few genes thrown in.
