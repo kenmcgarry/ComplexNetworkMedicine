@@ -103,7 +103,8 @@ unique(shell2Diseases$diseaseName)  # how many different shell2 associated non-C
 write.table(unique(sort(shell1Diseases$diseaseName)),"C:\\R-files\\disease\\shell1diseases.csv",sep=",",row.names = FALSE,col.names = FALSE)
 write.table(unique(sort(shell2Diseases$diseaseName)),"C:\\R-files\\disease\\shell2diseases.csv",sep=",",row.names = FALSE,col.names = FALSE)
 
-# create lists of non-C06 disease genes, for upload to STITCH (to make non_C06 disease modules)
+#-----------------------------------------------------------------
+# Create lists of non-C06 disease genes, will use rentrez(NCBI) server (to get proteins for non_C06 disease modules)
 # start with specifically named shell1 related non-C06's. 
 nonC06_alz <- shell1Diseases %>%
   filter(diseaseName == "Alzheimer's Disease") %>%
@@ -164,7 +165,6 @@ reduced_asthmods$adj_pval <- runif(length(reduced_asthmods$adj_pval), -1.0, 1.5)
 reduced_asthmods$logFC <- runif(length(reduced_asthmods$logFC), -2.0, 2.5) # bit of a fiddle this..but spread out logFC
 GOBubble(sample_n(reduced_asthmods,550), labels = .1, ID=TRUE)   
 
-
 # AUTISM DISEASE MODULE DETECTION
 # use_rentrez() here rather than use files downloaded from STITCH/STRING to get PPI's
 tempinteractions <- use_rentrez(nonC06_aut$geneName)
@@ -179,7 +179,6 @@ reduced_autmods$zscore <- runif(length(reduced_autmods$zscore), -3.0, 2.5) # bit
 reduced_autmods$adj_pval <- runif(length(reduced_autmods$adj_pval), -1.0, 1.5) # bit of a fiddle this..but spread out pval
 reduced_autmods$logFC <- runif(length(reduced_autmods$logFC), -2.0, 2.5) # bit of a fiddle this..but spread out logFC
 GOBubble(sample_n(reduced_autmods,550), labels = .1, ID=TRUE)   
-
 
 # PARKINSONS DISEASE MODULE DETECTION
 # use_rentrez() here rather than use files downloaded from STITCH/STRING to get PPI's
@@ -241,7 +240,6 @@ reduced_obsmods$adj_pval <- runif(length(reduced_obsmods$adj_pval), -1.0, 1.5) #
 reduced_obsmods$logFC <- runif(length(reduced_obsmods$logFC), -2.0, 2.5) # bit of a fiddle this..but spread out logFC
 GOBubble(sample_n(reduced_obsmods,550), labels = .1, ID=TRUE)   
 
-
 # DIABETES DISEASE MODULE DETECTION
 # use_rentrez() here rather than use filedownloaded from STITCH/STRING to get PPI's
 tempinteractions <- use_rentrez(nonC06_dia$geneName)
@@ -255,7 +253,9 @@ reduced_diamods <- reduce_overlap(diamods, overlap = 1)
 reduced_diamods$zscore <- runif(length(reduced_diamods$zscore), -3.0, 2.5) # bit of a fiddle this..but spread out zscore
 reduced_diamods$adj_pval <- runif(length(reduced_diamods$adj_pval), -1.0, 1.5) # bit of a fiddle this..but spread out pval
 reduced_diamods$logFC <- runif(length(reduced_diamods$logFC), -2.0, 2.5) # bit of a fiddle this..but spread out logFC
-GOBubble(sample_n(reduced_diamods,550), labels = .1, ID=TRUE)   
+GOBubble(sample_n(reduced_diamods,550), labels = .1, ID=TRUE)  
+
+
 ##################################################################################################
 
 # Load in drug interactions, majority are drug-2-drug interactions with a few genes thrown in.
