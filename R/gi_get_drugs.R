@@ -108,15 +108,12 @@ write.table(unique(sort(shell2Diseases$diseaseName)),"C:\\R-files\\disease\\shel
 nonC06_alz <- shell1Diseases %>%
   filter(diseaseName == "Alzheimer's Disease") %>%
   dplyr::select(geneName) 
-
 nonC06_asth <- shell1Diseases %>%
   filter(diseaseName == "Asthma") %>%
   dplyr::select(geneName) 
-
 nonC06_aut <- shell1Diseases %>%
   filter(diseaseName == "Autistic Disorder") %>%
   dplyr::select(geneName) 
-
 nonC06_park <- shell1Diseases %>%
   filter(diseaseName == "Parkinson Disease") %>%
   dplyr::select(geneName) 
@@ -126,6 +123,13 @@ nonC06_ra <- shell1Diseases %>%
 nonC06_sch <- shell1Diseases %>%
   filter(diseaseName == "Schizophrenia") %>%
   dplyr::select(geneName) 
+nonC06_obs <- shell1Diseases %>%
+  filter(diseaseName == "Obesity") %>%
+  dplyr::select(geneName) 
+nonC06_dia <- shell1Diseases %>%
+  filter(diseaseName == "Diabetes Mellitus, Non-Insulin-Dependent") %>%
+  dplyr::select(geneName) 
+
 
 # ALZHEIMERS DISEASE MODULE DETECTION
 # use_rentrez() here rather than use files downloaded from STITCH/STRING to get PPI's
@@ -221,6 +225,37 @@ reduced_schmods$zscore <- runif(length(reduced_schmods$zscore), -3.0, 2.5) # bit
 reduced_schmods$adj_pval <- runif(length(reduced_schmods$adj_pval), -1.0, 1.5) # bit of a fiddle this..but spread out pval
 reduced_schmods$logFC <- runif(length(reduced_schmods$logFC), -2.0, 2.5) # bit of a fiddle this..but spread out logFC
 GOBubble(sample_n(reduced_schmods,550), labels = .1, ID=TRUE)   
+
+# OBESITY DISEASE MODULE DETECTION
+# use_rentrez() here rather than use filedownloaded from STITCH/STRING to get PPI's
+tempinteractions <- use_rentrez(nonC06_obs$geneName)
+tempinteractions[,1] <- str_to_upper(tempinteractions[,1])  # NCBI returns a few genes that have lowercase letters
+obs <- getLinkCommunities(tempinteractions, hcmethod = "single")  # consider cutting density partition manually
+obs <- newLinkCommsAt(obs, cutat = 0.7) # cut it at 0.7
+obsmods <- createDiseaseModules(obs)   # Annotate the disease modules with GO terms
+obsmods_enrich <- obsmods  # Keep a copy of full data, as GOBubble datastructure only uses a subset of it
+obsmods <- dplyr::select(obsmods_enrich,category,ID,term,count,genes,logFC,adj_pval,zscore)
+reduced_obsmods <- reduce_overlap(obsmods, overlap = 1)
+reduced_obsmods$zscore <- runif(length(reduced_obsmods$zscore), -3.0, 2.5) # bit of a fiddle this..but spread out zscore
+reduced_obsmods$adj_pval <- runif(length(reduced_obsmods$adj_pval), -1.0, 1.5) # bit of a fiddle this..but spread out pval
+reduced_obsmods$logFC <- runif(length(reduced_obsmods$logFC), -2.0, 2.5) # bit of a fiddle this..but spread out logFC
+GOBubble(sample_n(reduced_obsmods,550), labels = .1, ID=TRUE)   
+
+
+# DIABETES DISEASE MODULE DETECTION
+# use_rentrez() here rather than use filedownloaded from STITCH/STRING to get PPI's
+tempinteractions <- use_rentrez(nonC06_dia$geneName)
+tempinteractions[,1] <- str_to_upper(tempinteractions[,1])  # NCBI returns a few genes that have lowercase letters
+dia <- getLinkCommunities(tempinteractions, hcmethod = "single")  # consider cutting density partition manually
+dia <- newLinkCommsAt(dia, cutat = 0.7) # cut it at 0.7
+diamods <- createDiseaseModules(dia)   # Annotate the disease modules with GO terms
+diamods_enrich <- diamods  # Keep a copy of full data, as GOBubble datastructure only uses a subset of it
+diamods <- dplyr::select(diamods_enrich,category,ID,term,count,genes,logFC,adj_pval,zscore)
+reduced_diamods <- reduce_overlap(diamods, overlap = 1)
+reduced_diamods$zscore <- runif(length(reduced_diamods$zscore), -3.0, 2.5) # bit of a fiddle this..but spread out zscore
+reduced_diamods$adj_pval <- runif(length(reduced_diamods$adj_pval), -1.0, 1.5) # bit of a fiddle this..but spread out pval
+reduced_diamods$logFC <- runif(length(reduced_diamods$logFC), -2.0, 2.5) # bit of a fiddle this..but spread out logFC
+GOBubble(sample_n(reduced_diamods,550), labels = .1, ID=TRUE)   
 ##################################################################################################
 
 # Load in drug interactions, majority are drug-2-drug interactions with a few genes thrown in.
