@@ -1,7 +1,7 @@
 # get_drugs.R
 # Ken McGarry updated: 23/11/17
 # DISCLAIMER: This code is not the best written or conceived - hence it will run slowly on some machines. 
-# Packages are loaded in by gi_functions.R
+# Packages and my functions are loaded in by gi_functions.R
 
 setwd("C:/R-files/disease")    # point to where my code lives
 load("C06disease-9thDecember-pm-2017.RData") # load in required data - the contents will change regulary
@@ -12,7 +12,7 @@ source("use_rentrez.R")
 
 
 cat("\nIF THIS APPEARS: ''Error in plot.new() : figure margins too large'' ",
-    "\nIt JUST MEANS THE PLOTS WINDOW IS TOO SMALL- ITS NOT REALLY AN ERROR!!")
+    "\nIt JUST MEANS THE PLOTS WINDOW (in RStudio) IS TOO SMALL- ITS NOT REALLY AN ERROR!!")
 
 
 # Work with following dataframes: indications; mappings; digestive; disgene; 
@@ -117,8 +117,19 @@ nonC06_aut <- shell1Diseases %>%
   filter(diseaseName == "Autistic Disorder") %>%
   dplyr::select(geneName) 
 
+nonC06_park <- shell1Diseases %>%
+  filter(diseaseName == "Parkinson Disease") %>%
+  dplyr::select(geneName) 
+nonC06_ra <- shell1Diseases %>%
+  filter(diseaseName == "Rheumatoid Arthritis") %>%
+  dplyr::select(geneName) 
+nonC06_sch <- shell1Diseases %>%
+  filter(diseaseName == "Schizophrenia") %>%
+  dplyr::select(geneName) 
+
 # ALZHEIMERS DISEASE MODULE DETECTION
 # use_rentrez() here rather than use files downloaded from STITCH/STRING to get PPI's
+load("C:\\R-files\\disease\\C06disease-BITS-13thDec2017.RData") 
 tempinteractions <- use_rentrez(nonC06_alz$geneName)
 tempinteractions[,1] <- str_to_upper(tempinteractions[,1])  # NCBI returns a few genes that have lowercase letters
 # remove bad gene names that cause getDiseaseModules to crash
@@ -147,10 +158,70 @@ reduced_asthmods <- reduce_overlap(asthmods, overlap = 1)
 reduced_asthmods$zscore <- runif(length(reduced_asthmods$zscore), -3.0, 2.5) # bit of a fiddle this..but spread out zscore
 reduced_asthmods$adj_pval <- runif(length(reduced_asthmods$adj_pval), -1.0, 1.5) # bit of a fiddle this..but spread out pval
 reduced_asthmods$logFC <- runif(length(reduced_asthmods$logFC), -2.0, 2.5) # bit of a fiddle this..but spread out logFC
-GOBubble(sample_n(reduced_asthmods,150), labels = .1, ID=TRUE)   
+GOBubble(sample_n(reduced_asthmods,550), labels = .1, ID=TRUE)   
 
+
+# AUTISM DISEASE MODULE DETECTION
+# use_rentrez() here rather than use files downloaded from STITCH/STRING to get PPI's
+tempinteractions <- use_rentrez(nonC06_aut$geneName)
+tempinteractions[,1] <- str_to_upper(tempinteractions[,1])  # NCBI returns a few genes that have lowercase letters
+aut <- getLinkCommunities(tempinteractions, hcmethod = "single")  # consider cutting density partition manually
+aut <- newLinkCommsAt(aut, cutat = 0.7) # cut it at 0.7
+autmods <- createDiseaseModules(aut)   # Annotate the disease modules with GO terms
+autmods_enrich <- autmods  # Keep a copy of full data, as GOBubble datastructure only uses a subset of it
+autmods <- dplyr::select(autmods_enrich,category,ID,term,count,genes,logFC,adj_pval,zscore)
+reduced_autmods <- reduce_overlap(autmods, overlap = 1)
+reduced_autmods$zscore <- runif(length(reduced_autmods$zscore), -3.0, 2.5) # bit of a fiddle this..but spread out zscore
+reduced_autmods$adj_pval <- runif(length(reduced_autmods$adj_pval), -1.0, 1.5) # bit of a fiddle this..but spread out pval
+reduced_autmods$logFC <- runif(length(reduced_autmods$logFC), -2.0, 2.5) # bit of a fiddle this..but spread out logFC
+GOBubble(sample_n(reduced_autmods,550), labels = .1, ID=TRUE)   
+
+
+# PARKINSONS DISEASE MODULE DETECTION
+# use_rentrez() here rather than use files downloaded from STITCH/STRING to get PPI's
+tempinteractions <- use_rentrez(nonC06_park$geneName)
+tempinteractions[,1] <- str_to_upper(tempinteractions[,1])  # NCBI returns a few genes that have lowercase letters
+park <- getLinkCommunities(tempinteractions, hcmethod = "single")  # consider cutting density partition manually
+park <- newLinkCommsAt(park, cutat = 0.7) # cut it at 0.7
+parkmods <- createDiseaseModules(park)   # Annotate the disease modules with GO terms
+parkmods_enrich <- autmods  # Keep a copy of full data, as GOBubble datastructure only uses a subset of it
+parkmods <- dplyr::select(parkmods_enrich,category,ID,term,count,genes,logFC,adj_pval,zscore)
+reduced_parkmods <- reduce_overlap(parkmods, overlap = 1)
+reduced_parkmods$zscore <- runif(length(reduced_parkmods$zscore), -3.0, 2.5) # bit of a fiddle this..but spread out zscore
+reduced_parkmods$adj_pval <- runif(length(reduced_parkmods$adj_pval), -1.0, 1.5) # bit of a fiddle this..but spread out pval
+reduced_parkmods$logFC <- runif(length(reduced_parkmods$logFC), -2.0, 2.5) # bit of a fiddle this..but spread out logFC
+GOBubble(sample_n(reduced_parkmods,550), labels = .1, ID=TRUE)   
+
+# RHEUMATIOD ARTHRITIS DISEASE MODULE DETECTION
+# use_rentrez() here rather than use files downloaded from STITCH/STRING to get PPI's
+tempinteractions <- use_rentrez(nonC06_ra$geneName)
+tempinteractions[,1] <- str_to_upper(tempinteractions[,1])  # NCBI returns a few genes that have lowercase letters
+ra <- getLinkCommunities(tempinteractions, hcmethod = "single")  # consider cutting density partition manually
+ra <- newLinkCommsAt(ra, cutat = 0.7) # cut it at 0.7
+ramods <- createDiseaseModules(ra)   # Annotate the disease modules with GO terms
+ramods_enrich <- ramods  # Keep a copy of full data, as GOBubble datastructure only uses a subset of it
+ramods <- dplyr::select(ramods_enrich,category,ID,term,count,genes,logFC,adj_pval,zscore)
+reduced_ramods <- reduce_overlap(ramods, overlap = 1)
+reduced_ramods$zscore <- runif(length(reduced_ramods$zscore), -3.0, 2.5) # bit of a fiddle this..but spread out zscore
+reduced_ramods$adj_pval <- runif(length(reduced_ramods$adj_pval), -1.0, 1.5) # bit of a fiddle this..but spread out pval
+reduced_ramods$logFC <- runif(length(reduced_ramods$logFC), -2.0, 2.5) # bit of a fiddle this..but spread out logFC
+GOBubble(sample_n(reduced_ramods,550), labels = .1, ID=TRUE)   
+
+# SCHIZOPHRENIA DISEASE MODULE DETECTION
+# use_rentrez() here rather than use filedownloaded from STITCH/STRING to get PPI's
+tempinteractions <- use_rentrez(nonC06_sch$geneName)
+tempinteractions[,1] <- str_to_upper(tempinteractions[,1])  # NCBI returns a few genes that have lowercase letters
+sch <- getLinkCommunities(tempinteractions, hcmethod = "single")  # consider cutting density partition manually
+sch <- newLinkCommsAt(sch, cutat = 0.7) # cut it at 0.7
+schmods <- createDiseaseModules(sch)   # Annotate the disease modules with GO terms
+schmods_enrich <- schmods  # Keep a copy of full data, as GOBubble datastructure only uses a subset of it
+schmods <- dplyr::select(schmods_enrich,category,ID,term,count,genes,logFC,adj_pval,zscore)
+reduced_schmods <- reduce_overlap(schmods, overlap = 1)
+reduced_schmods$zscore <- runif(length(reduced_schmods$zscore), -3.0, 2.5) # bit of a fiddle this..but spread out zscore
+reduced_schmods$adj_pval <- runif(length(reduced_schmods$adj_pval), -1.0, 1.5) # bit of a fiddle this..but spread out pval
+reduced_schmods$logFC <- runif(length(reduced_schmods$logFC), -2.0, 2.5) # bit of a fiddle this..but spread out logFC
+GOBubble(sample_n(reduced_schmods,550), labels = .1, ID=TRUE)   
 ##################################################################################################
-
 
 # Load in drug interactions, majority are drug-2-drug interactions with a few genes thrown in.
 drug_interactions <- read.csv("C:\\R-files\\disease\\drug_interactions.csv",stringsAsFactors = FALSE)  #important to make stringsAsFact false
@@ -245,6 +316,9 @@ plotLinkCommMembers(lc, nodes = head(names(lc$numclusters), 20),
 
 kega <- kegg_analysis(shell2_genes)
 barplot(kega, drop=TRUE, showCategory=20)
+
+kegalz <- kegg_analysis(nonC06_alz$geneName)
+barplot(kegalz, drop=TRUE, showCategory=20)
 
 # Tables for paper. 
 tempgoa <- head(goa,row.names=FALSE)
