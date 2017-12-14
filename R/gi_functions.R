@@ -323,6 +323,8 @@ go_analysis <- function(yourgenes,ontotype){
 
 # KEGG over-representation test
 kegg_analysis <- function(yourgenes){
+  #nlen <- dim(yourgenes)
+  
   eg = bitr(yourgenes, fromType="SYMBOL", toType="ENTREZID", OrgDb="org.Hs.eg.db")
   kk <- enrichKEGG(gene         = eg[,2],
                    organism     = 'hsa',
@@ -517,6 +519,17 @@ createDiseaseModules <- function(linkdata){
 
   return(enrich)
 }
+
+
+
+# add_pathways(), annotates each diseasemodule with the associated pathways from KEGG.
+add_pathways <- function(dm){
+  
+  pathways <- kegg_analysis(unique(alzmods$genes[1]))
+  
+  return(pathways)
+}
+
 
 
 # getdrugs() assumes that "indications" dataframe is already loaded. You must provide getdrugs() 

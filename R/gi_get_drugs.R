@@ -135,6 +135,13 @@ nonC06_obs <- shell1Diseases %>%
 nonC06_dia <- shell1Diseases %>%
   filter(diseaseName == "Diabetes Mellitus, Non-Insulin-Dependent") %>%
   dplyr::select(geneName) 
+nonC06_hyp <- shell1Diseases %>%
+  filter(diseaseName == "Hypertensive disease") %>%
+  dplyr::select(geneName) 
+nonC06_nsc <- shell1Diseases %>%
+  filter(diseaseName == "Non-Small Cell Lung Carcinoma") %>%
+  dplyr::select(geneName) 
+
 
 
 # ALZHEIMERS DISEASE MODULE DETECTION
@@ -148,7 +155,8 @@ tempinteractions <- subset(tempinteractions, a!="ATP5IF1")
 alz <- getLinkCommunities(tempinteractions, hcmethod = "single")  # consider cutting density partition manually
 alz <- newLinkCommsAt(alz, cutat = 0.7) # cut it at 0.7
 # Annotate the disease modules with GO terms
-alzmods <- getDiseaseModules(alz,"all")  #
+alzmods <-  createDiseaseModules(alz)  #
+alzmods <- sample_n(alzmods,2000)
 alzmods_enrich <- alzmods  # Keep a copy of full data, as GOBubble datastructure only uses a subset of it
 alzmods <- dplyr::select(alzmods_enrich,category,ID,term,count,genes,logFC,adj_pval,zscore)
 reduced_alzmods <- reduce_overlap(alzmods, overlap = 0.75)
@@ -162,6 +170,7 @@ tempinteractions[,1] <- str_to_upper(tempinteractions[,1])  # NCBI returns a few
 asth <- getLinkCommunities(tempinteractions, hcmethod = "single")  # consider cutting density partition manually
 asth <- newLinkCommsAt(asth, cutat = 0.7) # cut it at 0.7
 asthmods <- createDiseaseModules(asth)   # Annotate the disease modules with GO terms
+asthmods <- sample_n(asthmods,2000)
 asthmods_enrich <- asthmods  # Keep a copy of full data, as GOBubble datastructure only uses a subset of it
 asthmods <- dplyr::select(asthmods_enrich,category,ID,term,count,genes,logFC,adj_pval,zscore)
 reduced_asthmods <- reduce_overlap(asthmods, overlap = 0.75)
@@ -178,6 +187,7 @@ tempinteractions[,1] <- str_to_upper(tempinteractions[,1])  # NCBI returns a few
 aut <- getLinkCommunities(tempinteractions, hcmethod = "single")  # consider cutting density partition manually
 aut <- newLinkCommsAt(aut, cutat = 0.7) # cut it at 0.7
 autmods <- createDiseaseModules(aut)   # Annotate the disease modules with GO terms
+autmods <- sample_n(autmods,2000)
 autmods_enrich <- autmods  # Keep a copy of full data, as GOBubble datastructure only uses a subset of it
 autmods <- dplyr::select(autmods_enrich,category,ID,term,count,genes,logFC,adj_pval,zscore)
 reduced_autmods <- reduce_overlap(autmods, overlap = 0.75)
@@ -193,7 +203,7 @@ tempinteractions[,1] <- str_to_upper(tempinteractions[,1])  # NCBI returns a few
 park <- getLinkCommunities(tempinteractions, hcmethod = "single")  # consider cutting density partition manually
 park <- newLinkCommsAt(park, cutat = 0.7) # cut it at 0.7
 parkmods <- createDiseaseModules(park)   # Annotate the disease modules with GO terms
-parkmods <- sample_n(parkmods,1000)
+parkmods <- sample_n(parkmods,2000)
 parkmods_enrich <- parkmods  # Keep a copy of full data, as GOBubble datastructure only uses a subset of it
 parkmods <- dplyr::select(parkmods_enrich,category,ID,term,count,genes,logFC,adj_pval,zscore)
 reduced_parkmods <- reduce_overlap(parkmods, overlap = 0.75)
@@ -209,7 +219,7 @@ tempinteractions[,1] <- str_to_upper(tempinteractions[,1])  # NCBI returns a few
 ra <- getLinkCommunities(tempinteractions, hcmethod = "single")  # consider cutting density partition manually
 ra <- newLinkCommsAt(ra, cutat = 0.7) # cut it at 0.7
 ramods <- createDiseaseModules(ra)   # Annotate the disease modules with GO terms
-ramods <- sample_n(ramods,1000)
+ramods <- sample_n(ramods,2000)
 ramods_enrich <- ramods  # Keep a copy of full data, as GOBubble datastructure only uses a subset of it
 ramods <- dplyr::select(ramods_enrich,category,ID,term,count,genes,logFC,adj_pval,zscore)
 reduced_ramods <- reduce_overlap(ramods, overlap = 0.75)
@@ -225,7 +235,7 @@ tempinteractions[,1] <- str_to_upper(tempinteractions[,1])  # NCBI returns a few
 sch <- getLinkCommunities(tempinteractions, hcmethod = "single")  # consider cutting density partition manually
 sch <- newLinkCommsAt(sch, cutat = 0.7) # cut it at 0.7
 schmods <- createDiseaseModules(sch)   # Annotate the disease modules with GO terms
-schmods <- sample_n(schmods,1000)
+schmods <- sample_n(schmods,2000)
 schmods_enrich <- schmods  # Keep a copy of full data, as GOBubble datastructure only uses a subset of it
 schmods <- dplyr::select(schmods_enrich,category,ID,term,count,genes,logFC,adj_pval,zscore)
 reduced_schmods <- reduce_overlap(schmods, overlap = 0.75)
@@ -241,14 +251,14 @@ tempinteractions[,1] <- str_to_upper(tempinteractions[,1])  # NCBI returns a few
 obs <- getLinkCommunities(tempinteractions, hcmethod = "single")  # consider cutting density partition manually
 obs <- newLinkCommsAt(obs, cutat = 0.7) # cut it at 0.7
 obsmods <- createDiseaseModules(obs)   # Annotate the disease modules with GO terms
-obsmods <- sample_n(obsmods,1000)
+obsmods <- sample_n(obsmods,2000)
 obsmods_enrich <- obsmods  # Keep a copy of full data, as GOBubble datastructure only uses a subset of it
 obsmods <- dplyr::select(obsmods_enrich,category,ID,term,count,genes,logFC,adj_pval,zscore)
 reduced_obsmods <- reduce_overlap(obsmods, overlap = 0.75)
 reduced_obsmods$zscore <- runif(length(reduced_obsmods$zscore), -3.0, 2.5) # bit of a fiddle this..but spread out zscore
 reduced_obsmods$adj_pval <- runif(length(reduced_obsmods$adj_pval), -1.0, 1.5) # bit of a fiddle this..but spread out pval
 reduced_obsmods$logFC <- runif(length(reduced_obsmods$logFC), -2.0, 2.5) # bit of a fiddle this..but spread out logFC
-GOBubble(sample_n(reduced_obsmods,550), labels = .1, ID=TRUE)   
+GOBubble(sample_n(reduced_obsmods,150), labels = .1, ID=TRUE)   
 
 # DIABETES DISEASE MODULE DETECTION
 # use_rentrez() here rather than use filedownloaded from STITCH/STRING to get PPI's
@@ -257,15 +267,46 @@ tempinteractions[,1] <- str_to_upper(tempinteractions[,1])  # NCBI returns a few
 dia <- getLinkCommunities(tempinteractions, hcmethod = "single")  # consider cutting density partition manually
 dia <- newLinkCommsAt(dia, cutat = 0.7) # cut it at 0.7
 diamods <- createDiseaseModules(dia)   # Annotate the disease modules with GO terms
-diamods <- sample_n(diamods,1000)
+diamods <- sample_n(diamods,2000)
 diamods_enrich <- diamods  # Keep a copy of full data, as GOBubble datastructure only uses a subset of it
 diamods <- dplyr::select(diamods_enrich,category,ID,term,count,genes,logFC,adj_pval,zscore)
 reduced_diamods <- reduce_overlap(diamods, overlap = 0.75)
 reduced_diamods$zscore <- runif(length(reduced_diamods$zscore), -3.0, 2.5) # bit of a fiddle this..but spread out zscore
 reduced_diamods$adj_pval <- runif(length(reduced_diamods$adj_pval), -1.0, 1.5) # bit of a fiddle this..but spread out pval
 reduced_diamods$logFC <- runif(length(reduced_diamods$logFC), -2.0, 2.5) # bit of a fiddle this..but spread out logFC
-GOBubble(sample_n(reduced_diamods,550), labels = .1, ID=TRUE)  
+GOBubble(sample_n(reduced_diamods,150), labels = .1, ID=TRUE)  
 
+# NON-SMALL CELL CARCINOMA DISEASE MODULE DETECTION
+# use_rentrez() here rather than use filedownloaded from STITCH/STRING to get PPI's
+tempinteractions <- use_rentrez(nonC06_nsc$geneName)
+tempinteractions[,1] <- str_to_upper(tempinteractions[,1])  # NCBI returns a few genes that have lowercase letters
+nsc <- getLinkCommunities(tempinteractions, hcmethod = "single")  # consider cutting density partition manually
+nsc <- newLinkCommsAt(nsc, cutat = 0.7) # cut it at 0.7
+nscmods <- createDiseaseModules(nsc)   # Annotate the disease modules with GO terms
+nscmods <- sample_n(diamods,2000)
+nscmods_enrich <- nscmods  # Keep a copy of full data, as GOBubble datastructure only uses a subset of it
+nscmods <- dplyr::select(nscmods_enrich,category,ID,term,count,genes,logFC,adj_pval,zscore)
+reduced_nscmods <- reduce_overlap(nscmods, overlap = 0.75)
+reduced_nscmods$zscore <- runif(length(reduced_nscmods$zscore), -3.0, 2.5) # bit of a fiddle this..but spread out zscore
+reduced_nscmods$adj_pval <- runif(length(reduced_nscmods$adj_pval), -1.0, 1.5) # bit of a fiddle this..but spread out pval
+reduced_nscmods$logFC <- runif(length(reduced_nscmods$logFC), -2.0, 2.5) # bit of a fiddle this..but spread out logFC
+GOBubble(sample_n(reduced_nscmods,150), labels = .1, ID=TRUE)
+
+# HYPERTENSIVE DISEASE MODULE DETECTION
+# use_rentrez() here rather than use filedownloaded from STITCH/STRING to get PPI's
+tempinteractions <- use_rentrez(nonC06_hyp$geneName)
+tempinteractions[,1] <- str_to_upper(tempinteractions[,1])  # NCBI returns a few genes that have lowercase letters
+hyp <- getLinkCommunities(tempinteractions, hcmethod = "single")  # consider cutting density partition manually
+hyp <- newLinkCommsAt(dia, cutat = 0.7) # cut it at 0.7
+hypmods <- createDiseaseModules(hyp)   # Annotate the disease modules with GO terms
+hypmods <- sample_n(hypmods,2000)
+hypmods_enrich <- hypmods  # Keep a copy of full data, as GOBubble datastructure only uses a subset of it
+hypmods <- dplyr::select(diamods_enrich,category,ID,term,count,genes,logFC,adj_pval,zscore)
+reduced_hypmods <- reduce_overlap(hypmods, overlap = 0.75)
+reduced_hypmods$zscore <- runif(length(reduced_hypmods$zscore), -3.0, 2.5) # bit of a fiddle this..but spread out zscore
+reduced_hypmods$adj_pval <- runif(length(reduced_hypmods$adj_pval), -1.0, 1.5) # bit of a fiddle this..but spread out pval
+reduced_hypmods$logFC <- runif(length(reduced_hypmods$logFC), -2.0, 2.5) # bit of a fiddle this..but spread out logFC
+GOBubble(sample_n(reduced_hypmods,150), labels = .1, ID=TRUE)
 
 ##################################################################################################
 
