@@ -400,13 +400,32 @@ plotLinkCommMembers(lc, nodes = head(names(lc$numclusters), 20),
 
 
 ###############################################################################
-## GO and KEGG enrichment - creates large datastructures so created when needed
+## KEGG enrichment - creates large datastructures so created when needed
 
 kega <- kegg_analysis(shell2_genes)
 barplot(kega, drop=TRUE, showCategory=20)
 
 kegalz <- kegg_analysis(nonC06_alz$geneName)
 barplot(kegalz, drop=TRUE, showCategory=20)
+kegaut <- kegg_analysis(nonC06_aut$geneName)
+barplot(kegaut, drop=TRUE, showCategory=20)
+kegasth <- kegg_analysis(nonC06_asth$geneName)
+barplot(kegasth, drop=TRUE, showCategory=20)
+kegdia <- kegg_analysis(nonC06_dia$geneName)
+barplot(kegdia, drop=TRUE, showCategory=20)
+keghyp <- kegg_analysis(nonC06_hyp$geneName)
+barplot(keghyp, drop=TRUE, showCategory=20)
+kegnsc <- kegg_analysis(nonC06_nsc$geneName)
+barplot(kegnsc, drop=TRUE, showCategory=20)
+kegobs <- kegg_analysis(nonC06_obs$geneName)
+barplot(kegobs, drop=TRUE, showCategory=20)
+kegpark <- kegg_analysis(nonC06_park$geneName)
+barplot(kegpark, drop=TRUE, showCategory=20)
+kegra <- kegg_analysis(nonC06_ra$geneName)
+barplot(kegra, drop=TRUE, showCategory=20)
+kegsch <- kegg_analysis(nonC06_sch$geneName)
+barplot(kegsch, drop=TRUE, showCategory=20)
+
 
 # Tables for paper. 
 tempgoa <- head(goa,row.names=FALSE)

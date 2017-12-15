@@ -26,6 +26,7 @@ library(stringr)
 library(ontologySimilarity)
 library(ontologyIndex)
 library(infotheo)
+library(KEGGprofile)
 data(go)
 data(gene_GO_terms)
 data(GO_IC)
@@ -323,9 +324,10 @@ go_analysis <- function(yourgenes,ontotype){
 
 # KEGG over-representation test
 kegg_analysis <- function(yourgenes){
-  #nlen <- dim(yourgenes)
+  cat("\nyourgenes are: ",yourgenes)
   
   eg = bitr(yourgenes, fromType="SYMBOL", toType="ENTREZID", OrgDb="org.Hs.eg.db")
+  #cat("\nconverted",eg[1,2])
   kk <- enrichKEGG(gene         = eg[,2],
                    organism     = 'hsa',
                    pvalueCutoff = 0.05)
@@ -524,11 +526,13 @@ createDiseaseModules <- function(linkdata){
 
 # add_pathways(), annotates each diseasemodule with the associated pathways from KEGG.
 add_pathways <- function(dm){
+  pathways <- dataframe(ID=, Description, GeneRatio,  BgRatio,pvalue, p.adjust, qvalue, geneID, Count)
   
   genes <- unique(dm$genes)
-  
-  pathways <- kegg_analysis(unique(alzmods$genes[1]))
-  
+  for (i in 1:length(genes)){
+    tempath <- kegg_analysis(genes[i])
+    pathways <- rbind(pathways,tempath[1])
+  }
   
   return(pathways)
 }
