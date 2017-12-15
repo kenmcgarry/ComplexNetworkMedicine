@@ -523,6 +523,27 @@ createDiseaseModules <- function(linkdata){
 }
 
 
+# Disease ontology analysis
+# https://bioconductor.org/packages/release/bioc/vignettes/DOSE/inst/doc/semanticAnalysis.html
+
+DO_analysis <- function(mygenes){
+  data(geneList)
+  mygenes <- bitr(mygenes,fromType="SYMBOL", toType="ENTREZID", OrgDb="org.Hs.eg.db")
+  x <- enrichDO(gene          = mygenes$ENTREZID,
+              ont           = "DO",
+              pvalueCutoff  = 0.05,
+              pAdjustMethod = "BH",
+              #universe      = names(geneList),
+              minGSSize     = 5,
+              maxGSSize     = 500,
+              qvalueCutoff  = 0.05,
+              readable      = FALSE)
+  head(x)
+  upsetplot(x)
+  return(x)
+
+}
+
 
 # add_pathways(), annotates each diseasemodule with the associated pathways from KEGG.
 add_pathways <- function(dm){

@@ -400,7 +400,7 @@ plotLinkCommMembers(lc, nodes = head(names(lc$numclusters), 20),
 
 
 ###############################################################################
-## KEGG enrichment - creates large datastructures so created when needed
+## KEGG enrichment - creates large MEGABYTE datastructures 
 
 kega <- kegg_analysis(shell2_genes)
 barplot(kega, drop=TRUE, showCategory=20)
@@ -426,6 +426,14 @@ barplot(kegra, drop=TRUE, showCategory=20)
 kegsch <- kegg_analysis(nonC06_sch$geneName)
 barplot(kegsch, drop=TRUE, showCategory=20)
 
+# THINK ABOUT USING TOPGO PACKAGE
+# https://bioconductor.org/packages/3.7/bioc/vignettes/topGO/inst/doc/topGO.pdf
+
+# Semantically compare N clusters of genes 
+c1 <- bitr(nonC06_alz$geneName,fromType="SYMBOL", toType="ENTREZID", OrgDb="org.Hs.eg.db")
+c2 <- bitr(nonC06_aut$geneName,fromType="SYMBOL", toType="ENTREZID", OrgDb="org.Hs.eg.db")
+c3 <- bitr(nonC06_sch$geneName,fromType="SYMBOL", toType="ENTREZID", OrgDb="org.Hs.eg.db")
+mclusterSim(list(alz=c1$ENTREZID,aut=c2$ENTREZID,sch=c3$ENTREZID), measure="Wang", combine="BMA")
 
 # Tables for paper. 
 tempgoa <- head(goa,row.names=FALSE)
@@ -462,33 +470,4 @@ GOBubble(sample_n(reduced_dismods2,50), labels = 2, ID=TRUE)                    
 
 #####################################################################################################
 # COMPARE WITH OTHER MODULES
-# I have 4-6 GO terms that dont appear in Daniels database so.... 
-enrich2 <- enrich2[enrich2$ID %in% go$id,] # ensure missing GO terms are removed
-enrich2 <- enrich2[enrich2$ID %in% attributes(GO_IC)$name,] # ensure missing IC terms are removed
-
-terms_by_disease_module <- split(enrich2$ID,enrich2$DiseaseModule)  # do split by disease module
-terms_by_disease_module <- unname(terms_by_disease_module)   # Remove names for the moment
-sim_matrix <- get_sim_grid(ontology=go,information_content=GO_IC,term_sets=terms_by_disease_module)
-
-
-# Calculate mutual information from the similarity matrix, provides a score of sorts for each disease module
-
-  nbins <- sqrt(NROW(sim_matrix))
-  dat <- infotheo::discretize(sim_matrix,"equalwidth", nbins) # use full package extension
-  IXY <- infotheo::mutinformation(dat,method= "emp")
-  IXY2 <-infotheo::mutinformation(dat[,1],dat[,2])
-  H <- infotheo::entropy(infotheo::discretize(sim_matrix[1,]),method="shrink")
-
-  for (i in 1:nrow(sim_matrix)){
-    cat("\nModule[",i,"] biological value = ",IXY[i])#infotheo::mutinformation(dat[,i],dat[,i]))
-  }
-
-  
-# Rethink enrichment process - use Daniel Greene's lookup system, its a quantum leap quicker than Guangchangs!
-#snappy <- gene_GO_terms[gene_list$geneName]
-#snappy <- go$name[gene_GO_terms$CTNS]
-#attributes(snappy[1])$name
-#snappy <- gene_GO_terms[getNodesIn(s2, clusterids = 1)] 
-#save(shell1Diseases, shell2Diseases,file = "shell1and2-14thDec2017.RData")
-  
 
