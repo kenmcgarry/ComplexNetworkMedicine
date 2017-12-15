@@ -106,8 +106,9 @@ write.table(unique(sort(shell2Diseases$diseaseName)),"C:\\R-files\\disease\\shel
 #-----------------------------------------------------------------
 # Create lists of non-C06 disease genes, will use rentrez(NCBI) server (to get proteins for non_C06 disease modules)
 # start with specifically named shell1 related non-C06's.
-
 setwd("C:/R-files/disease")    # point to where my code lives
+source("gi_functions.R")  # load in the functions required for finding lists of drugs. 
+source("use_rentrez.R") 
 load("shell1and2-14thDec2017.RData") 
 load("C06disease-BITS-14thDec2017.RData") 
 
@@ -440,7 +441,7 @@ reduced_dismods2 <- reduce_overlap(dismods2, overlap = 2)
 reduced_dismods2$zscore <- runif(length(reduced_dismods2$zscore), -3.0, 2.5) # bit of a fiddle this..but
 GOBubble(sample_n(reduced_dismods2,50), labels = 2, ID=TRUE)                    # but need to spread out bubbles
 
-
+#####################################################################################################
 # COMPARE WITH OTHER MODULES
 # I have 4-6 GO terms that dont appear in Daniels database so.... 
 enrich2 <- enrich2[enrich2$ID %in% go$id,] # ensure missing GO terms are removed
@@ -463,12 +464,12 @@ sim_matrix <- get_sim_grid(ontology=go,information_content=GO_IC,term_sets=terms
     cat("\nModule[",i,"] biological value = ",IXY[i])#infotheo::mutinformation(dat[,i],dat[,i]))
   }
 
+  
 # Rethink enrichment process - use Daniel Greene's lookup system, its a quantum leap quicker than Guangchangs!
 #snappy <- gene_GO_terms[gene_list$geneName]
 #snappy <- go$name[gene_GO_terms$CTNS]
 #attributes(snappy[1])$name
 #snappy <- gene_GO_terms[getNodesIn(s2, clusterids = 1)] 
-
-save(shell1Diseases, shell2Diseases,file = "shell1and2-14thDec2017.RData")
+#save(shell1Diseases, shell2Diseases,file = "shell1and2-14thDec2017.RData")
   
 

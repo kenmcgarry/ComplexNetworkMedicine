@@ -525,13 +525,40 @@ createDiseaseModules <- function(linkdata){
 # add_pathways(), annotates each diseasemodule with the associated pathways from KEGG.
 add_pathways <- function(dm){
   
+  genes <- unique(dm$genes)
+  
   pathways <- kegg_analysis(unique(alzmods$genes[1]))
+  
   
   return(pathways)
 }
 
 
+# COMPARE WITH OTHER MODULES
+# calc_score() give a score to each disease module based on mutual information from similarity matrix.
+calc_score <- function(dm,disease){
+  
+  dm <- dm[dm$ID %in% go$id,] # ensure missing GO terms are removed
+  dm <- dm[dm$ID %in% attributes(GO_IC)$name,] # ensure missing IC terms are removed
+  terms_by_disease_module <- split(dm$ID,dm$DiseaseModule)  # do split by disease module
+  terms_by_disease_module <- unname(terms_by_disease_module)   # Remove names for the moment
+  sim_matrix <- get_sim_grid(ontology=go,information_content=GO_IC,term_sets=terms_by_disease_module)
 
+# Calculate mutual information from the similarity matrix, provides a score of sorts for each disease module
+  nbins <- sqrt(NROW(sim_matrix))
+  dat <- infotheo::discretize(sim_matrix,"equalwidth", nbins) # use full package extension
+  IXY <- infotheo::mutinformation(dat,method= "emp")
+  IXY2 <-infotheo::mutinformation(dat[,1],dat[,2])
+  H <- infotheo::entropy(infotheo::discretize(sim_matrix[1,]),method="shrink")
+
+  for (i in 1:nrow(sim_matrix)){
+    cat("\nDisease is", disease, "Module[",i,"] biological value = ",IXY[i])
+  }
+  
+  return(IXY)
+}
+
+  
 # getdrugs() assumes that "indications" dataframe is already loaded. You must provide getdrugs() 
 # with the "umls_cui_from_meddra" code for your disease. It will return the drugs known to be used...
 # e.g. C000239 is the code for Alzheimer's. Using the code is less error prone than typing in disease name.
