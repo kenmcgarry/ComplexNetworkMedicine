@@ -110,7 +110,7 @@ setwd("C:/R-files/disease")    # point to where my code lives
 source("gi_functions.R")  # load in the functions required for finding lists of drugs. 
 source("use_rentrez.R") 
 load("shell1and2-14thDec2017.RData") 
-load("C06disease-BITS-14thDec2017.RData") 
+load("C06disease-BITS-15thDec2017.RData") 
 
 nonC06_alz <- shell1Diseases %>%
   filter(diseaseName == "Alzheimer's Disease") %>%
@@ -147,7 +147,7 @@ nonC06_nsc <- shell1Diseases %>%
 
 # ALZHEIMERS DISEASE MODULE DETECTION
 # use_rentrez() here rather than use files downloaded from STITCH/STRING to get PPI's
-load("C:\\R-files\\disease\\C06disease-BITS-13thDec2017.RData") 
+load("C:\\R-files\\disease\\C06disease-BITS-15thDec2017.RData") 
 tempinteractions <- use_rentrez(nonC06_alz$geneName)
 tempinteractions[,1] <- str_to_upper(tempinteractions[,1])  # NCBI returns a few genes that have lowercase letters
 # remove bad gene names that cause getDiseaseModules to crash
@@ -402,9 +402,12 @@ plotLinkCommMembers(lc, nodes = head(names(lc$numclusters), 20),
 ###############################################################################
 ## KEGG enrichment - creates large MEGABYTE datastructures 
 
-kega <- kegg_analysis(shell2_genes)
-barplot(kega, drop=TRUE, showCategory=20)
+kegs1 <- kegg_analysis(unique(gene_list$geneName))
+barplot(kegs1, drop=TRUE, showCategory=20)
+kegs2 <- kegg_analysis(shell2_genes)
+barplot(kegs2,drop=TRUE, showCategory=20)
 
+barplot(kega, drop=TRUE, showCategory=20)
 kegalz <- kegg_analysis(nonC06_alz$geneName)
 barplot(kegalz, drop=TRUE, showCategory=20)
 kegaut <- kegg_analysis(nonC06_aut$geneName)
@@ -468,6 +471,41 @@ reduced_dismods2 <- reduce_overlap(dismods2, overlap = 2)
 reduced_dismods2$zscore <- runif(length(reduced_dismods2$zscore), -3.0, 2.5) # bit of a fiddle this..but
 GOBubble(sample_n(reduced_dismods2,50), labels = 2, ID=TRUE)                    # but need to spread out bubbles
 
-#####################################################################################################
-# COMPARE WITH OTHER MODULES
+########################################################################################
+# Calculate scores for all disease modules and rank them, sort decreasing numerical order
+# print_dm_table() will generate the latex stuff based on annoations and ranking 
+# methods to create the disease module table for the paper, containing:
+#   C06/DX0 numbers
+#   GO enrichment counts
+#   KEGG enrichment counts
+#   Biological plausibility ranking
+#   Current drugs / DX0 drug reposition candidates
+#   components/complexity
+
+ds <- calc_score(dm,"The name")
+
+print_dm_table(dm)
+
+# Alzheimer Disease C10.228.140.380.100
+# Asthma C08.127.108
+# Autistic Disorder F03.625.164.113.500
+# Carcinoma, Non-Small-Cell Lung C04.588.894.797.520.109.220.249
+# Obesity C18.654.726.500
+# Parkinson disease C10.228.140.079.862.500
+# Arthritis, Rheumatoid C05.550.114.154
+# Schizophrenia F03.700.750
+# Diabetes Mellitus, Type 2 C18.452.394.750.149
+# Hypertensive disease C14.907.489
+
+
+
+
+
+
+
+
+
+
+
+
 
