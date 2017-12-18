@@ -4,7 +4,7 @@
 # Packages and my functions are loaded in by gi_functions.R
 
 setwd("C:/R-files/disease")    # point to where my code lives
-load("C06disease-9thDecember-pm-2017.RData") # load in required data - the contents will change regulary
+load("C06disease-16thDec2017.RData") # load in required data - the contents will change regulary
 source("gi_functions.R")  # load in the functions required for finding lists of drugs. 
 source("gi_run.R")   # some routine code to load in.
 source("gi_plots.R")
@@ -192,56 +192,7 @@ plotLinkCommMembers(lc, nodes = head(names(lc$numclusters), 20),
                     fontsize = 11, nspace = 3.5, maxclusters = 20)
 
 
-###############################################################################
-## KEGG enrichment - creates large MEGABYTE datastructures 
 
-kegs1 <- kegg_analysis(unique(gene_list$geneName))
-barplot(kegs1, drop=TRUE, showCategory=20)
-kegs2 <- kegg_analysis(shell2_genes)
-barplot(kegs2,drop=TRUE, showCategory=20)
-
-barplot(kega, drop=TRUE, showCategory=20)
-kegalz <- kegg_analysis(nonC06_alz$geneName)
-barplot(kegalz, drop=TRUE, showCategory=20)
-kegaut <- kegg_analysis(nonC06_aut$geneName)
-barplot(kegaut, drop=TRUE, showCategory=20)
-kegasth <- kegg_analysis(nonC06_asth$geneName)
-barplot(kegasth, drop=TRUE, showCategory=20)
-kegdia <- kegg_analysis(nonC06_dia$geneName)
-barplot(kegdia, drop=TRUE, showCategory=20)
-keghyp <- kegg_analysis(nonC06_hyp$geneName)
-barplot(keghyp, drop=TRUE, showCategory=20)
-kegnsc <- kegg_analysis(nonC06_nsc$geneName)
-barplot(kegnsc, drop=TRUE, showCategory=20)
-kegobs <- kegg_analysis(nonC06_obs$geneName)
-barplot(kegobs, drop=TRUE, showCategory=20)
-kegpark <- kegg_analysis(nonC06_park$geneName)
-barplot(kegpark, drop=TRUE, showCategory=20)
-kegra <- kegg_analysis(nonC06_ra$geneName)
-barplot(kegra, drop=TRUE, showCategory=20)
-kegsch <- kegg_analysis(nonC06_sch$geneName)
-barplot(kegsch, drop=TRUE, showCategory=20)
-
-# THINK ABOUT USING TOPGO PACKAGE
-# https://bioconductor.org/packages/3.7/bioc/vignettes/topGO/inst/doc/topGO.pdf
-
-# Semantically compare N clusters of genes 
-c1 <- bitr(nonC06_alz$geneName,fromType="SYMBOL", toType="ENTREZID", OrgDb="org.Hs.eg.db")
-c2 <- bitr(nonC06_aut$geneName,fromType="SYMBOL", toType="ENTREZID", OrgDb="org.Hs.eg.db")
-c3 <- bitr(nonC06_sch$geneName,fromType="SYMBOL", toType="ENTREZID", OrgDb="org.Hs.eg.db")
-mclusterSim(list(alz=c1$ENTREZID,aut=c2$ENTREZID,sch=c3$ENTREZID), measure="Wang", combine="BMA")
-
-# Tables for paper. 
-tempgoa <- head(goa,row.names=FALSE)
-tempgoa <- tempgoa[,1:5]
-print(xtable(tempgoa, display=c("s","s","s","s","s","g")), math.style.exponents = TRUE,include.rownames = FALSE)
-
-tempkega <- tail(kega,row.names=FALSE)
-tempkega <- tempkega[,1:5]
-print(xtable(tempkega, display=c("s","s","s","s","s","g")), math.style.exponents = TRUE,include.rownames = FALSE)
-
-# rm(kega,goa,tempgoa,tempkega)
-#################################################################################
 
 # Annotate the SHELL 1, disease modules with GO terms
 dismods1 <- getDiseaseModules(s1,"all")  # crashed out after 8 hours on full dataset
@@ -469,6 +420,57 @@ reduced_hypmods$zscore <- runif(length(reduced_hypmods$zscore), -3.0, 2.5) # bit
 reduced_hypmods$adj_pval <- runif(length(reduced_hypmods$adj_pval), -1.0, 1.5) # bit of a fiddle this..but spread out pval
 reduced_hypmods$logFC <- runif(length(reduced_hypmods$logFC), -2.0, 2.5) # bit of a fiddle this..but spread out logFC
 GOBubble(sample_n(reduced_hypmods,150), labels = .1, ID=TRUE)
+
+###############################################################################
+## KEGG enrichment - creates large MEGABYTE data structures 
+
+kegs1 <- kegg_analysis(unique(gene_list$geneName))
+barplot(kegs1, drop=TRUE, showCategory=20)
+kegs2 <- kegg_analysis(shell2_genes)
+barplot(kegs2,drop=TRUE, showCategory=20)
+
+barplot(kega, drop=TRUE, showCategory=20)
+kegalz <- kegg_analysis(nonC06_alz$geneName)
+barplot(kegalz, drop=TRUE, showCategory=20)
+kegaut <- kegg_analysis(nonC06_aut$geneName)
+barplot(kegaut, drop=TRUE, showCategory=20)
+kegasth <- kegg_analysis(nonC06_asth$geneName)
+barplot(kegasth, drop=TRUE, showCategory=20)
+kegdia <- kegg_analysis(nonC06_dia$geneName)
+barplot(kegdia, drop=TRUE, showCategory=20)
+keghyp <- kegg_analysis(nonC06_hyp$geneName)
+barplot(keghyp, drop=TRUE, showCategory=20)
+kegnsc <- kegg_analysis(nonC06_nsc$geneName)
+barplot(kegnsc, drop=TRUE, showCategory=20)
+kegobs <- kegg_analysis(nonC06_obs$geneName)
+barplot(kegobs, drop=TRUE, showCategory=20)
+kegpark <- kegg_analysis(nonC06_park$geneName)
+barplot(kegpark, drop=TRUE, showCategory=20)
+kegra <- kegg_analysis(nonC06_ra$geneName)
+barplot(kegra, drop=TRUE, showCategory=20)
+kegsch <- kegg_analysis(nonC06_sch$geneName)
+barplot(kegsch, drop=TRUE, showCategory=20)
+
+# THINK ABOUT USING TOPGO PACKAGE
+# https://bioconductor.org/packages/3.7/bioc/vignettes/topGO/inst/doc/topGO.pdf
+
+# Semantically compare N clusters of genes 
+c1 <- bitr(nonC06_alz$geneName,fromType="SYMBOL", toType="ENTREZID", OrgDb="org.Hs.eg.db")
+c2 <- bitr(nonC06_aut$geneName,fromType="SYMBOL", toType="ENTREZID", OrgDb="org.Hs.eg.db")
+c3 <- bitr(nonC06_sch$geneName,fromType="SYMBOL", toType="ENTREZID", OrgDb="org.Hs.eg.db")
+mclusterSim(list(alz=c1$ENTREZID,aut=c2$ENTREZID,sch=c3$ENTREZID), measure="Wang", combine="BMA")
+
+# Tables for paper. 
+tempgoa <- head(goa,row.names=FALSE)
+tempgoa <- tempgoa[,1:5]
+print(xtable(tempgoa, display=c("s","s","s","s","s","g")), math.style.exponents = TRUE,include.rownames = FALSE)
+
+tempkega <- tail(kega,row.names=FALSE)
+tempkega <- tempkega[,1:5]
+print(xtable(tempkega, display=c("s","s","s","s","s","g")), math.style.exponents = TRUE,include.rownames = FALSE)
+
+# rm(kega,goa,tempgoa,tempkega)
+
 
 ########################################################################################
 # Calculate scores for all disease modules and rank them, sort decreasing numerical order
