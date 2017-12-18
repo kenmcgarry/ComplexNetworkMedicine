@@ -103,7 +103,168 @@ unique(shell2Diseases$diseaseName)  # how many different shell2 associated non-C
 write.table(unique(sort(shell1Diseases$diseaseName)),"C:\\R-files\\disease\\shell1diseases.csv",sep=",",row.names = FALSE,col.names = FALSE)
 write.table(unique(sort(shell2Diseases$diseaseName)),"C:\\R-files\\disease\\shell2diseases.csv",sep=",",row.names = FALSE,col.names = FALSE)
 
-#-----------------------------------------------------------------
+
+# Load in drug interactions, majority are drug-2-drug interactions with a few genes thrown in.
+drug_interactions <- read.csv("C:\\R-files\\disease\\drug_interactions.csv",stringsAsFactors = FALSE)  #important to make stringsAsFact false
+drug_interactions <- drug_interactions[,1:2]
+
+# load 1st shell interactions
+shell1_interactions <- read.csv("C:\\R-files\\disease\\C06-shell1-low.csv",stringsAsFactors = FALSE)  #important to make stringsAsFact false
+shell1_interactions <- shell1_interactions[,1:2]
+
+# load 1st shell interactions
+shell2_interactions <- read.csv("C:\\R-files\\disease\\shell2_genes_low.csv",stringsAsFactors = FALSE)  #important to make stringsAsFact false
+shell2_interactions <- shell2_interactions[,1:2]
+
+##################################################################
+# Using LINKCOMM to detect C06 disease modules
+# 1. drug modules
+# 2. 1st shell gene modules
+# 3. 2nd shell gene modules
+
+d1 <- getLinkCommunities(drug_interactions, hcmethod = "single")
+s1 <- getLinkCommunities(shell1_interactions, hcmethod = "single")
+s2 <- getLinkCommunities(shell2_interactions, hcmethod = "single")
+
+
+print(s2)
+head(s2$numclusters)
+plot(s2, type = "graph", shownodesin = 2, node.pies = TRUE)
+plot(s2, type = "summary")
+oc <- getOCG.clusters(shell2_interactions) 
+plot(oc, type = "graph", shownodesin = 7, scale.vertices = 0.1)
+cent <- getCommunityCentrality(s2)
+plot(cent)
+
+plot_pdens(d1$pdens)
+plot_pdens(s1$pdens)
+plot_pdens(s2$pdens)
+
+commod <- getCommunityConnectedness(d1, conn = "modularity")
+comcon<- getCommunityConnectedness(d1, conn = "conn")
+plot_com(commod,comcon,"Drug module community")
+
+commod <- getCommunityConnectedness(s1, conn = "modularity")
+comcon<- getCommunityConnectedness(s1, conn = "conn")
+plot_com(commod,comcon,"1st Shell gene community")
+
+commod <- getCommunityConnectedness(s2, conn = "modularity")
+comcon<- getCommunityConnectedness(s2, conn = "conn")
+plot_com(commod,comcon,"2nd Shell gene community")
+
+cent <- getCommunityCentrality(d1)
+plot_centrality(cent,"drug index")
+
+cent <- getCommunityCentrality(s1)
+plot_centrality(cent,"gene index")
+
+cent <- getCommunityCentrality(s2)
+plot_centrality(cent,"gene index")
+
+
+# matrix plot
+plotLinkCommMembers(s1, nodes = head(names(lc$numclusters), 20),
+                    pal = brewer.pal(11, "Spectral"), shape = "rect", total = TRUE,
+                    fontsize = 11, nspace = 3.5, maxclusters = 20)
+
+
+lc <- getLinkCommunities(drug_interactions, hcmethod = "single")
+plot(lc, type = "graph", layout = layout.fruchterman.reingold)
+plot(lc, type = "graph", shownodesin = 2, node.pies = TRUE)
+plot(lc, type = "summary")
+plot(lc, type = "con")
+
+
+cr <- getClusterRelatedness(lc, hcmethod = "ward.D")
+mc <- meta.communities(lc, hcmethod = "ward.D", deepSplit = 0)
+cent <- getCommunityCentrality(s2)
+cm <- getCommunityConnectedness(lc, conn = "modularity")
+
+head(sort(cc, decreasing = TRUE))
+
+plot(lc, type = "commsumm", summary = "modularity")
+plot(lc, type = "commsumm", summary = "con")
+
+
+# matrix plot
+plotLinkCommMembers(lc, nodes = head(names(lc$numclusters), 20),
+                    pal = brewer.pal(11, "Spectral"), shape = "rect", total = TRUE,
+                    fontsize = 11, nspace = 3.5, maxclusters = 20)
+
+
+###############################################################################
+## KEGG enrichment - creates large MEGABYTE datastructures 
+
+kegs1 <- kegg_analysis(unique(gene_list$geneName))
+barplot(kegs1, drop=TRUE, showCategory=20)
+kegs2 <- kegg_analysis(shell2_genes)
+barplot(kegs2,drop=TRUE, showCategory=20)
+
+barplot(kega, drop=TRUE, showCategory=20)
+kegalz <- kegg_analysis(nonC06_alz$geneName)
+barplot(kegalz, drop=TRUE, showCategory=20)
+kegaut <- kegg_analysis(nonC06_aut$geneName)
+barplot(kegaut, drop=TRUE, showCategory=20)
+kegasth <- kegg_analysis(nonC06_asth$geneName)
+barplot(kegasth, drop=TRUE, showCategory=20)
+kegdia <- kegg_analysis(nonC06_dia$geneName)
+barplot(kegdia, drop=TRUE, showCategory=20)
+keghyp <- kegg_analysis(nonC06_hyp$geneName)
+barplot(keghyp, drop=TRUE, showCategory=20)
+kegnsc <- kegg_analysis(nonC06_nsc$geneName)
+barplot(kegnsc, drop=TRUE, showCategory=20)
+kegobs <- kegg_analysis(nonC06_obs$geneName)
+barplot(kegobs, drop=TRUE, showCategory=20)
+kegpark <- kegg_analysis(nonC06_park$geneName)
+barplot(kegpark, drop=TRUE, showCategory=20)
+kegra <- kegg_analysis(nonC06_ra$geneName)
+barplot(kegra, drop=TRUE, showCategory=20)
+kegsch <- kegg_analysis(nonC06_sch$geneName)
+barplot(kegsch, drop=TRUE, showCategory=20)
+
+# THINK ABOUT USING TOPGO PACKAGE
+# https://bioconductor.org/packages/3.7/bioc/vignettes/topGO/inst/doc/topGO.pdf
+
+# Semantically compare N clusters of genes 
+c1 <- bitr(nonC06_alz$geneName,fromType="SYMBOL", toType="ENTREZID", OrgDb="org.Hs.eg.db")
+c2 <- bitr(nonC06_aut$geneName,fromType="SYMBOL", toType="ENTREZID", OrgDb="org.Hs.eg.db")
+c3 <- bitr(nonC06_sch$geneName,fromType="SYMBOL", toType="ENTREZID", OrgDb="org.Hs.eg.db")
+mclusterSim(list(alz=c1$ENTREZID,aut=c2$ENTREZID,sch=c3$ENTREZID), measure="Wang", combine="BMA")
+
+# Tables for paper. 
+tempgoa <- head(goa,row.names=FALSE)
+tempgoa <- tempgoa[,1:5]
+print(xtable(tempgoa, display=c("s","s","s","s","s","g")), math.style.exponents = TRUE,include.rownames = FALSE)
+
+tempkega <- tail(kega,row.names=FALSE)
+tempkega <- tempkega[,1:5]
+print(xtable(tempkega, display=c("s","s","s","s","s","g")), math.style.exponents = TRUE,include.rownames = FALSE)
+
+# rm(kega,goa,tempgoa,tempkega)
+#################################################################################
+
+# Annotate the SHELL 1, disease modules with GO terms
+dismods1 <- getDiseaseModules(s1,"all")  # crashed out after 8 hours on full dataset
+enrich1 <- dismods1  # Keep a copy of full data, as GOBubble only uses a subset of it
+dismods1 <- dplyr::select(enrich1,category,ID,term,count,genes,logFC,adj_pval,zscore)
+head(dismods1)
+
+# Annotate the SHELL 2, disease modules with GO terms
+dismods2 <- getDiseaseModules(s2,"all") # 'all' modules, '1:67' or '45:77' (a range) 
+enrich2 <- dismods2  # Keep a copy of full data, as GOBubble only uses a subset of it
+dismods2 <- dplyr::select(enrich2,category,ID,term,count,genes,logFC,adj_pval,zscore)
+
+# GOBubble plot will display GO enrichment. reduce_overlap() (if used) produces the key terms
+# sample_n randomly selects a subset.
+reduced_dismods1 <- reduce_overlap(dismods1, overlap = 2)
+reduced_dismods1$zscore <- runif(length(reduced_dismods1$zscore), -3.0, 2.5) # bit of a fiddle this..but
+GOBubble(sample_n(reduced_dismods1,50), labels = 2, ID=TRUE)                    # but need to spread out bubbles
+
+reduced_dismods2 <- reduce_overlap(dismods2, overlap = 2)
+reduced_dismods2$zscore <- runif(length(reduced_dismods2$zscore), -3.0, 2.5) # bit of a fiddle this..but
+GOBubble(sample_n(reduced_dismods2,50), labels = 2, ID=TRUE)                    # but need to spread out bubbles
+
+##################################################################################################
 # Create lists of non-C06 disease genes, will use rentrez(NCBI) server (to get proteins for non_C06 disease modules)
 # start with specifically named shell1 related non-C06's.
 setwd("C:/R-files/disease")    # point to where my code lives
@@ -309,183 +470,22 @@ reduced_hypmods$adj_pval <- runif(length(reduced_hypmods$adj_pval), -1.0, 1.5) #
 reduced_hypmods$logFC <- runif(length(reduced_hypmods$logFC), -2.0, 2.5) # bit of a fiddle this..but spread out logFC
 GOBubble(sample_n(reduced_hypmods,150), labels = .1, ID=TRUE)
 
-##################################################################################################
-
-# Load in drug interactions, majority are drug-2-drug interactions with a few genes thrown in.
-drug_interactions <- read.csv("C:\\R-files\\disease\\drug_interactions.csv",stringsAsFactors = FALSE)  #important to make stringsAsFact false
-drug_interactions <- drug_interactions[,1:2]
-
-# load 1st shell interactions
-shell1_interactions <- read.csv("C:\\R-files\\disease\\C06-shell1-low.csv",stringsAsFactors = FALSE)  #important to make stringsAsFact false
-shell1_interactions <- shell1_interactions[,1:2]
-
-# load 1st shell interactions
-shell2_interactions <- read.csv("C:\\R-files\\disease\\shell2_genes_low.csv",stringsAsFactors = FALSE)  #important to make stringsAsFact false
-shell2_interactions <- shell2_interactions[,1:2]
-
-##################################################################
-# Using LINKCOMM to detect C06 disease modules
-# 1. drug modules
-# 2. 1st shell gene modules
-# 3. 2nd shell gene modules
-
-d1 <- getLinkCommunities(drug_interactions, hcmethod = "single")
-s1 <- getLinkCommunities(shell1_interactions, hcmethod = "single")
-s2 <- getLinkCommunities(shell2_interactions, hcmethod = "single")
-
-
-print(s2)
-head(s2$numclusters)
-plot(s2, type = "graph", shownodesin = 2, node.pies = TRUE)
-plot(s2, type = "summary")
-oc <- getOCG.clusters(shell2_interactions) 
-plot(oc, type = "graph", shownodesin = 7, scale.vertices = 0.1)
-cent <- getCommunityCentrality(s2)
-plot(cent)
-
-plot_pdens(d1$pdens)
-plot_pdens(s1$pdens)
-plot_pdens(s2$pdens)
-
-commod <- getCommunityConnectedness(d1, conn = "modularity")
-comcon<- getCommunityConnectedness(d1, conn = "conn")
-plot_com(commod,comcon,"Drug module community")
-
-commod <- getCommunityConnectedness(s1, conn = "modularity")
-comcon<- getCommunityConnectedness(s1, conn = "conn")
-plot_com(commod,comcon,"1st Shell gene community")
-
-commod <- getCommunityConnectedness(s2, conn = "modularity")
-comcon<- getCommunityConnectedness(s2, conn = "conn")
-plot_com(commod,comcon,"2nd Shell gene community")
-
-cent <- getCommunityCentrality(d1)
-plot_centrality(cent,"drug index")
-
-cent <- getCommunityCentrality(s1)
-plot_centrality(cent,"gene index")
-
-cent <- getCommunityCentrality(s2)
-plot_centrality(cent,"gene index")
-
-
-# matrix plot
-plotLinkCommMembers(s1, nodes = head(names(lc$numclusters), 20),
-                    pal = brewer.pal(11, "Spectral"), shape = "rect", total = TRUE,
-                    fontsize = 11, nspace = 3.5, maxclusters = 20)
-
-
-lc <- getLinkCommunities(drug_interactions, hcmethod = "single")
-plot(lc, type = "graph", layout = layout.fruchterman.reingold)
-plot(lc, type = "graph", shownodesin = 2, node.pies = TRUE)
-plot(lc, type = "summary")
-plot(lc, type = "con")
-
-
-cr <- getClusterRelatedness(lc, hcmethod = "ward.D")
-mc <- meta.communities(lc, hcmethod = "ward.D", deepSplit = 0)
-cent <- getCommunityCentrality(s2)
-cm <- getCommunityConnectedness(lc, conn = "modularity")
-
-head(sort(cc, decreasing = TRUE))
-
-plot(lc, type = "commsumm", summary = "modularity")
-plot(lc, type = "commsumm", summary = "con")
-
-
-# matrix plot
-plotLinkCommMembers(lc, nodes = head(names(lc$numclusters), 20),
-                    pal = brewer.pal(11, "Spectral"), shape = "rect", total = TRUE,
-                    fontsize = 11, nspace = 3.5, maxclusters = 20)
-
-
-###############################################################################
-## KEGG enrichment - creates large MEGABYTE datastructures 
-
-kegs1 <- kegg_analysis(unique(gene_list$geneName))
-barplot(kegs1, drop=TRUE, showCategory=20)
-kegs2 <- kegg_analysis(shell2_genes)
-barplot(kegs2,drop=TRUE, showCategory=20)
-
-barplot(kega, drop=TRUE, showCategory=20)
-kegalz <- kegg_analysis(nonC06_alz$geneName)
-barplot(kegalz, drop=TRUE, showCategory=20)
-kegaut <- kegg_analysis(nonC06_aut$geneName)
-barplot(kegaut, drop=TRUE, showCategory=20)
-kegasth <- kegg_analysis(nonC06_asth$geneName)
-barplot(kegasth, drop=TRUE, showCategory=20)
-kegdia <- kegg_analysis(nonC06_dia$geneName)
-barplot(kegdia, drop=TRUE, showCategory=20)
-keghyp <- kegg_analysis(nonC06_hyp$geneName)
-barplot(keghyp, drop=TRUE, showCategory=20)
-kegnsc <- kegg_analysis(nonC06_nsc$geneName)
-barplot(kegnsc, drop=TRUE, showCategory=20)
-kegobs <- kegg_analysis(nonC06_obs$geneName)
-barplot(kegobs, drop=TRUE, showCategory=20)
-kegpark <- kegg_analysis(nonC06_park$geneName)
-barplot(kegpark, drop=TRUE, showCategory=20)
-kegra <- kegg_analysis(nonC06_ra$geneName)
-barplot(kegra, drop=TRUE, showCategory=20)
-kegsch <- kegg_analysis(nonC06_sch$geneName)
-barplot(kegsch, drop=TRUE, showCategory=20)
-
-# THINK ABOUT USING TOPGO PACKAGE
-# https://bioconductor.org/packages/3.7/bioc/vignettes/topGO/inst/doc/topGO.pdf
-
-# Semantically compare N clusters of genes 
-c1 <- bitr(nonC06_alz$geneName,fromType="SYMBOL", toType="ENTREZID", OrgDb="org.Hs.eg.db")
-c2 <- bitr(nonC06_aut$geneName,fromType="SYMBOL", toType="ENTREZID", OrgDb="org.Hs.eg.db")
-c3 <- bitr(nonC06_sch$geneName,fromType="SYMBOL", toType="ENTREZID", OrgDb="org.Hs.eg.db")
-mclusterSim(list(alz=c1$ENTREZID,aut=c2$ENTREZID,sch=c3$ENTREZID), measure="Wang", combine="BMA")
-
-# Tables for paper. 
-tempgoa <- head(goa,row.names=FALSE)
-tempgoa <- tempgoa[,1:5]
-print(xtable(tempgoa, display=c("s","s","s","s","s","g")), math.style.exponents = TRUE,include.rownames = FALSE)
-
-tempkega <- tail(kega,row.names=FALSE)
-tempkega <- tempkega[,1:5]
-print(xtable(tempkega, display=c("s","s","s","s","s","g")), math.style.exponents = TRUE,include.rownames = FALSE)
-
-# rm(kega,goa,tempgoa,tempkega)
-#################################################################################
-
-# Annotate the SHELL 1, disease modules with GO terms
-dismods1 <- getDiseaseModules(s1,"all")  # crashed out after 8 hours on full dataset
-enrich1 <- dismods1  # Keep a copy of full data, as GOBubble only uses a subset of it
-dismods1 <- dplyr::select(enrich1,category,ID,term,count,genes,logFC,adj_pval,zscore)
-head(dismods1)
-
-# Annotate the SHELL 2, disease modules with GO terms
-dismods2 <- getDiseaseModules(s2,"all") # 'all' modules, '1:67' or '45:77' (a range) 
-enrich2 <- dismods2  # Keep a copy of full data, as GOBubble only uses a subset of it
-dismods2 <- dplyr::select(enrich2,category,ID,term,count,genes,logFC,adj_pval,zscore)
-
-# GOBubble plot will display GO enrichment. reduce_overlap() (if used) produces the key terms
-# sample_n randomly selects a subset.
-reduced_dismods1 <- reduce_overlap(dismods1, overlap = 2)
-reduced_dismods1$zscore <- runif(length(reduced_dismods1$zscore), -3.0, 2.5) # bit of a fiddle this..but
-GOBubble(sample_n(reduced_dismods1,50), labels = 2, ID=TRUE)                    # but need to spread out bubbles
-
-reduced_dismods2 <- reduce_overlap(dismods2, overlap = 2)
-reduced_dismods2$zscore <- runif(length(reduced_dismods2$zscore), -3.0, 2.5) # bit of a fiddle this..but
-GOBubble(sample_n(reduced_dismods2,50), labels = 2, ID=TRUE)                    # but need to spread out bubbles
-
 ########################################################################################
 # Calculate scores for all disease modules and rank them, sort decreasing numerical order
 # print_dm_table() will generate the latex stuff based on annoations and ranking 
 # methods to create the disease module table for the paper, containing:
-#   C06/DX0 numbers
+#   C06 and non-C06 numbers
 #   GO enrichment counts
 #   KEGG enrichment counts
 #   Biological plausibility ranking
-#   Current drugs / DX0 drug reposition candidates
+#   Current drugs / any drug reposition candidates
 #   components/complexity
 
 ds <- calc_score(dm,"The name")
 
 print_dm_table(dm)
 
+# Non-C06 diseases that are closely linked to them.
 # Alzheimer Disease C10.228.140.380.100
 # Asthma C08.127.108
 # Autistic Disorder F03.625.164.113.500
@@ -498,12 +498,8 @@ print_dm_table(dm)
 # Hypertensive disease C14.907.489
 
 
-
-
-
-
-
-
+# Sort C06 diseases with genes, need to attach the MeSH code
+C06 <- fix_C06()
 
 
 
