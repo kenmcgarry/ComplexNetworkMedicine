@@ -164,7 +164,7 @@ middle <- function(mydata) {
 # Supply get_disease_genes() with a "drug_list" which has "umls_cui_from_meddra" field to tie 
 # with "diseaseId" in "disgene", For each disease see what genes are implicated and return dataframe
 get_disease_genes <- function(mydrugs){
-  implicated <-0 # instantiate, unfortunelay makes a zero entry, delete this at end of function.
+  implicated <-0 # instantiate, unfortunatly makes a zero entry, delete this at end of function.
   
   disgene$diseaseId <- gsub("umls:","",disgene$diseaseId) # get rid of the bloody "umls:" from disgene for good!
   mydrugs <- mydrugs[!duplicated(mydrugs[,c('umls_cui_from_meddra','meddra_name')]),]  # just keep unique diseases
@@ -522,6 +522,38 @@ createDiseaseModules <- function(linkdata){
   return(enrich)
 }
 
+# fix_C06() join C06 disease names with MeSH codes - its part manual process due to missing values
+# C06 diseases joined with genes and drugs.
+fix_C06 <- function(){
+  C06Disease <- unique(gene_list$diseaseName)
+  C06_ID <- vector(mode="character",length=length(C06Disease))
+  
+  for (i in 1:length(C06Disease)){
+    tempy <- filter(digestive,Term == C06Disease[i])
+    if(nrow(tempy) > 0){
+      C06_ID[i] <-tempy$MeSH}
+    if(nrow(tempy) == 0){
+      C06_ID[i] <- "manual entry required"
+    }
+  }
+  
+  # Fix missing entries by hand
+  C06_ID[9] <- "C06.301.623" # Liver Neoplasms
+  C06_ID[2] <- "C06.552.630.400" # Liver Cirrhosis, Biliary 
+  C06_ID[8] <- "C06.405.748.789"  # Malignant neoplasm of stomach Stomach
+  C06_ID[22] <- "C06.405.205.731.249"  # Colitis, Ulcerative [C06.405.205.731.249]
+  C06_ID[27] <- "C06.405.205" # 
+  C06_ID[32] <- "C06.405.469.275.800.849"  # Stomach Ulcer [C06.405.469.275.800.849]
+  C06_ID[34] <- "C06.405.469.637"  #Malabsorption Syndromes [C06.405.469.637]
+  C06_ID[38] <- "C06.552" #liver diseases
+  C06_ID[53] <- "C06.552.830.150" #     Porphyria, Acute Intermittent 
+  C06_ID[17] <- "C06.405.117.119.500.484" # Gastroesophageal Reflux 
+  C06_ID[10] <- "C06.552.697.160" #"Liver carcinoma"
+  C06_ID[11] <- "C06.301.761.249.500" # Insulinoma 
+  
+  disease <- as.data.frame(cbind(C06Disease,C06_ID),stringsAsFactors=FALSE)
+  return(disease)
+}
 
 # Disease ontology enrichment - based on the gene list it provides a list of
 # diseases associated with these genes.
@@ -634,52 +666,29 @@ print_dm_table <- function(){
 }
 
 
-# fix_C06() join C06 disease names with MeSH codes - its part manual process due to missing values
-# C06 diseases joined with genes and drugs.
-fix_C06 <- function(){
-C06Disease <- unique(gene_list$diseaseName)
-C06_ID <- vector(mode="character",length=length(C06Disease))
-
-for (i in 1:length(C06Disease)){
-  tempy <- filter(digestive,Term == C06Disease[i])
-  if(nrow(tempy) > 0){
-    C06_ID[i] <-tempy$MeSH}
-  if(nrow(tempy) == 0){
-    C06_ID[i] <- "manual entry required"
-  }
-}
-
-# Fix missing entries by hand
-C06_ID[9] <- "C06.301.623" # Liver Neoplasms
-C06_ID[2] <- "C06.552.630.400" # Liver Cirrhosis, Biliary 
-C06_ID[8] <- "C06.405.748.789"  # Malignant neoplasm of stomach Stomach
-C06_ID[22] <- "C06.405.205.731.249"  # Colitis, Ulcerative [C06.405.205.731.249]
-C06_ID[27] <- "C06.405.205" # 
-C06_ID[32] <- "C06.405.469.275.800.849"  # Stomach Ulcer [C06.405.469.275.800.849]
-C06_ID[34] <- "C06.405.469.637"  #Malabsorption Syndromes [C06.405.469.637]
-C06_ID[38] <- "C06.552" #liver diseases
-C06_ID[53] <- "C06.552.830.150" #     Porphyria, Acute Intermittent 
-C06_ID[17] <- "C06.405.117.119.500.484" # Gastroesophageal Reflux 
-C06_ID[10] <- "C06.552.697.160" #"Liver carcinoma"
-C06_ID[11] <- "C06.301.761.249.500" # Insulinoma 
-
-disease <- as.data.frame(cbind(C06Disease,C06_ID),stringsAsFactors=FALSE)
-return(disease)
-}
-
-
-
 # join_dm() will concatenate the C06 diseases with the non C06 diseases
 # afterwards, clustering can be used on their GO to determine similarities/differences.
 # They are: alzmods; asthmods; autmods; diamods; hypmods; nscmods; obsmods; parkmods; ramods; schmods; 
+# At the moment the above are Global data structures
+# Join C06 structure with appropriate genes and re-annotate then merge.....depth of Cholestasis is C06.130.120
 join_dm <- function(){
+  # WARNING DO ONLY ONCE!!!!
+  alzmods_enrich$DiseaseModule <- paste("Alzheimers",alzmods_enrich$DiseaseModule,sep="_")
+  autmods_enrich$DiseaseModule <- paste("Autism",autmods_enrich$DiseaseModule,sep="_")
+  asthmods_enrich$DiseaseModule <- paste("Asthma",asthmods_enrich$DiseaseModule,sep="_")
+  diamods_enrich$DiseaseModule <- paste("Diabetes",diamods_enrich$DiseaseModule,sep="_")
+  hypmods_enrich$DiseaseModule <- paste("Hypertension",hypmods_enrich$DiseaseModule,sep="_")
+  nscmods_enrich$DiseaseModule <- paste("non-small-cell-carcinoma",nscmods_enrich$DiseaseModule,sep="_")
+  obsmods_enrich$DiseaseModule <- paste("Obesity",obsmods_enrich$DiseaseModule,sep="_")
+  parkmods_enrich$DiseaseModule <- paste("Parkinson",parkmods_enrich$DiseaseModule,sep="_")
+  ramods_enrich$DiseaseModule <- paste("RheumatoidArthritis",ramods_enrich$DiseaseModule,sep="_")
+  schmods_enrich$DiseaseModule <- paste("Schizophrenia",schmods_enrich$DiseaseModule,sep="_")
   
-  
+  # gene_list is key to solving the C06 disease modules
+  (gene_list)
   
   return(alldismods)
 }
-
-
 
 
 
