@@ -523,45 +523,39 @@ createDiseaseModules <- function(linkdata){
 }
 
 
-# Disease ontology analysis
+# Disease ontology enrichment - based on the gene list it provides a list of
+# diseases associated with these genes.
 # https://bioconductor.org/packages/release/bioc/vignettes/DOSE/inst/doc/semanticAnalysis.html
-
 DO_analysis <- function(mygenes){
-  data(geneList)
+  #data(geneList)
   mygenes <- bitr(mygenes,fromType="SYMBOL", toType="ENTREZID", OrgDb="org.Hs.eg.db")
   x <- enrichDO(gene          = mygenes$ENTREZID,
-              ont           = "DO",
-              pvalueCutoff  = 0.05,
-              pAdjustMethod = "BH",
-              #universe      = names(geneList),
-              minGSSize     = 5,
-              maxGSSize     = 500,
-              qvalueCutoff  = 0.05,
-              readable      = FALSE)
+              ont           = "DO",      pvalueCutoff  = 0.05,
+              pAdjustMethod = "BH",     #universe      = names(geneList),
+              minGSSize     = 5,        maxGSSize     = 500,
+              qvalueCutoff  = 0.05,     readable      = FALSE)
   head(x)
-  upsetplot(x)
+  upsetplot(x,n=20,main.bar.color="blue", sets.bar.color="gray",text.scale=1.5,order.by = c("freq", "degree"))
+  enrichMap(x,n=50,fixed=FALSE)  # network view using TKPLOT()
   return(x)
 
 }
 
+# score_pathways(), scores the associated pathways from KEGG based on GeneRatio.
+# must compute some sort of value to rank biological plausibility/importance
+score_pathways <- function(dm){
 
-# add_pathways(), annotates each diseasemodule with the associated pathways from KEGG.
-add_pathways <- function(dm){
-  pathways <- dataframe(ID=, Description, GeneRatio,  BgRatio,pvalue, p.adjust, qvalue, geneID, Count)
-  
-  genes <- unique(dm$genes)
-  for (i in 1:length(genes)){
-    tempath <- kegg_analysis(genes[i])
-    pathways <- rbind(pathways,tempath[1])
+  score_path <- vector(mode="integer",length(nrow(dm))) #how may pathways do we have?
+  for (i in 1:nrow(dm)){
+    temp <- unlist(strsplit(dm[i]$GeneRatio,"/")) # split on the backslash symbol
+    score_path[i] <- dm[i]$Count/as.numeric(temp[2])  # calculate the actual GeneRatio
   }
-  
-  return(pathways)
+  return(score_path)
 }
 
-
-# COMPARE WITH OTHER MODULES
-# calc_score() give a score to each disease module based on mutual information from similarity matrix.
-calc_score <- function(dm,disease){
+# score_go() give a score to each disease module based on mutual information from similarity matrix
+# derived from the GO annotation.
+score_go <- function(dm,disease){
   
   dm <- dm[dm$ID %in% go$id,] # ensure missing GO terms are removed
   dm <- dm[dm$ID %in% attributes(GO_IC)$name,] # ensure missing IC terms are removed
