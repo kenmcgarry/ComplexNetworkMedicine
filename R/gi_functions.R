@@ -423,7 +423,7 @@ setcount <- function(dms,ind){
 } 
 
 # This is a far quicker version of getDiseaseModules(). This version uses the ontologySimilarity packages
-# by Daniel Green. 
+# by Daniel Green. Unfortunatley, Ive hand coded a lot hence its a big function.
 createDiseaseModules <- function(linkdata){
   tempgenes <- names(gene_GO_terms)
   enrich <- data.frame(ID="GO:0000666", genes="RU12",DiseaseModule=666,adj_pval=0.001,zscore=6.001,logFC=0.2,
@@ -556,13 +556,11 @@ score_pathways <- function(dm){
 # score_go() give a score to each disease module based on mutual information from similarity matrix
 # derived from the GO annotation.
 score_go <- function(dm,disease){
-  
   dm <- dm[dm$ID %in% go$id,] # ensure missing GO terms are removed
   dm <- dm[dm$ID %in% attributes(GO_IC)$name,] # ensure missing IC terms are removed
   terms_by_disease_module <- split(dm$ID,dm$DiseaseModule)  # do split by disease module
   terms_by_disease_module <- unname(terms_by_disease_module)   # Remove names for the moment
   sim_matrix <- get_sim_grid(ontology=go,information_content=GO_IC,term_sets=terms_by_disease_module)
-
 # Calculate mutual information from the similarity matrix, provides a score of sorts for each disease module
   nbins <- sqrt(NROW(sim_matrix))
   dat <- infotheo::discretize(sim_matrix,"equalwidth", nbins) # use full package extension
@@ -570,11 +568,32 @@ score_go <- function(dm,disease){
   IXY2 <-infotheo::mutinformation(dat[,1],dat[,2])
   H <- infotheo::entropy(infotheo::discretize(sim_matrix[1,]),method="shrink")
 
+  # see how the disease modules cluster
+  dist_mat <- max(sim_matrix) - sim_matrix
+  plot(hclust(as.dist(dist_mat)))
+  
   for (i in 1:nrow(sim_matrix)){
-    cat("\nDisease is", disease, "Module[",i,"] biological value = ",IXY[i])
-  }
+    cat("\nDisease is", disease, "Module[",i,"] biological value = ",IXY[i])  }
   
   return(IXY)
+}
+
+
+# Group the most salient disease modules and cluster them, this is for the table
+# in Latex file.
+score_dm_go <- function(dm){
+  dm <- dm[dm$ID %in% go$id,] # ensure missing GO terms are removed
+  dm <- dm[dm$ID %in% attributes(GO_IC)$name,] # ensure missing IC terms are removed
+  terms_by_disease_module <- split(dm$ID,dm$DiseaseModule)  # do split by disease module
+  #terms_by_disease_module <- unname(terms_by_disease_module)   # Remove names for the moment
+  sim_matrix <- get_sim_grid(ontology=go,information_content=GO_IC,term_sets=terms_by_disease_module)
+  
+  # see how the disease modules cluster
+  dist_mat <- max(sim_matrix) - sim_matrix  # need a distance matrix, not a similarity matrix
+  plot(hclust(as.dist(dist_mat)))
+
+  
+  return(sim_matrix)
 }
 
   
@@ -643,7 +662,7 @@ C06_ID[17] <- "C06.405.117.119.500.484" # Gastroesophageal Reflux
 C06_ID[10] <- "C06.552.697.160" #"Liver carcinoma"
 C06_ID[11] <- "C06.301.761.249.500" # Insulinoma 
 
-disease <- as.data.frame( cbind(C06Disease,C06_ID),stringsAsFactors=FALSE)
+disease <- as.data.frame(cbind(C06Disease,C06_ID),stringsAsFactors=FALSE)
 return(disease)
 }
 

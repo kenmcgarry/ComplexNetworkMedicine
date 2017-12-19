@@ -4,7 +4,7 @@
 # Packages and my functions are loaded in by gi_functions.R
 
 setwd("C:/R-files/disease")    # point to where my code lives
-load("C06disease-16thDec2017.RData") # load in required data - the contents will change regulary
+load("C06disease-18thDec2017.RData") # load in required data - the contents will change regulary
 source("gi_functions.R")  # load in the functions required for finding lists of drugs. 
 source("gi_run.R")   # some routine code to load in.
 source("gi_plots.R")
@@ -82,6 +82,7 @@ shell2_genes <- unique(shell2_genes)
 shell2_genes <- setdiff(shell2_genes,gene_list$geneName) # we are left with 109 genes unique to shell2 and not related to C06
 write.table(unique(sort(shell2_genes)),"C:\\R-files\\disease\\shell2genes.txt",sep=",",row.names = FALSE,col.names = FALSE)
 
+##################################################################################################
 # Now seek out the two shell levels of diseases
 shell1 <- get_linked_diseases(gene_list$geneName)  # diseases directly linked to C06 disease genes
 shell2 <- get_linked_diseases(shell2_genes)  # diseases indirectly linked through 2nd shell genes
@@ -91,10 +92,10 @@ shell2Diseases <-  # For the moment, Only keep diseases with at least FIVE share
     add_count(diseaseName,sort=TRUE) %>%
     filter(n > 5)
 
-shell1Diseases <-  # For the moment, Only keep diseases with at least 15 shared genes
+shell1Diseases <-  # For the moment, Only keep diseases with at least FIVE shared genes
   shell1 %>%
   add_count(diseaseName,sort=TRUE) %>%
-  filter(n > 15)
+  filter(n > 5)
 
 unique(shell1Diseases$diseaseName) # how many different shell1 associated non-C06 diseases do we have?
 unique(shell2Diseases$diseaseName)  # how many different shell2 associated non-C06 diseases do we have?
@@ -192,10 +193,10 @@ plotLinkCommMembers(lc, nodes = head(names(lc$numclusters), 20),
                     fontsize = 11, nspace = 3.5, maxclusters = 20)
 
 
-
+# memory.limit() # memory.limit(60000)
 
 # Annotate the SHELL 1, disease modules with GO terms
-dismods1 <- getDiseaseModules(s1,"all")  # crashed out after 8 hours on full dataset
+dismods1 <- createDiseaseModules(s1)  # crashed out after 8 hours using "getDiseaseModule"
 enrich1 <- dismods1  # Keep a copy of full data, as GOBubble only uses a subset of it
 dismods1 <- dplyr::select(enrich1,category,ID,term,count,genes,logFC,adj_pval,zscore)
 head(dismods1)
@@ -207,7 +208,7 @@ dismods2 <- dplyr::select(enrich2,category,ID,term,count,genes,logFC,adj_pval,zs
 
 # GOBubble plot will display GO enrichment. reduce_overlap() (if used) produces the key terms
 # sample_n randomly selects a subset.
-reduced_dismods1 <- reduce_overlap(dismods1, overlap = 2)
+reduced_dismods1 <- reduce_overlap(dismods1, overlap = 0.75)
 reduced_dismods1$zscore <- runif(length(reduced_dismods1$zscore), -3.0, 2.5) # bit of a fiddle this..but
 GOBubble(sample_n(reduced_dismods1,50), labels = 2, ID=TRUE)                    # but need to spread out bubbles
 
@@ -422,7 +423,7 @@ reduced_hypmods$logFC <- runif(length(reduced_hypmods$logFC), -2.0, 2.5) # bit o
 GOBubble(sample_n(reduced_hypmods,150), labels = .1, ID=TRUE)
 
 ###############################################################################
-## KEGG enrichment - creates large MEGABYTE data structures 
+## KEGG enrichment - kegg_analysis() creates large MEGABYTE data structures 
 
 kegs1 <- kegg_analysis(unique(gene_list$geneName))
 barplot(kegs1, drop=TRUE, showCategory=20)
@@ -454,11 +455,6 @@ barplot(kegsch, drop=TRUE, showCategory=20)
 # THINK ABOUT USING TOPGO PACKAGE
 # https://bioconductor.org/packages/3.7/bioc/vignettes/topGO/inst/doc/topGO.pdf
 
-# Semantically compare N clusters of genes 
-c1 <- bitr(nonC06_alz$geneName,fromType="SYMBOL", toType="ENTREZID", OrgDb="org.Hs.eg.db")
-c2 <- bitr(nonC06_aut$geneName,fromType="SYMBOL", toType="ENTREZID", OrgDb="org.Hs.eg.db")
-c3 <- bitr(nonC06_sch$geneName,fromType="SYMBOL", toType="ENTREZID", OrgDb="org.Hs.eg.db")
-mclusterSim(list(alz=c1$ENTREZID,aut=c2$ENTREZID,sch=c3$ENTREZID), measure="Wang", combine="BMA")
 
 # Tables for paper. 
 tempgoa <- head(goa,row.names=FALSE)
@@ -476,18 +472,20 @@ print(xtable(tempkega, display=c("s","s","s","s","s","g")), math.style.exponents
 # Calculate scores for all disease modules and rank them, sort decreasing numerical order
 # print_dm_table() will generate the latex stuff based on annoations and ranking 
 # methods to create the disease module table for the paper, containing:
-#   C06 and non-C06 numbers
+#   C06 and non-C06 disease modules
 #   GO enrichment counts
 #   KEGG enrichment counts
 #   Biological plausibility ranking
 #   Current drugs / any drug reposition candidates
 #   components/complexity
 
-ds <- calc_score(dm,"The name")
+shite <- score_dm_go(dismods_enrich)
 
-print_dm_table(dm)
+sg <- score_go(dm,"The name")
+sp <- score_pathways(dm)
+print_dm_table(sg)
 
-# Non-C06 diseases that are closely linked to them.
+# The Non-C06 diseases that are closely linked to them.
 # Alzheimer Disease C10.228.140.380.100
 # Asthma C08.127.108
 # Autistic Disorder F03.625.164.113.500
