@@ -580,20 +580,21 @@ score_go <- function(dm,disease){
 
 
 # Group the most salient disease modules and cluster them, this is for the table
-# in Latex file.
-score_dm_go <- function(dm){
+# in Latex file. need to get either disease name or MESH id for dendro plot.
+score_alldm_go <- function(dm){
   dm <- dm[dm$ID %in% go$id,] # ensure missing GO terms are removed
   dm <- dm[dm$ID %in% attributes(GO_IC)$name,] # ensure missing IC terms are removed
+  countdm <- length(unique(dm$DiseaseModule))
+  cat("\nFound ",countdm,"Disease Modules.")
   terms_by_disease_module <- split(dm$ID,dm$DiseaseModule)  # do split by disease module
   #terms_by_disease_module <- unname(terms_by_disease_module)   # Remove names for the moment
   sim_matrix <- get_sim_grid(ontology=go,information_content=GO_IC,term_sets=terms_by_disease_module)
-  
   # see how the disease modules cluster
   dist_mat <- max(sim_matrix) - sim_matrix  # need a distance matrix, not a similarity matrix
+  clusterdetails <- hclust(as.dist(dist_mat))
   plot(hclust(as.dist(dist_mat)))
 
-  
-  return(sim_matrix)
+  return(clusterdetails)
 }
 
   
@@ -665,6 +666,27 @@ C06_ID[11] <- "C06.301.761.249.500" # Insulinoma
 disease <- as.data.frame(cbind(C06Disease,C06_ID),stringsAsFactors=FALSE)
 return(disease)
 }
+
+
+
+# join_dm() will concatenate the C06 diseases with the non C06 diseases
+# afterwards, clustering can be used on their GO to determine similarities/differences.
+# They are: alzmods; asthmods; autmods; diamods; hypmods; nscmods; obsmods; parkmods; ramods; schmods; 
+join_dm <- function(){
+  
+  
+  
+  return(alldismods)
+}
+
+
+
+
+
+
+
+
+
 
 
 

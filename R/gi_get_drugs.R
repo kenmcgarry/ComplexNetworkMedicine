@@ -479,10 +479,12 @@ print(xtable(tempkega, display=c("s","s","s","s","s","g")), math.style.exponents
 #   Current drugs / any drug reposition candidates
 #   components/complexity
 
-shite <- score_dm_go(dismods_enrich)
+crappy <- join_dm()  #  add the 12 non-C06's to the 55 C06's
+shite <- score_alldm_go(crappy)
 
 sg <- score_go(dm,"The name")
 sp <- score_pathways(dm)
+
 print_dm_table(sg)
 
 # The Non-C06 diseases that are closely linked to them.
