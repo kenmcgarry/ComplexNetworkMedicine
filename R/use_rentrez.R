@@ -1,5 +1,5 @@
 # use_rentrez.R
-# use internet connection to NCBI to collect interactios rather than clumsy STITCH/STRING process, it
+# use internet connection to NCBI to collect interactions rather than clumsy STITCH/STRING process, it
 # assumes library(rentrez) and library(stringr) are loaded.
 # https://github.com/ropensci/rentrez/wiki/Find-genes-known-to-interact-with-a-given-gene
 
@@ -10,24 +10,26 @@ use_rentrez <- function(mygenes){
     onegene <- mygenes[i]
     #cat("\nlength mygenes=",length(mygenes))
     gene_search <- entrez_search(db="gene", term=str_c("(",onegene,"[GENE]) AND (Homo sapiens[ORGN])"))
+    if(gene_search$count > 0){
+      #cat("\ngene_search",gene_search)
   
-    if(!is.null(gene_search$ids)){
-      templist <- interactions_from_gene(gene_search$ids)
-      cat("\nonegene is ",onegene)
-      n <- length(templist)
-      #cat("\nlength templist=",n)
-      genevec <- rep(onegene,n)
-      #cat("\nlength genevec=",length(genevec))
-      tempvec <- cbind(templist,genevec)
-      colnames(tempvec)<- c("a","b") 
-      #cat("\nnames tempvec",names(tempvec))
-      #cat("\nnames interactionList",names(interactionList))
+      if(!is.null(gene_search$ids)){
+        templist <- interactions_from_gene(gene_search$ids)
+        cat("\nonegene is ",onegene)
+        n <- length(templist)
+        #cat("\nlength templist=",n)
+        genevec <- rep(onegene,n)
+        #cat("\nlength genevec=",length(genevec))
+        tempvec <- cbind(templist,genevec)
+        colnames(tempvec)<- c("a","b") 
+        #cat("\nnames tempvec",names(tempvec))
+        #cat("\nnames interactionList",names(interactionList))
       
-      interactionList <- rbind(interactionList,tempvec)
-      tempvec <- NULL
-    }else{
-      cat("\nNo interaction partners for ",onegene)
-    }
+        interactionList <- rbind(interactionList,tempvec)
+        tempvec <- NULL
+      }else{
+        cat("\nNo interaction partners for ",onegene)
+    }}
     
   }
   interactionList <- interactionList[-1,] # remove silly entry initializing interactionList
