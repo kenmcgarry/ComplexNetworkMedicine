@@ -666,11 +666,57 @@ print_dm_table <- function(){
 }
 
 
+# make_C06_mods() is used by join_dm() to build complete list of disease modules (C06 and non-C06)
+# The end results is then clustered to see similar/dissimilar modules and more importanatly the 
+# degree of module overlap. dplyr::select(dmname_enrich,category,ID,term,genes,DiseaseModule)
+# Join C06 structure with appropriate genes and re-annotate then merge.....depth of Cholestasis is C06.130.120
+make_C06_mods <- function(){
+  C06mods <- data.frame(category="FU2",ID="GO:0000666", term="happy behaviour",genes="RU12",DiseaseModule=66,
+                        stringsAsFactors=FALSE) #instantiate.
+  # break the 55 diseases into seven broad C06.XXX groups - we do not have enough genes to form viable communities!
+  n <- nrow(C06)
+  C06code <- C06$C06_ID
+  for (j in 1:n){
+    C06code[j] <- substr(C06$C06_ID[j],1,7)}
+  C06 <- cbind(C06,C06code)
+  
+  tempgene <- disgene[,c(1,2,4,6)]  # use a temp variable
+  C06code <- vector(mode="character", length=nrow(tempgene))
+  tempgene <- cbind(tempgene,C06code) 
+  tempgene <- data.frame(lapply(tempgene, as.character), stringsAsFactors=FALSE)
+  C06 <- data.frame(lapply(C06,as.character),stringsAsFactors=FALSE)
+  for (i in 1:nrow(C06)){
+    tempgene[tempgene$diseaseName == C06$C06Disease[i], "C06code"] <- C06$C06code[i]
+  }
+
+  Disease <- unique(C06$C06code)
+  Disease <- Disease[1:6] # kill peritonitits C06.844 - its too small to form viable clusters
+  for (i in 1:length(Disease)){     # for every C06 disease type see what modules they form.
+    dg <- dplyr::filter(tempgene,C06code==Disease[i])
+    cat("\ni=",i,"  ",Disease[i])
+    tempinteractions <- use_rentrez(unique(dg$geneName))
+    tempinteractions[,1] <- str_to_upper(tempinteractions[,1])
+    lcom <- getLinkCommunities(tempinteractions, hcmethod = "single",use.all.edges = TRUE)  # consider cutting density partition manually
+    lmods <- createDiseaseModules(lcom)  
+    if(nrow(lmods) ==0){
+      lcom <- newLinkCommsAt(lcom, cutat = 0.7) # cut it at 0.7
+      lmods <- createDiseaseModules(lcom) 
+    }
+    lmods <- dplyr::select(lmods,category,ID,term,genes,DiseaseModule)
+    if(nrow(lmods) > 2000){
+      lmods <- sample_n(lmods,2000)}
+    lmods$DiseaseModule <- paste(C06Disease[i],lmods$DiseaseModule,sep="_")
+    C06mods <- rbind(C06mods,lmods)
+  }
+  C06mods <- C06mods[-1, ]     # 1st entry is rubbish so remove it
+  return(C06mods)
+}
+
+
 # join_dm() will concatenate the C06 diseases with the non C06 diseases
 # afterwards, clustering can be used on their GO to determine similarities/differences.
 # They are: alzmods; asthmods; autmods; diamods; hypmods; nscmods; obsmods; parkmods; ramods; schmods; 
 # At the moment the above are Global data structures
-# Join C06 structure with appropriate genes and re-annotate then merge.....depth of Cholestasis is C06.130.120
 join_dm <- function(){
   # WARNING DO ONLY ONCE!!!!
   alzmods_enrich$DiseaseModule <- paste("Alzheimers",alzmods_enrich$DiseaseModule,sep="_")
@@ -684,17 +730,25 @@ join_dm <- function(){
   ramods_enrich$DiseaseModule <- paste("RheumatoidArthritis",ramods_enrich$DiseaseModule,sep="_")
   schmods_enrich$DiseaseModule <- paste("Schizophrenia",schmods_enrich$DiseaseModule,sep="_")
   
-  # gene_list is key to solving the C06 disease modules
-  (gene_list)
+  allmods <- rbind(dplyr::select(diamods_enrich,category,ID,term,genes,DiseaseModule),
+                   dplyr::select(autmods_enrich,category,ID,term,genes,DiseaseModule),
+                   dplyr::select(asthmods_enrich,category,ID,term,genes,DiseaseModule),
+                   dplyr::select(hypmods_enrich,category,ID,term,genes,DiseaseModule),
+                   dplyr::select(nscmods_enrich,category,ID,term,genes,DiseaseModule),
+                   dplyr::select(obsmods_enrich,category,ID,term,genes,DiseaseModule),
+                   dplyr::select(parkmods_enrich,category,ID,term,genes,DiseaseModule),
+                   dplyr::select(ramods_enrich,category,ID,term,genes,DiseaseModule),
+                   dplyr::select(schmods_enrich,category,ID,term,genes,DiseaseModule),
+                   dplyr::select(alzmods_enrich,category,ID,term,genes,DiseaseModule))
   
-  return(alldismods)
+  
+  C06mods <- make_C06_mods()
+  rbind(allmods,C06mods)
+  
+  return(allmods)
 }
 
-
-
-
-
-
+#save(C06mods,allmods, file = "C06-20thDec-2017.RData")
 
 
 
