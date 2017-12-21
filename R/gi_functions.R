@@ -576,7 +576,8 @@ DO_analysis <- function(mygenes){
 # score_pathways(), scores the associated pathways from KEGG based on GeneRatio.
 # must compute some sort of value to rank biological plausibility/importance
 score_pathways <- function(dm){
-
+  # How many disease mods do we have?
+  kegpaths <- kegg_analysis(nonC06_nsc$geneName)
   score_path <- vector(mode="integer",length(nrow(dm))) #how may pathways do we have?
   for (i in 1:nrow(dm)){
     temp <- unlist(strsplit(dm[i]$GeneRatio,"/")) # split on the backslash symbol
@@ -657,9 +658,12 @@ get_drugs <- function(umls,rlist) {
 #   Current drugs / DX0 drug reposition candidates
 #   components/complexity
 
-print_dm_table <- function(){
+print_dm_table <- function(yourtable){
 
-  dm.table <- xtable(head(temp_table))
+  tablehead <- xtable(head(yourtable))
+  tablemiddle <- xtable(middle(yourtable))
+  tabletail <- xtable(tail(yourtable))
+  dm.table <- rbind(tablehead,tablemiddle,tabletail)
   #digits(tli.table)[c(2,6)] <- 0
   print(dm.table,floating=FALSE)
   
@@ -693,9 +697,15 @@ make_C06_mods <- function(){
   Disease <- Disease[1:6] # kill peritonitits C06.844 - its too small to form viable clusters
   for (i in 1:length(Disease)){     # for every C06 disease type see what modules they form.
     dg <- dplyr::filter(tempgene,C06code==Disease[i])
-    cat("\ni=",i,"  ",Disease[i])
-    tempinteractions <- use_rentrez(unique(dg$geneName))
+    cat("\ni=",i,"  ",Disease[i]," with ", length(unique(dg$geneName)), " genes.")
+    usethese <- unique(dg$geneName)
+    if(length(usethese) > 100){
+      usethese <- usethese[1:100] }
+    
+    tempinteractions <- use_rentrez(unique(usethese))
     tempinteractions[,1] <- str_to_upper(tempinteractions[,1])
+    cat("\nDIM interactions =",dim(tempinteractions))
+    # tempinteractions <- sample_n(tempinteractions,200)  # what what size sample?
     lcom <- getLinkCommunities(tempinteractions, hcmethod = "single",use.all.edges = TRUE)  # consider cutting density partition manually
     lmods <- createDiseaseModules(lcom)  
     if(nrow(lmods) ==0){
@@ -743,13 +753,24 @@ join_dm <- function(){
   
   
   C06mods <- make_C06_mods()
-  rbind(allmods,C06mods)
+  allmods <- rbind(allmods,C06mods)
   
   return(allmods)
 }
 
 #save(C06mods,allmods, file = "C06-20thDec-2017.RData")
 
+
+# merge_dm() will merge modules based on GO biological similarity. Where "dm" is
+# a dataframe of modules. "n" enforce cut point.
+merge_dm <- function(dm,n){
+  # merge on 75% similarity 
+  merged_dm <- cutree(dm,n)
+  
+  dmdata <- as.vector(merged_dm)
+  dmlabel <- names(merged_dm)
+  return(merged_dm)
+}
 
 
 

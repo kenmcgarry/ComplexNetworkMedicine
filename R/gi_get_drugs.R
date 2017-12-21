@@ -479,12 +479,28 @@ print(xtable(tempkega, display=c("s","s","s","s","s","g")), math.style.exponents
 #   Current drugs / any drug reposition candidates
 #   components/complexity
 
-crappy <- join_dm()  #  add the 12 non-C06's to the 55 C06's
-shite <- score_alldm_go(crappy)
+load("C06-20thDec-2017.RData")
+#sample_mods <- sample_n(allmods,10000)
+modscores <- score_alldm_go(allmods)  # cluster based scoring
+dm <- merge_dm(modscores,20)
+dmgroup <- as.vector(dm)
+dmlabel <- names(dm)
+dm_df <- as.data.frame(dmgroup,dmlabel)
 
-sg <- score_go(dm,"The name")
-sp <- score_pathways(dm)
 
+# get new overall scores on combined disease modules groups 
+list_allmods <- unique(allmods$DiseaseModule)
+for (i in 1:length(unique(dmgroup))){
+  filter(allmods,)
+}
+
+# make Latex tables
+dm_df <- as.data.frame()
+dm.table <- xtable(dm_df)
+print(dm.table,floating=FALSE)
+
+#sg <- score_go(unknown,"The name")
+#sp <- score_pathways(unknown)
 print_dm_table(sg)
 
 # The Non-C06 diseases that are closely linked to them.
@@ -500,8 +516,8 @@ print_dm_table(sg)
 # Hypertensive disease C14.907.489
 
 
-# Sort C06 diseases with genes, need to attach the MeSH code
-C06 <- fix_C06()
+# Sort C06 diseases with genes, need to attach the MeSH code - DO ONLY ONCE.
+#C06 <- fix_C06()
 
 
 
