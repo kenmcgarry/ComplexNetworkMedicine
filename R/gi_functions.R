@@ -16,10 +16,9 @@ library(linkcomm)
 library(clusterProfiler)
 library(org.Hs.eg.db)
 keytypes(org.Hs.eg.db)
+library("AnnotationDbi")
 library(GOplot)
 library(scales)
-library(ontologySimilarity)
-library(ontologyIndex)
 library(rentrez)
 library(stringr)
 # huge amount of data gets loaded in here onwards!
@@ -27,6 +26,8 @@ library(ontologySimilarity)
 library(ontologyIndex)
 library(infotheo)
 library(KEGGprofile)
+library(KEGG.db)
+library(Matrix)
 data(go)
 data(gene_GO_terms)
 data(GO_IC)
@@ -577,6 +578,7 @@ DO_analysis <- function(mygenes){
 # must compute some sort of value to rank biological plausibility/importance
 score_pathways <- function(dm){
   # How many disease mods do we have?
+  
   kegpaths <- kegg_analysis(nonC06_nsc$geneName)
   score_path <- vector(mode="integer",length(nrow(dm))) #how may pathways do we have?
   for (i in 1:nrow(dm)){
@@ -585,6 +587,36 @@ score_pathways <- function(dm){
   }
   return(score_path)
 }
+
+# score_group_pathways(), scores the associated pathways from KEGG based on GeneRatio.
+# THESE ARE THE NEW, GROUPED DISEASE MODULES
+score_group_pathways <- function(dm){
+  nmods <- length(unique(dm$newgroup))  
+  nmods <- 9
+  score_path <- rep(0,9); #temp_score_path<-rep(0,5)
+  cat("\nWe have ",nmods,"disease modules")# How many disease mods do we have?
+  for (j in 1:nmods){
+    tmpmod <- filter(dm,newgroup == j)
+    thegenes <- unique(tmpmod$genes)
+    thegenes <- thegenes[!numbers_only(thegenes)]
+    cat("\nModule ",j)
+    kegpaths <- kegg_analysis(thegenes)
+    #score_path <- rep(0,length(nrow(kegpaths))) #how may pathways do we have?
+    if(!is.null(kegpaths)){
+      tmpscore <- rep(0,nrow(kegpaths))
+      for (i in 1:nrow(kegpaths)){
+        temp <- unlist(strsplit(kegpaths[i]$GeneRatio,"/")) # split on the backslash symbol
+        tmpscore[i] <- kegpaths[i]$Count/as.numeric(temp[2])  # calculate the actual GeneRatio
+        cat("\ntmpscore= ",tmpscore)
+      } 
+      score_path[j] <- tmpscore
+    }
+   # score_path <- rbind(tmpscore,score_path)
+  }
+  
+  return(score_path)
+}
+
 
 # score_go() give a score to each disease module based on mutual information from similarity matrix
 # derived from the GO annotation.
@@ -630,6 +662,34 @@ score_alldm_go <- function(dm){
   return(clusterdetails)
 }
 
+# Ranks the NEW disease modules, this is for the table in Latex file. 
+# 
+rank_group_pathways <- function(dm){
+  dm <- dm[dm$ID %in% go$id,] # ensure missing GO terms are removed
+  dm <- dm[dm$ID %in% attributes(GO_IC)$name,] # ensure missing IC terms are removed
+  countdm <- length(unique(dm$newgroup))
+  cat("\nFound ",countdm,"New Disease Modules to Rank.")
+  terms_by_disease_module <- split(dm$ID,dm$newgroup)  # do split by disease module
+  #terms_by_disease_module <- unname(terms_by_disease_module)   # Remove names for the moment
+  sim_matrix <- get_sim_grid(ontology=go,information_content=GO_IC,term_sets=terms_by_disease_module)
+
+  # Calculate mutual information from the similarity matrix, provides a score of sorts for each disease module
+  nbins <- sqrt(NROW(sim_matrix))
+  dat <- infotheo::discretize(sim_matrix,"equalwidth", nbins) # use full package extension
+  IXY <- infotheo::mutinformation(dat,method= "emp")
+  IXY2 <-infotheo::mutinformation(dat[,1],dat[,2])
+  H <- infotheo::entropy(infotheo::discretize(sim_matrix[1,]),method="shrink")
+  
+  # ADJUST RANK WITH BIOLOGICAL INPUT FROM KEGG
+  collate_scores <- jaccard(IXY)  # ensure Matrix library is loaded.
+  collate_scores <- diag(collate_scores)
+  
+  for (i in 1:nrow(sim_matrix)){
+    cat("\nDiseaseModule is",  "Module[",i,"] biological value = ",IXY[i])  }
+  rankedmods <- IXY
+  
+  return(rankedmods)
+}
   
 # getdrugs() assumes that "indications" dataframe is already loaded. You must provide getdrugs() 
 # with the "umls_cui_from_meddra" code for your disease. It will return the drugs known to be used...
@@ -774,8 +834,30 @@ merge_dm <- function(dm,n){
 
 
 
+numbers_only <- function(x) !grepl("\\D", x)
 
-
+# obtained from stackoverflow question.
+jaccard <- function(m) {
+  ## common values:
+  A = tcrossprod(m)
+  ## indexes for non-zero common values
+  im = which(A > 0, arr.ind=TRUE)
+  ## counts for each row
+  b = rowSums(m)
+  
+  ## only non-zero values of common
+  Aim = A[im]
+  
+  ## Jacard formula: #common / (#i + #j - #common)
+  J = sparseMatrix(
+    i = im[,1],
+    j = im[,2],
+    x = Aim / (b[im[,1]] + b[im[,2]] - Aim),
+    dims = dim(A)
+  )
+  
+  return( J )
+}
 
 
 

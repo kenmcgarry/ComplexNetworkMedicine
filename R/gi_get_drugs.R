@@ -479,23 +479,34 @@ print(xtable(tempkega, display=c("s","s","s","s","s","g")), math.style.exponents
 #   Current drugs / any drug reposition candidates
 #   components/complexity
 
-load("C06-20thDec-2017.RData")
+load("C06disease-SMALL-21stDec2017.RData")
 #sample_mods <- sample_n(allmods,10000)
 modscores <- score_alldm_go(allmods)  # cluster based scoring
 dm <- merge_dm(modscores,20)
 dmgroup <- as.vector(dm)
 dmlabel <- names(dm)
-dm_df <- as.data.frame(dmgroup,dmlabel)
+dm_df <- data.frame(dm=dmgroup,disease=dmlabel,stringsAsFactors = FALSE)
 
-
-# get new overall scores on combined disease modules groups 
+# get new overall scores on combined, new disease modules groups 
+# 1. create new dismods based on cluster numbers and labels.
 list_allmods <- unique(allmods$DiseaseModule)
+new_dm <- c("BP", "GO:0070863","positive regulation","PLAU1","Parks", 1)
 for (i in 1:length(unique(dmgroup))){
-  filter(allmods,)
+  tmp_names <- filter(dm_df,dmgroup == dmgroup[i])
+  tmp_dm <- filter(allmods,DiseaseModule == tmp_names$disease)  
+  #cat("\ndiseases in group ",i," are ",tmp_names$disease)
+  newgroup <- rep(i, nrow(tmp_dm))
+  tmp_dm <- cbind(tmp_dm,newgroup)
+  new_dm <- rbind(new_dm,tmp_dm)
 }
 
+GOranks <- rank_group_pathways(new_dm) # use VERSION 2 of rank_alldm_go(allmods)
+KEGGranks <- score_group_pathways(new_dm) # use VERSION 2 of rank_alldm_go(allmods)
+
+new_dm <- new_dm[-1, ]     # 1st entry is rubbish so remove it
+rm(tmp_dm,new_dm)
+
 # make Latex tables
-dm_df <- as.data.frame()
 dm.table <- xtable(dm_df)
 print(dm.table,floating=FALSE)
 
