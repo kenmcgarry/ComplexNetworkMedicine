@@ -4,7 +4,7 @@
 # Packages and my functions are loaded in by gi_functions.R
 
 setwd("C:/R-files/disease")    # point to where my code lives
-load("C06disease-18thDec2017.RData") # load in required data - the contents will change regulary
+load("C06disease-22ndDec2017.RData") # load in required data - the contents will change regulary
 source("gi_functions.R")  # load in the functions required for finding lists of drugs. 
 source("gi_run.R")   # some routine code to load in.
 source("gi_plots.R")
@@ -193,10 +193,10 @@ plotLinkCommMembers(lc, nodes = head(names(lc$numclusters), 20),
                     fontsize = 11, nspace = 3.5, maxclusters = 20)
 
 
-# memory.limit() # memory.limit(60000)
+# memory.limit() # memory.limit(90000)
 
 # Annotate the SHELL 1, disease modules with GO terms
-dismods1 <- createDiseaseModules(s1)  # crashed out after 8 hours using "getDiseaseModule"
+dismods1 <- createDiseaseModules(s1)#crashed out after 8 hours using "getDiseaseModule" "create" is faster version
 enrich1 <- dismods1  # Keep a copy of full data, as GOBubble only uses a subset of it
 dismods1 <- dplyr::select(enrich1,category,ID,term,count,genes,logFC,adj_pval,zscore)
 head(dismods1)
@@ -482,7 +482,7 @@ print(xtable(tempkega, display=c("s","s","s","s","s","g")), math.style.exponents
 load("C06disease-SMALL-21stDec2017.RData")
 #sample_mods <- sample_n(allmods,10000)
 modscores <- score_alldm_go(allmods)  # cluster based scoring
-dm <- merge_dm(modscores,20)
+dm <- merge_dm(modscores,25)
 dmgroup <- as.vector(dm)
 dmlabel <- names(dm)
 dm_df <- data.frame(dm=dmgroup,disease=dmlabel,stringsAsFactors = FALSE)
@@ -499,19 +499,46 @@ for (i in 1:length(unique(dmgroup))){
   tmp_dm <- cbind(tmp_dm,newgroup)
   new_dm <- rbind(new_dm,tmp_dm)
 }
+new_dm <- new_dm[-1, ]     # 1st entry is rubbish so remove it
 
 GOranks <- rank_group_pathways(new_dm) # use VERSION 2 of rank_alldm_go(allmods)
 KEGGranks <- score_group_pathways(new_dm) # use VERSION 2 of rank_alldm_go(allmods)
+score <- diag(GOranks)+KEGGranks  # get the combined score by simply adding KEGG rank to GOrank
+score <- as.vector(score)
 
-new_dm <- new_dm[-1, ]     # 1st entry is rubbish so remove it
-rm(tmp_dm,new_dm)
+# add score variable for each new disease module
+tmp_score <-rep(0,nrow(new_dm))
+new_dm <- cbind(new_dm,tmp_score)
+colnames(new_dm)[7] <- "score"
+# populate score variable in new_dm with the values - lots of duplications!
+for(i in 1:length(unique(new_dm$newgroup))){
+  new_dm[new_dm$newgroup == i, "score"] <- score[i]
+}
+
+temp_for_latex <- data.frame(score=score, newgroup=seq(1:25)) # to be sorted for latex table
+temp_for_latex  <- temp_for_latex[order(temp_for_latex$score,decreasing = TRUE),]
+
+# sum GO counts for (CC,MF,BP) inclusion into table
+gocount <- rep(0,length(unique(new_dm$newgroup)))
+for(i in 1:length(unique(new_dm$newgroup))){
+  tempstuff <- filter(new_dm,newgroup == i)
+  cat("\nGo count for group ",i," is ",nrow(tempstuff))
+  gocount[i] <- nrow(tempstuff)
+}
+
+# sum gene counts for inclusion into table
+genecount <- rep(0,length(unique(new_dm$newgroup)))
+for(i in 1:length(unique(new_dm$newgroup))){
+  tempstuff <- filter(new_dm,newgroup == i)
+  genecount[i] <- length(unique(tempstuff$genes))
+  cat("\ngenecount for group ",i," is ",genecount[i])
+}
+
+
 
 # make Latex tables
 dm.table <- xtable(dm_df)
 print(dm.table,floating=FALSE)
-
-#sg <- score_go(unknown,"The name")
-#sp <- score_pathways(unknown)
 print_dm_table(sg)
 
 # The Non-C06 diseases that are closely linked to them.
@@ -527,7 +554,7 @@ print_dm_table(sg)
 # Hypertensive disease C14.907.489
 
 
-# Sort C06 diseases with genes, need to attach the MeSH code - DO ONLY ONCE.
+# Sort C06 diseases with genes, need to attach the MeSH code - DO THIS ONLY ONCE.
 #C06 <- fix_C06()
 
 
