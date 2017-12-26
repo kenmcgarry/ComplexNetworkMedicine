@@ -429,14 +429,14 @@ createDiseaseModules <- function(linkdata){
   tempgenes <- names(gene_GO_terms)
   enrich <- data.frame(ID="GO:0000666", genes="RU12",DiseaseModule=666,adj_pval=0.001,zscore=6.001,logFC=0.2,
                        category="FU",term="Satanic like behaviour",stringsAsFactors=FALSE) #instantiate.
-  # remove modules with fewer than 20 genes - as per Menche 2015 paper
-  newclusters <- Filter(function(x)length(x) > 20, linkdata$clusters)
+  # remove modules with fewer than 10 genes - as per Menche 2015 paper - 20 is too restrictive
+  newclusters <- Filter(function(x)length(x) > 10, linkdata$clusters)
   cat("\nFound ",length(newclusters), " usable modules.")
-  j<- 0  # set counter for clusters bigger than 20 
+  j<- 0  # set counter for clusters bigger than 10 
   
   for (i in 1:length(linkdata$clusters)){
     tempnodes <- getNodesIn(linkdata, clusterids = i,type="names")
-    if(length(tempnodes) >= 20){
+    if(length(tempnodes) >= 10){
       j <- j+1
       #cat("\nj =...",j)
       tempnodes <- tempnodes[tempnodes %in% tempgenes]  # remove genes that do not exist in GO data 
@@ -592,8 +592,8 @@ score_pathways <- function(dm){
 # THESE ARE THE NEW, GROUPED DISEASE MODULES
 score_group_pathways <- function(dm){
   nmods <- length(unique(dm$newgroup))  
-  nmods <- 9
-  score_path <- rep(0,9); #temp_score_path<-rep(0,5)
+  nmods <- 10
+  score_path <- rep(0,10); #temp_score_path<-rep(0,5)
   cat("\nWe have ",nmods,"disease modules")# How many disease mods do we have?
   for (j in 1:nmods){
     tmpmod <- filter(dm,newgroup == j)
@@ -737,7 +737,7 @@ print_dm_table <- function(yourtable){
 make_C06_mods <- function(){
   C06mods <- data.frame(category="FU2",ID="GO:0000666", term="happy behaviour",genes="RU12",DiseaseModule=66,
                         stringsAsFactors=FALSE) #instantiate.
-  # break the 55 diseases into seven broad C06.XXX groups - we do not have enough genes to form viable communities!
+  # break the 55 diseases into the seven broad C06.XXX groups-we do not have enough genes to form viable communities!
   n <- nrow(C06)
   C06code <- C06$C06_ID
   for (j in 1:n){
@@ -754,22 +754,20 @@ make_C06_mods <- function(){
   }
 
   Disease <- unique(C06$C06code)
-  Disease <- Disease[1:6] # kill peritonitits C06.844 - its too small to form viable clusters
+  #Disease <- Disease[1:6] # kill peritonitits C06.844 - its too small to form viable clusters
   for (i in 1:length(Disease)){     # for every C06 disease type see what modules they form.
     dg <- dplyr::filter(tempgene,C06code==Disease[i])
     cat("\ni=",i,"  ",Disease[i]," with ", length(unique(dg$geneName)), " genes.")
     usethese <- unique(dg$geneName)
-    if(length(usethese) > 100){
-      usethese <- usethese[1:100] }
-    
+    if(length(usethese) > 100){   # use no more than 100 implicated genes
+      usethese <- usethese[sample(1:length(usethese), 100,replace=FALSE)] }
+    cat("\nUsing ",length(usethese)," genes.")
     tempinteractions <- use_rentrez(unique(usethese))
     tempinteractions[,1] <- str_to_upper(tempinteractions[,1])
-    cat("\nDIM interactions =",dim(tempinteractions))
-    # tempinteractions <- sample_n(tempinteractions,200)  # what what size sample?
     lcom <- getLinkCommunities(tempinteractions, hcmethod = "single",use.all.edges = TRUE)  # consider cutting density partition manually
     lmods <- createDiseaseModules(lcom)  
     if(nrow(lmods) ==0){
-      lcom <- newLinkCommsAt(lcom, cutat = 0.7) # cut it at 0.7
+      lcom <- newLinkCommsAt(lcom, cutat = 0.6) # cut it at 0.6
       lmods <- createDiseaseModules(lcom) 
     }
     lmods <- dplyr::select(lmods,category,ID,term,genes,DiseaseModule)

@@ -4,42 +4,36 @@
 # https://github.com/ropensci/rentrez/wiki/Find-genes-known-to-interact-with-a-given-gene
 
 use_rentrez <- function(mygenes){
-  interactionList <- data.frame(a="RU12",b="FU2")
-  
+  interactionList <- data.frame(a="RU12",b="RFU2")
   for (i in 1:length(mygenes)){
-    onegene <- mygenes[i]
-    #cat("\nlength mygenes=",length(mygenes))
+    onegene <- mygenes[i]                  # convert from name to entrez ID
     gene_search <- entrez_search(db="gene", term=str_c("(",onegene,"[GENE]) AND (Homo sapiens[ORGN])"))
     if(gene_search$count > 0){
-      #cat("\ngene_search",gene_search)
-  
       if(!is.null(gene_search$ids)){
-        templist <- interactions_from_gene(gene_search$ids)
-        cat("\nonegene is ",onegene)
-        n <- length(templist)
-        #cat("\nlength templist=",n)
-        genevec <- rep(onegene,n)
-        #cat("\nlength genevec=",length(genevec))
-        tempvec <- cbind(templist,genevec)
-        colnames(tempvec)<- c("a","b") 
-        #cat("\nnames tempvec",names(tempvec))
-        #cat("\nnames interactionList",names(interactionList))
-      
-        interactionList <- rbind(interactionList,tempvec)
-        tempvec <- NULL
+        templist <- interactions_from_gene(gene_search$ids[1])  # get interaction partners for this single gene
+        #if(!is.null(templist)){
+          cat("\nonegene is ",onegene)
+          n <- length(templist)
+          genevec <- rep(onegene,n)
+          tempvec <- cbind(templist,genevec)
+          colnames(tempvec)<- c("a","b") 
+          interactionList <- rbind(interactionList,tempvec)
+          tempvec <- NULL}
       }else{
-        cat("\nNo interaction partners for ",onegene)
-    }}
-    
+        cat("\nNo interaction partners for ",onegene)}
+    #}
   }
   interactionList <- interactionList[-1,] # remove silly entry initializing interactionList
   return(interactionList)
 }
 
 
-interactions_from_gene <- function(gene_id){                                                                                                                                                                         
-  xmlrec <- entrez_fetch(db="gene", id=gene_id, rettype="xml", parsed=TRUE)                                                                                                                                          
-  XML::xpathSApply(xmlrec,                                                                                                                                                                                           
-                   "//Gene-commentary[Gene-commentary_heading[./text()='Interactions']]//Other-source[Other-source_src/Dbtag/Dbtag_db[./text()='GeneID']]//Other-source_anchor",
-                   XML::xmlValue)                                                                                                                                  
+interactions_from_gene <- function(gene_id){
+  
+  xmlrec <- entrez_fetch(db="gene", id=gene_id, rettype="xml", parsed=TRUE) 
+  if(is.null(xmlrec)){return}else{
+  XML::xpathSApply(xmlrec,"//Gene-commentary[Gene-commentary_heading[./text()='Interactions']]//Other-source[Other-source_src/Dbtag/Dbtag_db[./text()='GeneID']]//Other-source_anchor",
+                   XML::xmlValue) }                                                                                                                                 
 }
+
+

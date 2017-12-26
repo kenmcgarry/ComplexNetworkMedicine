@@ -5,6 +5,7 @@
 
 setwd("C:/R-files/disease")    # point to where my code lives
 load("C06disease-22ndDec2017.RData") # load in required data - the contents will change regulary
+memory.limit(90000)  # use more RAM memory
 source("gi_functions.R")  # load in the functions required for finding lists of drugs. 
 source("gi_run.R")   # some routine code to load in.
 source("gi_plots.R")
@@ -25,7 +26,7 @@ cat("\nIF THIS APPEARS: ''Error in plot.new() : figure margins too large'' ",
 # 3. Get genes associated (if known) with each disease from "disgene" dataframe.
 # 4. Get chemical structures of drugs and create fingerprints.
 # 5. Get 2nd shell protein & drug interactions
-# 6. Use 2nd shell stuff to investigate linkages with other diseases
+# 6. Use 2nd shell information to investigate linkages with other diseases
 
 # Code below perfoms stages 1 and 2 ----------
 disease_umls <- id2umls(digestive)  # get umls codes for each disease
@@ -64,8 +65,7 @@ gene_list <- get_disease_genes(drug_list)  # not all diseases will have implicat
 write.table(unique(sort(drugnames)),"C:\\R-files\\disease\\C06drugs.txt",sep=",",row.names = FALSE,col.names = FALSE)
 write.table(unique(sort(gene_list$geneName)),"C:\\R-files\\disease\\C06genes.txt",sep=",",row.names = FALSE,col.names = FALSE)
 
-# STITCH can only find 820 out of 892 C06 genes connected to 907 2nd shell genes
-# with 15,736 interactions.
+# STITCH can only find 820 out of 892 C06 genes connected to the 907 2nd shell genes with 15,736 interactions.
 
 # load in the mesh data, keep only first three variables.
 temptree <- file.path('C://R-files//disease//','meshtreefull.csv') %>% read.delim(na.strings='',sep=',',header=TRUE,comment.char="#")
@@ -113,7 +113,7 @@ drug_interactions <- drug_interactions[,1:2]
 shell1_interactions <- read.csv("C:\\R-files\\disease\\C06-shell1-low.csv",stringsAsFactors = FALSE)  #important to make stringsAsFact false
 shell1_interactions <- shell1_interactions[,1:2]
 
-# load 1st shell interactions
+# load 2nd shell interactions
 shell2_interactions <- read.csv("C:\\R-files\\disease\\shell2_genes_low.csv",stringsAsFactors = FALSE)  #important to make stringsAsFact false
 shell2_interactions <- shell2_interactions[,1:2]
 
@@ -202,7 +202,7 @@ dismods1 <- dplyr::select(enrich1,category,ID,term,count,genes,logFC,adj_pval,zs
 head(dismods1)
 
 # Annotate the SHELL 2, disease modules with GO terms
-dismods2 <- getDiseaseModules(s2,"all") # 'all' modules, '1:67' or '45:77' (a range) 
+dismods2 <- createDiseaseModules(s2)  
 enrich2 <- dismods2  # Keep a copy of full data, as GOBubble only uses a subset of it
 dismods2 <- dplyr::select(enrich2,category,ID,term,count,genes,logFC,adj_pval,zscore)
 
