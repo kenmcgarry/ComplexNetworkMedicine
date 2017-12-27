@@ -4,7 +4,7 @@
 # Packages and my functions are loaded in by gi_functions.R
 
 setwd("C:/R-files/disease")    # point to where my code lives
-load("C06disease-22ndDec2017.RData") # load in required data - the contents will change regulary
+load("C06disease-26thDec2017.RData") # load in required data - the contents will change regulary
 memory.limit(90000)  # use more RAM memory
 source("gi_functions.R")  # load in the functions required for finding lists of drugs. 
 source("gi_run.R")   # some routine code to load in.
@@ -479,7 +479,15 @@ print(xtable(tempkega, display=c("s","s","s","s","s","g")), math.style.exponents
 #   Current drugs / any drug reposition candidates
 #   components/complexity
 
-load("C06disease-SMALL-21stDec2017.RData")
+
+# 27/12/17
+paths <- rank_alldm_pathways(allmods)
+gos <- rank_alldm_go(allmods)
+
+
+  
+###################################################################
+#load("C06disease-SMALL-21stDec2017.RData")
 #sample_mods <- sample_n(allmods,10000)
 modscores <- score_alldm_go(allmods)  # cluster based scoring
 dm <- merge_dm(modscores,25)

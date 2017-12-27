@@ -323,19 +323,6 @@ go_analysis <- function(yourgenes,ontotype){
 }
 
 
-# KEGG over-representation test
-kegg_analysis <- function(yourgenes){
-  cat("\nyourgenes are: ",yourgenes)
-  
-  eg = bitr(yourgenes, fromType="SYMBOL", toType="ENTREZID", OrgDb="org.Hs.eg.db")
-  #cat("\nconverted",eg[1,2])
-  kk <- enrichKEGG(gene         = eg[,2],
-                   organism     = 'hsa',
-                   pvalueCutoff = 0.05)
-
-  return(kk)
-}
-
 
 # getDiseaseModules() pass it the linkcomm structure, the appropriate data will be
 # converted into a dataframe - ready to be passed to GO enrichment functions before
@@ -588,18 +575,42 @@ score_pathways <- function(dm){
   return(score_path)
 }
 
-# score_group_pathways(), scores the associated pathways from KEGG based on GeneRatio.
-# THESE ARE THE NEW, GROUPED DISEASE MODULES
-score_group_pathways <- function(dm){
-  nmods <- length(unique(dm$newgroup))  
-  nmods <- 10
-  score_path <- rep(0,10); #temp_score_path<-rep(0,5)
+# KEGG over-representation test
+kegg_analysis <- function(yourgenes){
+  #cat("\nyourgenes are: ",yourgenes)
+  eg = bitr(yourgenes, fromType="SYMBOL", toType="ENTREZID", OrgDb="org.Hs.eg.db");
+  eg<-eg[,2]
+  kk <- enrichKEGG(gene= eg, organism= 'hsa', pvalueCutoff = 0.05)
+  
+  return(kk)
+}
+
+# rank_alldm_pathways(), scores the associated pathways from KEGG based on GeneRatio.
+# 27/12/17
+rank_alldm_pathways <- function(dm){
+  nmods <- length(unique(dm$DiseaseModule)) 
+  listdm <- unique(dm$DiseaseModule)
+  score_path <- rep(0,nmods); 
   cat("\nWe have ",nmods,"disease modules")# How many disease mods do we have?
   for (j in 1:nmods){
-    tmpmod <- filter(dm,newgroup == j)
+    cat("\nprocessing module ",j)
+    tmpmod <- filter(dm,DiseaseModule == listdm[j])
     thegenes <- unique(tmpmod$genes)
-    thegenes <- thegenes[!numbers_only(thegenes)]
-    cat("\nModule ",j)
+
+    if(j < 140 || j >= 144){ # Good God, how did NCBI manage to add two extra characters to end of gene names?
+      if(j== 156 || (j>233 & j<242) || (j==283) || (j==306)){thegenes <- "APP"}else{
+      thegenes <- substr(thegenes,1,nchar(thegenes)-2)}
+      if(j==252 || (j>278 & j<282)){thegenes <- substr(thegenes,1,nchar(thegenes)-1)}
+    }
+    if(j==305){thegenes <- substr(thegenes,1,nchar(thegenes)-1)}
+    
+    entrezgenes <- thegenes[numbers_only(thegenes)]  # get entrez numbers
+    thegenes <- thegenes[!numbers_only(thegenes)]    # get symbol names
+    if(length(entrezgenes)>0){
+      entrezgenes <- bitr(entrezgenes, fromType="ENTREZID", toType="SYMBOL", OrgDb="org.Hs.eg.db");
+      thegenes <- c(entrezgenes[,2],thegenes)
+    }else{thegenes <- thegenes[!numbers_only(thegenes)]}
+
     kegpaths <- kegg_analysis(thegenes)
     #score_path <- rep(0,length(nrow(kegpaths))) #how may pathways do we have?
     if(!is.null(kegpaths)){
@@ -607,13 +618,13 @@ score_group_pathways <- function(dm){
       for (i in 1:nrow(kegpaths)){
         temp <- unlist(strsplit(kegpaths[i]$GeneRatio,"/")) # split on the backslash symbol
         tmpscore[i] <- kegpaths[i]$Count/as.numeric(temp[2])  # calculate the actual GeneRatio
-        cat("\ntmpscore= ",tmpscore)
+        #cat("\ntmpscore= ",tmpscore)
       } 
       score_path[j] <- tmpscore
     }
    # score_path <- rbind(tmpscore,score_path)
   }
-  
+  score_path[is.na(score_path)] <- 0.00
   return(score_path)
 }
 
@@ -656,10 +667,35 @@ score_alldm_go <- function(dm){
   sim_matrix <- get_sim_grid(ontology=go,information_content=GO_IC,term_sets=terms_by_disease_module)
   # see how the disease modules cluster
   dist_mat <- max(sim_matrix) - sim_matrix  # need a distance matrix, not a similarity matrix
-  clusterdetails <- hclust(as.dist(dist_mat))
+  clusterdetails <- hclust(as.dist(dist_mat),"ave")
   plot(hclust(as.dist(dist_mat)))
 
   return(clusterdetails)
+}
+
+
+# Ranks the most salient disease modules based on GO annotations.
+# 27/12/17
+rank_alldm_go <- function(dm){
+  dm <- dm[dm$ID %in% go$id,] # ensure missing GO terms are removed
+  dm <- dm[dm$ID %in% attributes(GO_IC)$name,] # ensure missing IC terms are removed
+  countdm <- length(unique(dm$DiseaseModule))
+  listdm <- unique(dm$DiseaseModule)
+  cat("\nFound ",countdm,"Disease Modules.")
+  for (i in 1:countdm){
+    tempmod <- filter(dm,DiseaseModule == listdm[i])
+    #cat("\n",dim(tempmod))
+    cat("\ndismod",listdm[i], "has",length(unique(tempmod$genes))," genes and ",sum(table(tempmod$category))," GO annotations")
+  }
+  #terms_by_disease_module <- split(dm$ID,dm$DiseaseModule)  # do split by disease module
+  #terms_by_disease_module <- unname(terms_by_disease_module)   # Remove names for the moment
+  #sim_matrix <- get_sim_grid(ontology=go,information_content=GO_IC,term_sets=terms_by_disease_module)
+  # see how the disease modules cluster
+  #dist_mat <- max(sim_matrix) - sim_matrix  # need a distance matrix, not a similarity matrix
+  #clusterdetails <- hclust(as.dist(dist_mat),"ave")
+  #plot(hclust(as.dist(dist_mat)))
+  
+  #return(rankedmods)
 }
 
 # Ranks the NEW disease modules, this is for the table in Latex file. 
@@ -735,9 +771,10 @@ print_dm_table <- function(yourtable){
 # degree of module overlap. dplyr::select(dmname_enrich,category,ID,term,genes,DiseaseModule)
 # Join C06 structure with appropriate genes and re-annotate then merge.....depth of Cholestasis is C06.130.120
 make_C06_mods <- function(){
+  start.time <- Sys.time()
   C06mods <- data.frame(category="FU2",ID="GO:0000666", term="happy behaviour",genes="RU12",DiseaseModule=66,
                         stringsAsFactors=FALSE) #instantiate.
-  # break the 55 diseases into the seven broad C06.XXX groups-we do not have enough genes to form viable communities!
+  # break the 55 diseases into the seven broad C06.XXX groups-else we do not have enough genes to form viable communities!
   n <- nrow(C06)
   C06code <- C06$C06_ID
   for (j in 1:n){
@@ -753,8 +790,8 @@ make_C06_mods <- function(){
     tempgene[tempgene$diseaseName == C06$C06Disease[i], "C06code"] <- C06$C06code[i]
   }
 
+  C06[] <- lapply(C06, as.character) # keep as strings NOt factors
   Disease <- unique(C06$C06code)
-  #Disease <- Disease[1:6] # kill peritonitits C06.844 - its too small to form viable clusters
   for (i in 1:length(Disease)){     # for every C06 disease type see what modules they form.
     dg <- dplyr::filter(tempgene,C06code==Disease[i])
     cat("\ni=",i,"  ",Disease[i]," with ", length(unique(dg$geneName)), " genes.")
@@ -762,12 +799,13 @@ make_C06_mods <- function(){
     if(length(usethese) > 100){   # use no more than 100 implicated genes
       usethese <- usethese[sample(1:length(usethese), 100,replace=FALSE)] }
     cat("\nUsing ",length(usethese)," genes.")
+    if(i == 7){usethese <- c("C5","GSK3B","IFNG","IL18","HMGB1","NLRP1","NLRP3")} # provide Peritonitis with genes not in MY database
     tempinteractions <- use_rentrez(unique(usethese))
     tempinteractions[,1] <- str_to_upper(tempinteractions[,1])
     lcom <- getLinkCommunities(tempinteractions, hcmethod = "single",use.all.edges = TRUE)  # consider cutting density partition manually
     lmods <- createDiseaseModules(lcom)  
-    if(nrow(lmods) ==0){
-      lcom <- newLinkCommsAt(lcom, cutat = 0.6) # cut it at 0.6
+    if(length(lcom$clusters) < 10){
+      lcom <- newLinkCommsAt(lcom, cutat = 0.5) # cut it at 0.5 or 0.6
       lmods <- createDiseaseModules(lcom) 
     }
     lmods <- dplyr::select(lmods,category,ID,term,genes,DiseaseModule)
@@ -777,6 +815,10 @@ make_C06_mods <- function(){
     C06mods <- rbind(C06mods,lmods)
   }
   C06mods <- C06mods[-1, ]     # 1st entry is rubbish so remove it
+  
+  end.time <- Sys.time()
+  time.taken <- end.time - start.time
+  cat("\n Execution took - ",time.taken)
   return(C06mods)
 }
 
