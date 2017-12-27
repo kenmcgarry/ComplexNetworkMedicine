@@ -480,9 +480,9 @@ print(xtable(tempkega, display=c("s","s","s","s","s","g")), math.style.exponents
 #   components/complexity
 
 
-# 27/12/17
-paths <- rank_alldm_pathways(allmods)
-gos <- rank_alldm_go(allmods)
+# 27/12/17  Uising new ranking techniques
+keggRanks <- rank_alldm_pathways(allmods)
+goRanks <- rank_alldm_go(allmods)
 
 
   

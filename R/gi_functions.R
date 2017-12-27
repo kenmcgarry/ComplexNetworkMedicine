@@ -585,6 +585,31 @@ kegg_analysis <- function(yourgenes){
   return(kk)
 }
 
+# Ranks the most salient disease modules based on GO annotations.
+# 27/12/17
+rank_alldm_go <- function(dm){
+  dm <- dm[dm$ID %in% go$id,] # ensure missing GO terms are removed
+  dm <- dm[dm$ID %in% attributes(GO_IC)$name,] # ensure missing IC terms are removed
+  countdm <- length(unique(dm$DiseaseModule))
+  listdm <- unique(dm$DiseaseModule)
+  cat("\nFound ",countdm,"Disease Modules.")
+  for (i in 1:countdm){
+    tempmod <- filter(dm,DiseaseModule == listdm[i])
+    tempMF <- filter(tempmod,category =="MF")
+    cat("\ndismod has ",nrow(tempMF)," MF")
+    #cat("\ndismod",listdm[i], "has",length(unique(tempmod$genes))," genes and ",(table(tempmod$category))," GO annotations")
+  }
+  #terms_by_disease_module <- split(dm$ID,dm$DiseaseModule)  # do split by disease module
+  #terms_by_disease_module <- unname(terms_by_disease_module)   # Remove names for the moment
+  #sim_matrix <- get_sim_grid(ontology=go,information_content=GO_IC,term_sets=terms_by_disease_module)
+  # see how the disease modules cluster
+  #dist_mat <- max(sim_matrix) - sim_matrix  # need a distance matrix, not a similarity matrix
+  #clusterdetails <- hclust(as.dist(dist_mat),"ave")
+  #plot(hclust(as.dist(dist_mat)))
+  
+  #return(rankedmods)
+}
+
 # rank_alldm_pathways(), scores the associated pathways from KEGG based on GeneRatio.
 # 27/12/17
 rank_alldm_pathways <- function(dm){
@@ -603,6 +628,8 @@ rank_alldm_pathways <- function(dm){
       if(j==252 || (j>278 & j<282)){thegenes <- substr(thegenes,1,nchar(thegenes)-1)}
     }
     if(j==305){thegenes <- substr(thegenes,1,nchar(thegenes)-1)}
+    
+    if(j>81 & J < 84){thegenes <- substr(thegenes,1,nchar(thegenes)-1)}
     
     entrezgenes <- thegenes[numbers_only(thegenes)]  # get entrez numbers
     thegenes <- thegenes[!numbers_only(thegenes)]    # get symbol names
@@ -624,7 +651,7 @@ rank_alldm_pathways <- function(dm){
     }
    # score_path <- rbind(tmpscore,score_path)
   }
-  score_path[is.na(score_path)] <- 0.00
+  score_path[is.na(score_path)] <- 0.00   # remove NA where no keggpath could be found
   return(score_path)
 }
 
@@ -674,29 +701,7 @@ score_alldm_go <- function(dm){
 }
 
 
-# Ranks the most salient disease modules based on GO annotations.
-# 27/12/17
-rank_alldm_go <- function(dm){
-  dm <- dm[dm$ID %in% go$id,] # ensure missing GO terms are removed
-  dm <- dm[dm$ID %in% attributes(GO_IC)$name,] # ensure missing IC terms are removed
-  countdm <- length(unique(dm$DiseaseModule))
-  listdm <- unique(dm$DiseaseModule)
-  cat("\nFound ",countdm,"Disease Modules.")
-  for (i in 1:countdm){
-    tempmod <- filter(dm,DiseaseModule == listdm[i])
-    #cat("\n",dim(tempmod))
-    cat("\ndismod",listdm[i], "has",length(unique(tempmod$genes))," genes and ",sum(table(tempmod$category))," GO annotations")
-  }
-  #terms_by_disease_module <- split(dm$ID,dm$DiseaseModule)  # do split by disease module
-  #terms_by_disease_module <- unname(terms_by_disease_module)   # Remove names for the moment
-  #sim_matrix <- get_sim_grid(ontology=go,information_content=GO_IC,term_sets=terms_by_disease_module)
-  # see how the disease modules cluster
-  #dist_mat <- max(sim_matrix) - sim_matrix  # need a distance matrix, not a similarity matrix
-  #clusterdetails <- hclust(as.dist(dist_mat),"ave")
-  #plot(hclust(as.dist(dist_mat)))
-  
-  #return(rankedmods)
-}
+
 
 # Ranks the NEW disease modules, this is for the table in Latex file. 
 # 
@@ -771,8 +776,8 @@ print_dm_table <- function(yourtable){
 # degree of module overlap. dplyr::select(dmname_enrich,category,ID,term,genes,DiseaseModule)
 # Join C06 structure with appropriate genes and re-annotate then merge.....depth of Cholestasis is C06.130.120
 make_C06_mods <- function(){
-  start.time <- Sys.time()
-  C06mods <- data.frame(category="FU2",ID="GO:0000666", term="happy behaviour",genes="RU12",DiseaseModule=66,
+  start.time <- Sys.time() # start the clock
+  C06mods <- data.frame(category="FAKE2",ID="GO:0000666", term="happy behaviour",genes="gene12",DiseaseModule=66,
                         stringsAsFactors=FALSE) #instantiate.
   # break the 55 diseases into the seven broad C06.XXX groups-else we do not have enough genes to form viable communities!
   n <- nrow(C06)
@@ -790,7 +795,7 @@ make_C06_mods <- function(){
     tempgene[tempgene$diseaseName == C06$C06Disease[i], "C06code"] <- C06$C06code[i]
   }
 
-  C06[] <- lapply(C06, as.character) # keep as strings NOt factors
+  C06[] <- lapply(C06, as.character) # keep as strings NOT factors
   Disease <- unique(C06$C06code)
   for (i in 1:length(Disease)){     # for every C06 disease type see what modules they form.
     dg <- dplyr::filter(tempgene,C06code==Disease[i])
@@ -801,22 +806,24 @@ make_C06_mods <- function(){
     cat("\nUsing ",length(usethese)," genes.")
     if(i == 7){usethese <- c("C5","GSK3B","IFNG","IL18","HMGB1","NLRP1","NLRP3")} # provide Peritonitis with genes not in MY database
     tempinteractions <- use_rentrez(unique(usethese))
+    tempinteractions[] <- lapply(tempinteractions, as.character) # keep as strings NOT factors
     tempinteractions[,1] <- str_to_upper(tempinteractions[,1])
+    
     lcom <- getLinkCommunities(tempinteractions, hcmethod = "single",use.all.edges = TRUE)  # consider cutting density partition manually
     lmods <- createDiseaseModules(lcom)  
-    if(length(lcom$clusters) < 10){
+    if(length(lcom$clusters) < 10){  # if fewer than 10 modules try again - cut 
       lcom <- newLinkCommsAt(lcom, cutat = 0.5) # cut it at 0.5 or 0.6
       lmods <- createDiseaseModules(lcom) 
     }
     lmods <- dplyr::select(lmods,category,ID,term,genes,DiseaseModule)
-    if(nrow(lmods) > 2000){
-      lmods <- sample_n(lmods,2000)}
-    lmods$DiseaseModule <- paste(C06Disease[i],lmods$DiseaseModule,sep="_")
+    if(nrow(lmods) > 4000){
+      lmods <- sample_n(lmods,4000)}
+    lmods$DiseaseModule <- paste(C06$C06code[i],lmods$DiseaseModule,sep="_")
     C06mods <- rbind(C06mods,lmods)
   }
   C06mods <- C06mods[-1, ]     # 1st entry is rubbish so remove it
   
-  end.time <- Sys.time()
+  end.time <- Sys.time() # stop clock and figure out time taken
   time.taken <- end.time - start.time
   cat("\n Execution took - ",time.taken)
   return(C06mods)
