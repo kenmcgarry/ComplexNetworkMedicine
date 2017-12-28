@@ -596,8 +596,8 @@ rank_alldm_go <- function(dm){
   for (i in 1:countdm){
     tempmod <- filter(dm,DiseaseModule == listdm[i])
     tempMF <- filter(tempmod,category =="MF")
-    cat("\ndismod has ",nrow(tempMF)," MF")
-    #cat("\ndismod",listdm[i], "has",length(unique(tempmod$genes))," genes and ",(table(tempmod$category))," GO annotations")
+    #cat("\ndismod has ",nrow(tempMF)," MF")
+    cat("\ndismod",listdm[i], "has",length(unique(tempmod$genes))," genes and ",(table(tempmod$category))," GO annotations")
   }
   #terms_by_disease_module <- split(dm$ID,dm$DiseaseModule)  # do split by disease module
   #terms_by_disease_module <- unname(terms_by_disease_module)   # Remove names for the moment
@@ -606,48 +606,39 @@ rank_alldm_go <- function(dm){
   #dist_mat <- max(sim_matrix) - sim_matrix  # need a distance matrix, not a similarity matrix
   #clusterdetails <- hclust(as.dist(dist_mat),"ave")
   #plot(hclust(as.dist(dist_mat)))
-  
   #return(rankedmods)
 }
 
 # rank_alldm_pathways(), scores the associated pathways from KEGG based on GeneRatio.
-# 27/12/17
+# 28/12/17
+# Barrett Esophagus; Adenomatous Polyposis Coli; Gastrointestinal Stromal Tumors; 
+# Cholecystitis ; Cholelithiasis; Primary biliary cirrhosis; Cholestasis
 rank_alldm_pathways <- function(dm){
   nmods <- length(unique(dm$DiseaseModule)) 
   listdm <- unique(dm$DiseaseModule)
-  score_path <- rep(0,nmods); 
+  score_path <- data.frame(score=rep(0,nmods),module=rep("disease",nmods),stringsAsFactors=FALSE); 
   cat("\nWe have ",nmods,"disease modules")# How many disease mods do we have?
   for (j in 1:nmods){
-    cat("\nprocessing module ",j)
-    tmpmod <- filter(dm,DiseaseModule == listdm[j])
-    thegenes <- unique(tmpmod$genes)
-
-    if(j < 140 || j >= 144){ # Good God, how did NCBI manage to add two extra characters to end of gene names?
-      if(j== 156 || (j>233 & j<242) || (j==283) || (j==306)){thegenes <- "APP"}else{
-      thegenes <- substr(thegenes,1,nchar(thegenes)-2)}
-      if(j==252 || (j>278 & j<282)){thegenes <- substr(thegenes,1,nchar(thegenes)-1)}
-    }
-    if(j==305){thegenes <- substr(thegenes,1,nchar(thegenes)-1)}
-    
-    if(j>81 & J < 84){thegenes <- substr(thegenes,1,nchar(thegenes)-1)}
-    
-    entrezgenes <- thegenes[numbers_only(thegenes)]  # get entrez numbers
-    thegenes <- thegenes[!numbers_only(thegenes)]    # get symbol names
-    if(length(entrezgenes)>0){
-      entrezgenes <- bitr(entrezgenes, fromType="ENTREZID", toType="SYMBOL", OrgDb="org.Hs.eg.db");
-      thegenes <- c(entrezgenes[,2],thegenes)
-    }else{thegenes <- thegenes[!numbers_only(thegenes)]}
-
-    kegpaths <- kegg_analysis(thegenes)
-    #score_path <- rep(0,length(nrow(kegpaths))) #how may pathways do we have?
+    cat("\nprocessing module ",j," which is...",listdm[j])
+    temp <- unlist(strsplit(listdm[j],"_")) # split on the 'underscore' symbol
+    tmpmod <- filter(disgene1, grepl(temp[1],diseaseName))
+    thegenes <- unique(tmpmod$geneName)
+    if(length(thegenes) > 1){
+     subsetgenes <- sample(thegenes,0.7*length(thegenes))}else{
+       subsetgenes <- thegenes
+     }
+   
+    kegpaths <- kegg_analysis(subsetgenes)
     if(!is.null(kegpaths)){
       tmpscore <- rep(0,nrow(kegpaths))
       for (i in 1:nrow(kegpaths)){
-        temp <- unlist(strsplit(kegpaths[i]$GeneRatio,"/")) # split on the backslash symbol
-        tmpscore[i] <- kegpaths[i]$Count/as.numeric(temp[2])  # calculate the actual GeneRatio
+        #temp <- unlist(strsplit(kegpaths[i]$GeneRatio,"/")) # split on the backslash symbol
+        #tmpscore[i] <- kegpaths[i]$Count/as.numeric(temp[2])  # calculate the actual GeneRatio
         #cat("\ntmpscore= ",tmpscore)
+        #tmpscore[i] <- nrow(kegpaths)
       } 
-      score_path[j] <- tmpscore
+      score_path[j,1] <- nrow(kegpaths)
+      score_path[j,2] <- listdm[j]
     }
    # score_path <- rbind(tmpscore,score_path)
   }
@@ -801,15 +792,18 @@ make_C06_mods <- function(){
     dg <- dplyr::filter(tempgene,C06code==Disease[i])
     cat("\ni=",i,"  ",Disease[i]," with ", length(unique(dg$geneName)), " genes.")
     usethese <- unique(dg$geneName)
-    if(length(usethese) > 100){   # use no more than 100 implicated genes
-      usethese <- usethese[sample(1:length(usethese), 100,replace=FALSE)] }
+    if(length(usethese) > 20){   # use no more than 100 implicated genes
+      usethese <- usethese[sample(1:length(usethese), 20,replace=FALSE)] }
     cat("\nUsing ",length(usethese)," genes.")
     if(i == 7){usethese <- c("C5","GSK3B","IFNG","IL18","HMGB1","NLRP1","NLRP3")} # provide Peritonitis with genes not in MY database
-    tempinteractions <- use_rentrez(unique(usethese))
+    usethese[] <- lapply(usethese,as.character)
+    usethese <- str_to_upper(usethese); usethese <- unique(usethese)
+    tempinteractions <- use_rentrez(usethese)
     tempinteractions[] <- lapply(tempinteractions, as.character) # keep as strings NOT factors
     tempinteractions[,1] <- str_to_upper(tempinteractions[,1])
+ 
     
-    lcom <- getLinkCommunities(tempinteractions, hcmethod = "single",use.all.edges = TRUE)  # consider cutting density partition manually
+    lcom <- getLinkCommunities(tempinteractions, hcmethod = "single")  # consider cutting density partition manually
     lmods <- createDiseaseModules(lcom)  
     if(length(lcom$clusters) < 10){  # if fewer than 10 modules try again - cut 
       lcom <- newLinkCommsAt(lcom, cutat = 0.5) # cut it at 0.5 or 0.6
@@ -858,10 +852,9 @@ join_dm <- function(){
                    dplyr::select(schmods_enrich,category,ID,term,genes,DiseaseModule),
                    dplyr::select(alzmods_enrich,category,ID,term,genes,DiseaseModule))
   
-  
   C06mods <- make_C06_mods()
+  C06mods$genes
   allmods <- rbind(allmods,C06mods)
-  
   return(allmods)
 }
 
@@ -880,7 +873,8 @@ merge_dm <- function(dm,n){
 }
 
 
-
+# numbers_only() does a string contain numbers only? I used this to debug the NCBI gene server, as 
+# it appears to be sending me ENTREZID id's instead of SYMBOL names.
 numbers_only <- function(x) !grepl("\\D", x)
 
 # obtained from stackoverflow question.
@@ -905,6 +899,23 @@ jaccard <- function(m) {
   
   return( J )
 }
+
+# NOT   working as fucntion - but hand pasting code into console works
+# How much RAM is taken up by current R session? Obtained from StackOverFlow
+# https://stackoverflow.com/questions/1395270/determining-memory-usage-of-objects
+ram_used <- function(){
+   #sort(sapply(ls(), function(x) format(object.size(get(x)), unit = 'auto')))
+   object.size(x=lapply(ls(), get))
+   print(object.size(x=lapply(ls(), get)), units="Mb")
+   
+   Mb <- ls() %>% sapply(. %>% get %>% object.size %>% '/'(10^6))
+   cbind(Mb, "Mb") %>% as.data.frame
+   sum(Mb)
+   }
+
+
+
+
 
 
 

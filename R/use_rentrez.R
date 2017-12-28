@@ -11,7 +11,12 @@ use_rentrez <- function(mygenes){
     if(gene_search$count > 0){
       if(!is.null(gene_search$ids)){
         templist <- interactions_from_gene(gene_search$ids[1])  # get interaction partners for this single gene
-        #if(!is.null(templist)){
+        
+        
+          #cat("\nFound numbers only gene.....in module",i)
+          #cat("\ntemplist=",templist)
+          #readline(prompt="Press [enter] to continue")
+      
           cat("\nonegene is ",onegene)
           n <- length(templist)
           genevec <- rep(onegene,n)
@@ -21,7 +26,6 @@ use_rentrez <- function(mygenes){
           tempvec <- NULL}
       }else{
         cat("\nNo interaction partners for ",onegene)}
-    #}
   }
   interactionList <- interactionList[-1,] # remove silly entry initializing interactionList
   return(interactionList)
@@ -35,5 +39,3 @@ interactions_from_gene <- function(gene_id){
   XML::xpathSApply(xmlrec,"//Gene-commentary[Gene-commentary_heading[./text()='Interactions']]//Other-source[Other-source_src/Dbtag/Dbtag_db[./text()='GeneID']]//Other-source_anchor",
                    XML::xmlValue) }                                                                                                                                 
 }
-
-

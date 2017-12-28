@@ -4,8 +4,8 @@
 # Packages and my functions are loaded in by gi_functions.R
 
 setwd("C:/R-files/disease")    # point to where my code lives
-load("C06disease-26thDec2017.RData") # load in required data - the contents will change regulary
-memory.limit(90000)  # use more RAM memory
+load("C06disease-27thDec2017.RData") # load in required data - the contents will change regulary
+memory.limit(2010241024*1024) # use more RAM memory (20 GBs)
 source("gi_functions.R")  # load in the functions required for finding lists of drugs. 
 source("gi_run.R")   # some routine code to load in.
 source("gi_plots.R")
@@ -452,6 +452,8 @@ barplot(kegra, drop=TRUE, showCategory=20)
 kegsch <- kegg_analysis(nonC06_sch$geneName)
 barplot(kegsch, drop=TRUE, showCategory=20)
 
+kegC06 <- kegg_analysis(C06_genes)
+
 # THINK ABOUT USING TOPGO PACKAGE
 # https://bioconductor.org/packages/3.7/bioc/vignettes/topGO/inst/doc/topGO.pdf
 
@@ -487,8 +489,6 @@ goRanks <- rank_alldm_go(allmods)
 
   
 ###################################################################
-#load("C06disease-SMALL-21stDec2017.RData")
-#sample_mods <- sample_n(allmods,10000)
 modscores <- score_alldm_go(allmods)  # cluster based scoring
 dm <- merge_dm(modscores,25)
 dmgroup <- as.vector(dm)
