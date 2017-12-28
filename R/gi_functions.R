@@ -701,13 +701,23 @@ module_overlap <- function(dm){
                   Liver=liv_genes)  # Liver carcinoma
   
   # gene.list <- list() # my version of list
-  universeOfGenes <- 400; # how many unique genes in total set?
+  universeOfGenes <- 1000; # how many unique genes in total set?
   mat_table <- hyper_matrix(nonC06.list, universeOfGenes)
   mat_table <- hyper_matrix(C06.list, universeOfGenes)
   
   # Now compare the key C06 and nonC06 diseases for shared genes
-  Compare.list <- list
+  Compare.list <- list(Barr=bar_genes,       # "Barrett Esophagus"
+                       Adeno=adc_genes,   # "Adenomatous Polyposis Coli"
+                       IBS=ibs_genes,   # "Inflammatory Bowel Diseases"
+                       Celi=cel_genes,  # "Celiac Disease"
+                       Croh=cro_genes, 
+                       RH=nonC06_ra$geneName,
+                       Sch=nonC06_sch$geneName,
+                       Park=nonC06_park$geneName,
+                       Aut=nonC06_aut$geneName,
+                       Obes=nonC06_obs$geneName)
   
+  mat_table <- hyper_matrix(Compare.list, universeOfGenes)
   
   return(mat_table)
 }
