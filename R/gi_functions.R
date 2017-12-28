@@ -653,22 +653,9 @@ rank_alldm_pathways <- function(dm){
 # modules from different diseases. Calls up hyper_matrix(). We need lists() of genes based around 
 # disease modules. Choose only a select few modules, otherwise table will be unreadable.
 module_overlap <- function(dm){
-  countdm <- length(unique(dm$DiseaseModule))
-  listdm <- unique(dm$DiseaseModule)
-  #cat("\nFound ",countdm,"Disease Modules.")
-  for (i in 1:countdm){
-    tempmod <- filter(dm,DiseaseModule == listdm[i])
-    genesForList <- unique(tempmod$genes)
-    #cat("\ndismod",listdm[i], "has",length(unique(tempmod$genes))," genes and ",(table(tempmod$category))," GO annotations")
-  }
   
-  gene.list <- list(listA=paste0("gene",c(1,2,3,4,5,6,7,8,9)),
-                    listB=paste0("gene",c(1,3,4,6,7,9)),
-                    listC=paste0("gene",c(5,6,7,8,9,11)),
-                    listD=paste0("gene",c(11,12,13,14,15)),
-                    listE=paste0("gene",c(1,3,2,4,7,8,9)))
-  
-  gene.list <- list(Alz=nonC06_alz$geneName,
+  # Compare linked diseases between themselves for shared genes
+  nonC06.list <- list(Alz=nonC06_alz$geneName,
                     Asth=nonC06_asth$geneName,
                     Diab=nonC06_dia$geneName,
                     Hypo=nonC06_hyp$geneName,
@@ -679,12 +666,50 @@ module_overlap <- function(dm){
                     Aut=nonC06_aut$geneName,
                     Obes=nonC06_obs$geneName)
   
-  # gene.list <- list() # my version of list
-  universeOfGenes <- 400; # how many genes in total set?
-  mat_table <- hyper_matrix(gene.list, universeOfGenes)
-  return(mat_table)
-
+  # Build up gene lists for separate C06 diseases
+  tmpmod <- filter(disgene1,diseaseName == "Primary biliary cirrhosis")
+  pbc_genes <- unique(tmpmod$geneName)
+  tmpmod <- filter(disgene1,diseaseName == "Gastrointestinal Diseases")
+  gd_genes <- unique(tmpmod$geneName)  
+  tmpmod <- filter(disgene1,diseaseName == "Cholecystitis")
+  cho_genes <- unique(tmpmod$geneName)  
+  tmpmod <- filter(disgene1,diseaseName == "Gastrointestinal Stromal Tumors")
+  gst_genes <- unique(tmpmod$geneName)
+  tmpmod <- filter(disgene1,diseaseName == "Barrett Esophagus")
+  bar_genes <- unique(tmpmod$geneName)  
+  tmpmod <- filter(disgene1,diseaseName == "Adenomatous Polyposis Coli")
+  adc_genes <- unique(tmpmod$geneName)
+  tmpmod <- filter(disgene1,diseaseName == "Inflammatory Bowel Diseases")
+  ibs_genes <- unique(tmpmod$geneName)  
+  tmpmod <- filter(disgene1,diseaseName == "Celiac Disease")
+  cel_genes <- unique(tmpmod$geneName)
+  tmpmod <- filter(disgene1,diseaseName == "Crohn Disease")
+  cro_genes <- unique(tmpmod$geneName)  
+  tmpmod <- filter(disgene1,diseaseName == "Liver carcinoma")
+  liv_genes <- unique(tmpmod$geneName)
   
+  # Compare shared genes between main C06 diseases
+  C06.list <- list(Cirr=pbc_genes,    # "Primary biliary cirrhosis"
+                  Gast=gd_genes,         # "Gastrointestinal Diseases"
+                  Chol=cho_genes,         # "Cholecystitis" 
+                  Gtum=gst_genes,         # "Gastrointestinal Stromal Tumors"
+                  Barr=bar_genes,       # "Barrett Esophagus"
+                  Adeno=adc_genes,   # "Adenomatous Polyposis Coli"
+                  IBS=ibs_genes,   # "Inflammatory Bowel Diseases"
+                  Celi=cel_genes,  # "Celiac Disease"
+                  Croh=cro_genes,  #"Crohn Disease"   
+                  Liver=liv_genes)  # Liver carcinoma
+  
+  # gene.list <- list() # my version of list
+  universeOfGenes <- 400; # how many unique genes in total set?
+  mat_table <- hyper_matrix(nonC06.list, universeOfGenes)
+  mat_table <- hyper_matrix(C06.list, universeOfGenes)
+  
+  # Now compare the key C06 and nonC06 diseases for shared genes
+  Compare.list <- list
+  
+  
+  return(mat_table)
 }
 
 
