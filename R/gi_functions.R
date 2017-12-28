@@ -592,7 +592,7 @@ rank_alldm_go <- function(dm){
   dm <- dm[dm$ID %in% attributes(GO_IC)$name,] # ensure missing IC terms are removed
   countdm <- length(unique(dm$DiseaseModule))
   listdm <- unique(dm$DiseaseModule)
-  cat("\nFound ",countdm,"Disease Modules.")
+  #cat("\nFound ",countdm,"Disease Modules.")
   for (i in 1:countdm){
     tempmod <- filter(dm,DiseaseModule == listdm[i])
     tempMF <- filter(tempmod,category =="MF")
@@ -623,12 +623,13 @@ rank_alldm_pathways <- function(dm){
     temp <- unlist(strsplit(listdm[j],"_")) # split on the 'underscore' symbol
     tmpmod <- filter(disgene1, grepl(temp[1],diseaseName))
     thegenes <- unique(tmpmod$geneName)
-    if(length(thegenes) > 1){
-     subsetgenes <- sample(thegenes,0.7*length(thegenes))}else{
+      if(length(thegenes) > 1){
+       subsetgenes <- sample(thegenes,0.7*length(thegenes))}else{
        subsetgenes <- thegenes
-     }
+      }
    
     kegpaths <- kegg_analysis(subsetgenes)
+    score_path[j,2] <- listdm[j]
     if(!is.null(kegpaths)){
       tmpscore <- rep(0,nrow(kegpaths))
       for (i in 1:nrow(kegpaths)){
@@ -638,12 +639,52 @@ rank_alldm_pathways <- function(dm){
         #tmpscore[i] <- nrow(kegpaths)
       } 
       score_path[j,1] <- nrow(kegpaths)
-      score_path[j,2] <- listdm[j]
+      #score_path[j,2] <- listdm[j]
     }
    # score_path <- rbind(tmpscore,score_path)
   }
   score_path[is.na(score_path)] <- 0.00   # remove NA where no keggpath could be found
   return(score_path)
+}
+
+
+# 28/12/17
+# module_overlap() provides percentage similarity values where the key modules overlap  with other 
+# modules from different diseases. Calls up hyper_matrix(). We need lists() of genes based around 
+# disease modules. Choose only a select few modules, otherwise table will be unreadable.
+module_overlap <- function(dm){
+  countdm <- length(unique(dm$DiseaseModule))
+  listdm <- unique(dm$DiseaseModule)
+  #cat("\nFound ",countdm,"Disease Modules.")
+  for (i in 1:countdm){
+    tempmod <- filter(dm,DiseaseModule == listdm[i])
+    genesForList <- unique(tempmod$genes)
+    #cat("\ndismod",listdm[i], "has",length(unique(tempmod$genes))," genes and ",(table(tempmod$category))," GO annotations")
+  }
+  
+  gene.list <- list(listA=paste0("gene",c(1,2,3,4,5,6,7,8,9)),
+                    listB=paste0("gene",c(1,3,4,6,7,9)),
+                    listC=paste0("gene",c(5,6,7,8,9,11)),
+                    listD=paste0("gene",c(11,12,13,14,15)),
+                    listE=paste0("gene",c(1,3,2,4,7,8,9)))
+  
+  gene.list <- list(Alz=nonC06_alz$geneName,
+                    Asth=nonC06_asth$geneName,
+                    Diab=nonC06_dia$geneName,
+                    Hypo=nonC06_hyp$geneName,
+                    Scc=nonC06_nsc$geneName,
+                    RH=nonC06_ra$geneName,
+                    Sch=nonC06_sch$geneName,
+                    Park=nonC06_park$geneName,
+                    Aut=nonC06_aut$geneName,
+                    Obes=nonC06_obs$geneName)
+  
+  # gene.list <- list() # my version of list
+  universeOfGenes <- 400; # how many genes in total set?
+  mat_table <- hyper_matrix(gene.list, universeOfGenes)
+  return(mat_table)
+
+  
 }
 
 
@@ -914,7 +955,45 @@ ram_used <- function(){
    }
 
 
+# Another stackoverflow soloution by Yan
+# https://stats.stackexchange.com/questions/95523/significance-of-overlap-between-multiple-lists
+# gene.list <- list(listA=paste0("gene",c(1,2,3,4,5,6,7,8,9)),
+# where the upper triangle on the right is the lengths of overlap of each pair, and the bottom triangle 
+# on the left is the significance of the overlap by hypergeometric test. Here in this toy example, the 
+# overlap between listA and listB is significant in a world a 14 genes if you choose 0.05 as your p-value 
+# cutoff. Any other pair is not significantly overlapping.
 
+
+hyper_matrix <- function(gene.list, background){
+  # generate every combinations of two gene lists
+  combination <- expand.grid(names(gene.list),names(gene.list))
+  combination$values <- rep(NA, times=nrow(combination))
+  
+  # convert long table into wide
+  combination <- reshape(combination, idvar="Var1", timevar="Var2", direction="wide")
+  rownames(combination) <- combination$Var1
+  combination <- combination[,-1]
+  colnames(combination) <- gsub("values.", "", colnames(combination))
+  
+  # calculate the length of overlap of each pair
+  for(i in colnames(combination)){
+    for(j in rownames(combination)){
+      combination[j,i]<-length(intersect(gene.list[[j]],gene.list[[i]]))
+    }
+  }
+  
+  # calculate the significance of the overlap of each pair
+  for(m in 1:length(gene.list)){
+    for(n in 1:length(gene.list)){
+      if(n>m){
+        combination[n,m] <- phyper(combination[m,n]-1, length(gene.list[[m]]), background-length(gene.list[[m]]), length(gene.list[[n]]), lower.tail=F)
+        # note that the phyper function (lower.tail=F) give the probability of P[X>x], so the the overlap length should subtract 1 to get a P[X>=x].
+      }
+    }
+  }
+  # round to 2 digit.
+  return(round(combination,2))
+}
 
 
 
