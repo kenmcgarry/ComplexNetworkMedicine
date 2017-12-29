@@ -4,7 +4,7 @@
 # Packages and my functions are loaded in by gi_functions.R
 
 setwd("C:/R-files/disease")    # point to where my code lives
-load("C06disease-27thDec2017.RData") # load in required data - the contents will change regulary
+load("C06disease-28thDec2017.RData") # load in required data - the contents will change regulary
 memory.limit(2010241024*1024) # use more RAM memory (20 GBs)
 source("gi_functions.R")  # load in the functions required for finding lists of drugs. 
 source("gi_run.R")   # some routine code to load in.
@@ -483,11 +483,13 @@ print(xtable(tempkega, display=c("s","s","s","s","s","g")), math.style.exponents
 
 
 # 27/12/17  Uising new ranking techniques
-keggRanks <- rank_alldm_pathways(allmods)
-goRanks <- rank_alldm_go(allmods)
+keggRanks <- rank_alldm_pathways(allmods)  # provides count of number of active pathways in each diseasemodule
+goRanks <- rank_alldm_go(allmods)    # provides ranking of GO annotations
+score <- diag(goRanks)+keggRanks  # get the combined score by simply adding KEGG rank to GOrank
+score <- as.vector(score)
 
+score <- diag(jaccard(goRanks))
 
-  
 ###################################################################
 modscores <- score_alldm_go(allmods)  # cluster based scoring
 dm <- merge_dm(modscores,25)

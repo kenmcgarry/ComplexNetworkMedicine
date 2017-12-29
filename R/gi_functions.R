@@ -34,7 +34,7 @@ data(GO_IC)
 
 ## --------------------- FUNCTION DEFINITIONS -----------------------
 
-# Makes first letter uppercase
+# Makes first letter of string uppercase
 firstup <- function(x) {
   substr(x, 1, 1) <- toupper(substr(x, 1, 1))
   return(x)
@@ -599,14 +599,14 @@ rank_alldm_go <- function(dm){
     #cat("\ndismod has ",nrow(tempMF)," MF")
     cat("\ndismod",listdm[i], "has",length(unique(tempmod$genes))," genes and ",(table(tempmod$category))," GO annotations")
   }
-  #terms_by_disease_module <- split(dm$ID,dm$DiseaseModule)  # do split by disease module
-  #terms_by_disease_module <- unname(terms_by_disease_module)   # Remove names for the moment
-  #sim_matrix <- get_sim_grid(ontology=go,information_content=GO_IC,term_sets=terms_by_disease_module)
+  terms_by_disease_module <- split(dm$ID,dm$DiseaseModule)  # do split by disease module
+  terms_by_disease_module <- unname(terms_by_disease_module)   # Remove names for the moment
+  sim_matrix <- get_sim_grid(ontology=go,information_content=GO_IC,term_sets=terms_by_disease_module)
   # see how the disease modules cluster
   #dist_mat <- max(sim_matrix) - sim_matrix  # need a distance matrix, not a similarity matrix
   #clusterdetails <- hclust(as.dist(dist_mat),"ave")
   #plot(hclust(as.dist(dist_mat)))
-  #return(rankedmods)
+  return(sim_matrix)
 }
 
 # rank_alldm_pathways(), scores the associated pathways from KEGG based on GeneRatio.
@@ -652,9 +652,9 @@ rank_alldm_pathways <- function(dm){
 # module_overlap() provides percentage similarity values where the key modules overlap  with other 
 # modules from different diseases. Calls up hyper_matrix(). We need lists() of genes based around 
 # disease modules. Choose only a select few modules, otherwise table will be unreadable.
-module_overlap <- function(dm){
+module_overlap <- function(){
   
-  # Compare linked diseases between themselves for shared genes
+  # Compare non-C06 diseases between themselves for shared genes
   nonC06.list <- list(Alz=nonC06_alz$geneName,
                     Asth=nonC06_asth$geneName,
                     Diab=nonC06_dia$geneName,
