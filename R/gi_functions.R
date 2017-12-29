@@ -761,10 +761,16 @@ score_alldm_go <- function(dm){
   sim_matrix <- get_sim_grid(ontology=go,information_content=GO_IC,term_sets=terms_by_disease_module)
   # see how the disease modules cluster
   dist_mat <- max(sim_matrix) - sim_matrix  # need a distance matrix, not a similarity matrix
-  clusterdetails <- hclust(as.dist(dist_mat),"ave")
-  plot(hclust(as.dist(dist_mat)))
+  #clusterdetails <- hclust(as.dist(dist_mat),"ave")
+  #plot(hclust(as.dist(dist_mat)))
 
-  return(clusterdetails)
+  #hc <- hclust(as.dist(1-dist_mat), method="complete") 
+  #plot(as.dendrogram(hc), edgePar=list(col=4, lwd=2), horiz=FALSE)
+  
+  #KM <- kmeans(as.dist(1-dist_mat), 15, nstart = 20)
+  optimum_clusters((dist_mat))
+  
+  return(dist_mat)
 }
 
 
@@ -1030,6 +1036,22 @@ hyper_matrix <- function(gene.list, background){
   return(round(combination,2))
 }
 
+optimum_clusters <- function(df){
+  # Elbow method
+  fviz_nbclust(df, kmeans, method = "wss") +
+  geom_vline(xintercept = 4, linetype = 2) +
+  labs(subtitle = "Elbow method")
+  
+  # Silhouette method
+  fviz_nbclust(df, kmeans, method = "silhouette") +
+    labs(subtitle = "Silhouette method")
 
+  # Gap statistic
+  # nboot = 50 to keep the function speedy. recommended value: nboot= 500 for your analysis.
+  # Use verbose = FALSE to hide computing progression.
+  set.seed(123)
+  fviz_nbclust(df, kmeans, nstart = 25,  method = "gap_stat", nboot = 50) +
+   labs(subtitle = "Gap statistic method")
 
+}
 

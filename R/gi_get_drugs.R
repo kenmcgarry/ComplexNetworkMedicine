@@ -482,17 +482,19 @@ print(xtable(tempkega, display=c("s","s","s","s","s","g")), math.style.exponents
 #   components/complexity
 
 
-# 27/12/17  Uising new ranking techniques
+
 keggRanks <- rank_alldm_pathways(allmods)  # provides count of number of active pathways in each diseasemodule
 goRanks <- rank_alldm_go(allmods)    # provides ranking of GO annotations
-score <- diag(goRanks)+keggRanks  # get the combined score by simply adding KEGG rank to GOrank
+score <- diag(goRanks)+keggRanks  # get the combined score by simply adding KEGG rank to goRanks
 score <- as.vector(score)
 
-score <- diag(jaccard(goRanks))
+score <- diag(jaccard(goRanks))  # ??????
 
 ###################################################################
-modscores <- score_alldm_go(allmods)  # cluster based scoring
-dm <- merge_dm(modscores,25)
+dist_mat <- score_alldm_go(allmods)  # cluster based scoring
+optimum_clusters(dist_mat)
+
+dm <- merge_dm(modscores,15)
 dmgroup <- as.vector(dm)
 dmlabel <- names(dm)
 dm_df <- data.frame(dm=dmgroup,disease=dmlabel,stringsAsFactors = FALSE)
@@ -510,11 +512,6 @@ for (i in 1:length(unique(dmgroup))){
   new_dm <- rbind(new_dm,tmp_dm)
 }
 new_dm <- new_dm[-1, ]     # 1st entry is rubbish so remove it
-
-GOranks <- rank_group_pathways(new_dm) # use VERSION 2 of rank_alldm_go(allmods)
-KEGGranks <- score_group_pathways(new_dm) # use VERSION 2 of rank_alldm_go(allmods)
-score <- diag(GOranks)+KEGGranks  # get the combined score by simply adding KEGG rank to GOrank
-score <- as.vector(score)
 
 # add score variable for each new disease module
 tmp_score <-rep(0,nrow(new_dm))
@@ -542,6 +539,15 @@ for(i in 1:length(unique(new_dm$newgroup))){
   tempstuff <- filter(new_dm,newgroup == i)
   genecount[i] <- length(unique(tempstuff$genes))
   cat("\ngenecount for group ",i," is ",genecount[i])
+}
+
+
+# 29/12/17
+# get count of clusters each disease falls into, after KMeans.
+tempstuff <- unique(dm_df$disease)
+for(i in 1:length(tempstuff)){
+  tempcount <- filter(dm_df,disease==tempstuff[i])
+  cat("\n",tempstuff[i]," is in ",length(unique(tempcount$dm))," clusters.")
 }
 
 
