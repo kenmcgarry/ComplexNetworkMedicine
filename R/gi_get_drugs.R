@@ -483,12 +483,24 @@ print(xtable(tempkega, display=c("s","s","s","s","s","g")), math.style.exponents
 
 keggRanks <- rank_alldm_pathways(allmods)  # provides count of number of active pathways in each diseasemodule
 goRanks <- rank_alldm_go(allmods)    # provides ranking of GO annotations
-score <- diag(jaccard(goRanks)+keggRanks$score )  # ??????
+score <- diag(jaccard(goRanks)+keggRanks$score )  # combine using diag matrix of jaccard score
 score <- as.vector(score)
 
 
 ###################################################################
-dist_mat <- score_alldm_go(allmods)  # cluster based scoring
+
+clipped_mods <- allmods[!numbers_only(allmods$genes),]  # we have a lot of genes with only numbers
+                                                        # for names - I think NCBI has screwed up.
+                                                        # We lose a lot of genes and 13 modules but...
+
+small_data <-      # Only use genes that appear twice or more
+  clipped_mods %>%
+  add_count(genes,sort=TRUE) %>%
+  filter(n > 1)
+
+shite <- merge_dm(small_data)
+
+dist_mat <- score_alldm_go(clipped_mods)  # cluster based scoring
 optimum_clusters(dist_mat)
 
 dm <- merge_dm(modscores,15)

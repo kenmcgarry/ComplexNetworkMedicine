@@ -766,9 +766,8 @@ score_alldm_go <- function(dm){
 
   #hc <- hclust(as.dist(1-dist_mat), method="complete") 
   #plot(as.dendrogram(hc), edgePar=list(col=4, lwd=2), horiz=FALSE)
-  
   #KM <- kmeans(as.dist(1-dist_mat), 15, nstart = 20)
-  optimum_clusters((dist_mat))
+  #optimum_clusters((dist_mat))
   
   return(dist_mat)
 }
@@ -944,14 +943,40 @@ join_dm <- function(){
 
 
 # merge_dm() will merge modules based on GO biological similarity. Where "dm" is
-# a dataframe of modules. "n" enforce cut point.
-merge_dm <- function(dm,n){
-  # merge on 75% similarity 
-  merged_dm <- cutree(dm,n)
+# a dataframe of modules (small_data). Then create an n x m matrix of dismods and genes, 
+# then cluster it.
+merge_dm <- function(dm){
+  umods <- unique(dm$DiseaseModule)
+  nmods <- length(umods)
+  elist <- data.frame(genes="RU12",disease="Pox_1",stringsAsFactors = FALSE)
   
-  dmdata <- as.vector(merged_dm)
-  dmlabel <- names(merged_dm)
-  return(merged_dm)
+  for (i in 1:nmods){  # create an edgelist
+    cat("\nCreating DM ",i, " of ",nmods)
+    tempstuff <- filter(dm,DiseaseModule == umods[i])  # work way thru all disease modules
+    #tempgenes <- unique(tempstuff$genes)    # keep only unique genes
+    #tempstuff <- filter(dm,genes == tempgenes)
+    tempstuff <- tempstuff %>% distinct(genes,DiseaseModule, .keep_all = TRUE)
+    elist_temp <- cbind(genes=tempstuff$genes,disease=tempstuff$DiseaseModule)
+    elist <- rbind(elist,elist_temp)
+  }
+  
+  #el_mat <- as.matrix(as_adjacency_matrix(graph.data.frame(elist)))
+  #clusterdetails <- hclust(as.dist(el_mat),"ave")
+  #plot(hclust(as.dist(el_mat)))
+  
+  mat <- matrix(0, length(unique(elist[,1])), length(unique(elist[,2])))
+  rownames(mat) <- unique(elist[,1])
+  colnames(mat) <- unique(elist[,2])
+  #elist <- as.list(elist)
+  #mat[elist] <- 1.0
+  i <- match(rownames(mat), unique(elist$genes))
+  j <- match(colnames(mat), unique(elist$disease))
+  mat[i,j] <- 1
+  rownames(mat) <- unique(elist[,1])
+  colnames(mat) <- unique(elist[,2])
+  
+  return(mat)
+  
 }
 
 
