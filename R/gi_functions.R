@@ -603,7 +603,7 @@ rank_alldm_go <- function(dm){
   terms_by_disease_module <- unname(terms_by_disease_module)   # Remove names for the moment
   sim_matrix <- get_sim_grid(ontology=go,information_content=GO_IC,term_sets=terms_by_disease_module)
   # see how the disease modules cluster
-  #dist_mat <- max(sim_matrix) - sim_matrix  # need a distance matrix, not a similarity matrix
+  dist_mat <- max(sim_matrix) - sim_matrix  # need a distance matrix, not a similarity matrix
   #clusterdetails <- hclust(as.dist(dist_mat),"ave")
   #plot(hclust(as.dist(dist_mat)))
   return(sim_matrix)
@@ -633,13 +633,13 @@ rank_alldm_pathways <- function(dm){
     if(!is.null(kegpaths)){
       tmpscore <- rep(0,nrow(kegpaths))
       for (i in 1:nrow(kegpaths)){
-        #temp <- unlist(strsplit(kegpaths[i]$GeneRatio,"/")) # split on the backslash symbol
-        #tmpscore[i] <- kegpaths[i]$Count/as.numeric(temp[2])  # calculate the actual GeneRatio
+        temp <- unlist(strsplit(kegpaths[i]$GeneRatio,"/")) # split on the backslash symbol
+        tmpscore[i] <- kegpaths[i]$Count/as.numeric(temp[2])  # calculate the actual GeneRatio
         #cat("\ntmpscore= ",tmpscore)
         #tmpscore[i] <- nrow(kegpaths)
       } 
-      score_path[j,1] <- nrow(kegpaths)
-      #score_path[j,2] <- listdm[j]
+      score_path[j,1] <- sum(tmpscore)
+      score_path[j,2] <- listdm[j]
     }
    # score_path <- rbind(tmpscore,score_path)
   }

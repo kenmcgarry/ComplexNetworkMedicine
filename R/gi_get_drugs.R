@@ -481,14 +481,11 @@ print(xtable(tempkega, display=c("s","s","s","s","s","g")), math.style.exponents
 #   Current drugs / any drug reposition candidates
 #   components/complexity
 
-
-
 keggRanks <- rank_alldm_pathways(allmods)  # provides count of number of active pathways in each diseasemodule
 goRanks <- rank_alldm_go(allmods)    # provides ranking of GO annotations
-score <- diag(goRanks)+keggRanks  # get the combined score by simply adding KEGG rank to goRanks
+score <- diag(jaccard(goRanks)+keggRanks$score )  # ??????
 score <- as.vector(score)
 
-score <- diag(jaccard(goRanks))  # ??????
 
 ###################################################################
 dist_mat <- score_alldm_go(allmods)  # cluster based scoring
