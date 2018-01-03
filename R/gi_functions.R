@@ -953,27 +953,42 @@ merge_dm <- function(dm){
   for (i in 1:nmods){  # create an edgelist
     cat("\nCreating DM ",i, " of ",nmods)
     tempstuff <- filter(dm,DiseaseModule == umods[i])  # work way thru all disease modules
-    #tempgenes <- unique(tempstuff$genes)    # keep only unique genes
-    #tempstuff <- filter(dm,genes == tempgenes)
     tempstuff <- tempstuff %>% distinct(genes,DiseaseModule, .keep_all = TRUE)
     elist_temp <- cbind(genes=tempstuff$genes,disease=tempstuff$DiseaseModule)
     elist <- rbind(elist,elist_temp)
   }
   
-  #el_mat <- as.matrix(as_adjacency_matrix(graph.data.frame(elist)))
-  #clusterdetails <- hclust(as.dist(el_mat),"ave")
-  #plot(hclust(as.dist(el_mat)))
-  
+  elist <- elist[-1,]   # remove silly 1st entry
   mat <- matrix(0, length(unique(elist[,1])), length(unique(elist[,2])))
   rownames(mat) <- unique(elist[,1])
   colnames(mat) <- unique(elist[,2])
-  #elist <- as.list(elist)
-  #mat[elist] <- 1.0
-  i <- match(rownames(mat), unique(elist$genes))
-  j <- match(colnames(mat), unique(elist$disease))
-  mat[i,j] <- 1
+
+  len_el <- nrow(elist)
+  for(i in 1:len_el){ 
+    matcols <- as.character(elist[i,]$genes)
+    matrows <- as.character(elist[i,]$disease)
+    cat("\n - ",i," ", matcols," ", matrows)
+    mat[matcols,matrows] <- 1 
+    
+  }
+
   rownames(mat) <- unique(elist[,1])
   colnames(mat) <- unique(elist[,2])
+  
+  d = dist(mat, method = "binary")
+  hc = hclust(d, method="ward")
+  plot(hc)
+  cluster.means = aggregate(mat,by=list(cutree(hc, k = 6)), mean)
+  
+  testcluster <- biclust(x = mat, method=BCBimax()) # needs biclust library
+  
+  drawHeatmap(x = mat, bicResult = testcluster,number=1) 
+  drawHeatmap(x = mat, bicResult = testcluster, number = 50)
+  drawHeatmap2(x = mat, bicResult = testcluster, number = 1) 
+  drawHeatmap2(x = mat, bicResult = testcluster,number=1)
+  
+  xmotif<-biclust(x=mat, method=BCXmotifs(), number=50, alpha=0.05,nd=20, ns=20, sd=5)
+  drawHeatmap2(x = mat, bicResult = xmotif,number=1)
   
   return(mat)
   

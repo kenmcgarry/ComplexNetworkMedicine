@@ -2,6 +2,7 @@
 # 27/12/17  Using new ranking techniques
 library(factoextra)
 library(NbClust)
+library(biclust)
 
 df <- sim_mat
 
