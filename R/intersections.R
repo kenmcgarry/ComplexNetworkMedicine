@@ -1,5 +1,9 @@
 
 
+disma <- hamming.distance(mat) 
+hr <- hclust(as.dist(disma)) 
+plot(as.dendrogram(hr), edgePar=list(col=3, lwd=4), horiz=T)
+
 
 listInput <- list(alz=c(nonC06_alz$geneName),asth=c(nonC06_asth$geneName),
                   diab=c(nonC06_dia$geneName),hype=c(nonC06_hyp$geneName),
