@@ -975,20 +975,29 @@ merge_dm <- function(dm){
   rownames(mat) <- unique(elist[,1])
   colnames(mat) <- unique(elist[,2])
   
-  d = dist(mat, method = "binary")
-  hc = hclust(d, method="ward")
-  plot(hc)
-  cluster.means = aggregate(mat,by=list(cutree(hc, k = 6)), mean)
+  #d = dist(mat, method = "binary")
+  #hc = hclust(d, method="ward")
+  #plot(hc)
+  #cluster.means = aggregate(mat,by=list(cutree(hc, k = 6)), mean)
   
-  testcluster <- biclust(x = mat, method=BCBimax()) # needs biclust library
+  testcluster <- biclust(x = mat, method=BCBimax(),number=50,minr=5,minc=3) # needs biclust library
+  testcluster
+  #testcluster <- biclust(x = disma, method=BCBimax()) # needs biclust library
   
-  drawHeatmap(x = mat, bicResult = testcluster,number=1) 
-  drawHeatmap(x = mat, bicResult = testcluster, number = 50)
-  drawHeatmap2(x = mat, bicResult = testcluster, number = 1) 
-  drawHeatmap2(x = mat, bicResult = testcluster,number=1)
+  #plotclust(testcluster,mat,noC=12)
+  #drawHeatmap(x = mat, bicResult = testcluster, number = 2)
+  #drawHeatmap2(x = mat, bicResult = testcluster, number = 1) 
+  #drawHeatmap2(x = mat, bicResult = testcluster,number=10)
   
-  xmotif<-biclust(x=mat, method=BCXmotifs(), number=50, alpha=0.05,nd=20, ns=20, sd=5)
-  drawHeatmap2(x = mat, bicResult = xmotif,number=1)
+  testcluster <- biclust(mat,method=BCSpectral(),numberOfEigenvalues=1,withinVar=100)
+  testcluster
+  drawHeatmap2(x = mat, bicResult = testcluster,number=4)
+  
+  writeBiclusterResults("BI-results-21.txt", testcluster,"Disease modules", dimnames(mat)[1][[1]],
+                        dimnames(mat)[2][[1]])
+  
+  #xmotif<-biclust(x=mat, method=BCXmotifs(), number=50, alpha=0.05,nd=20, ns=20, sd=5)
+  #drawHeatmap2(x = mat, bicResult = xmotif,number=1)
   
   return(mat)
   
