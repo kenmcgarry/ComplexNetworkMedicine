@@ -1,0 +1,64 @@
+Disease modules
+7 3
+TP5342 YBX13 IKBKB12 MAPK37 FAS8 BAX6 PARP127
+Small cell carcinoma_ Diabetes_7 Hypertension_7
+7 3
+EZR33 EZR36 XPO110 HSPA59 LIMA11 HSPA1A7 LIMA12
+Gastrointestinal Stromal Tumors_5 Small cell carcinoma_ Diabetes_5
+5 3
+TP534 APP19 CTNNB125 CTNNB1118 MAPK331
+Small cell carcinoma_ Cholelithiasis_7 Diabetes_7
+7 3
+MAPK112 MTOR8 PSEN11 APP30 AR6 CTNNB13 ILK12
+Small cell carcinoma_ Adenomatous Polyposis Coli_2 Diabetes_7
+5 3
+AR6 CTNNB13 PSEN121 PARP117 CTNNB179
+Small cell carcinoma_ Schizophrenia_4 Diabetes_7
+5 3
+CEBPB1 TP5342 PARP14 PARP15 MAPK130
+Small cell carcinoma_ Adenomatous Polyposis Coli_3 Diabetes_7
+11 3
+CCAR22 HEY219 FBXO72 DVL120 NBN3 SNW18 FGF1039 SNW115 FOXO42 SUPT7L2 KSR13
+Small cell carcinoma_ Diabetes_10 Hypertension_10
+8 3
+CCAR22 HEY219 FBXO72 SIRT144 FOXP33 ECT25 ARID4B3 FOXL27
+Small cell carcinoma_ Diabetes_10 Obesity_17
+5 3
+APP11 HSP90AA112 YWHAB6 GAPDH10 HSP90AA114
+Parkinson_2 Small cell carcinoma_ Diabetes_5
+5 3
+EP3003 IKBKB7 PDPK129 PDPK18 IKBKG17
+Small cell carcinoma_ Diabetes_12 Schizophrenia_2
+6 3
+HSP90AA120 GAPDH10 MAPK18 SMURF22 GEMIN41 CCND16
+Small cell carcinoma_ Adenomatous Polyposis Coli_2 Diabetes_5
+5 3
+TP533 MDM229 MDM25 TP5352 PARP116
+Diabetes_9 Small cell carcinoma_ Adenomatous Polyposis Coli_3
+10 3
+VHL2 MAPK81 MTOR8 EEF1G2 MTOR63 PML1 ACACA1 AKT195 EZH221 CTNNB1111
+Diabetes_9 Small cell carcinoma_ Hypertension_9
+5 3
+MAPK18 CDH13 PLCG15 PLEC5 PLCG22
+Small cell carcinoma_ Diabetes_5 Hypertension_5
+7 3
+MTOR8 MTOR63 AR6 TP5342 YBX13 PARP15 MAPK85
+Small cell carcinoma_ Diabetes_7 Hypertension_9
+7 3
+PPP2CB3 TINF21 PDLIM51 H1F02 GJA110 ANXA217 GRIN127
+Small cell carcinoma_ Barrett Esophagus_17 Diabetes_13
+6 3
+EIF66 PDLIM51 GJA17 RIPK41 TINF29 ANXA75
+Small cell carcinoma_ Diabetes_13 Hypertension_13
+6 3
+HSPD17 STK43 HSF16 SIRT144 HSPD112 RARA11
+Small cell carcinoma_ Obesity_16 Diabetes_10
+7 3
+VIM2 PARK712 BAP12 LRRK232 RNF344 GRIA16 ATP1A32
+Small cell carcinoma_ Diabetes_8 Hypertension_8
+5 3
+HSP90AA112 HSP90AA129 YWHAZ3 YWHAQ3 SNCA9
+Parkinson_2 Small cell carcinoma_ Diabetes_15
+5 3
+ILK12 CTNNB1118 BIRC317 AR27 CTNNB178
+Small cell carcinoma_ Diabetes_7 Asthma_10
