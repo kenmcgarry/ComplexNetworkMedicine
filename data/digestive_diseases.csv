@@ -1,0 +1,1196 @@
+Family,MCID,Name,MIFTS
+P,STM004,Stomach Cancer,73
+P,GST044,Gastritis,64
+,GST023,Gastric Ulcer,56
+,IMM106,"Immunodysregulation, Polyendocrinopathy, and Enteropathy, X-Linked",31
+,GST019,Gastrointestinal Stromal Tumor,73
+c,INT072,Intestinal Pseudo-Obstruction,45
+,GST013,Gastrojejunal Ulcer,23
+P,HRS035,Hirschsprung Disease 1,58
+,JJN004,Jejunal Atresia,31
+c,HRS036,Hirschsprung Disease 2,24
+c,HRS029,Hirschsprung Disease 4,20
+c,HRS034,Hirschsprung Disease 3,20
+c,HRS027,Hirschsprung Disease 5,15
+c,HRS028,Hirschsprung Disease 6,14
+c,HRS024,Hirschsprung Disease 9,12
+c,HRS025,Hirschsprung Disease 8,12
+c,HRS026,Hirschsprung Disease 7,12
+c,EC1001,Ece1-Related Hirschsprung Disease,6
+c,EDN002,Edn3-Related Hirschsprung Disease,6
+c,EDN003,Ednrb-Related Hirschsprung Disease,6
+c,GDN001,Gdnf-Related Hirschsprung Disease,6
+c,NRT008,Nrtn-Related Hirschsprung Disease,6
+c,RTR014,Ret-Related Hirschsprung Disease,6
+,PTZ001,Peutz-Jeghers Syndrome,71
+,VSC044,Visceral Myopathy,44
+,GST002,Gastric Mucosal Hypertrophy,35
+,ESN014,Eosinophilic Enteropathy,21
+P,SML016,Small Intestine Cancer,54
+,PRN019,Perinatal Necrotizing Enterocolitis,47
+,PLY056,"Polyposis, Juvenile Intestinal",54
+,ACR003,Acrodermatitis Enteropathica,49
+,STM006,Stomach Disease,48
+,TFT003,Tufting Enteropathy,17
+P,PRG017,Paraganglioma and Gastric Stromal Sarcoma,40
+,GST093,Gastrointestinal Defects and Immunodeficiency Syndrome,37
+,CHR515,Chronic Atrial and Intestinal Dysrhythmia,19
+,GST026,Gastric Fundus Cancer,20
+c,PRM158,Primary Intestinal Lymphangiectasia,19
+,UMB001,Umbilical Cord Ulceration and Intestinal Atresia,14
+,GST092,Gastroesophageal Reflux,62
+,CHR280,Chronic Erosive Gastritis,13
+,GST060,"Gastric Cancer, Somatic",44
+,CLN045,Colonic Benign Neoplasm,38
+c,FML321,Familial Stomach Cancer,17
+P,CLC005,Celiac Disease,67
+,GST030,Gastrinoma,39
+,GST051,Gastrointestinal Tuberculosis,37
+,GST020,Gastric Antral Vascular Ectasia,33
+,DRR003,"Diarrhea 5, with Tufting Enteropathy, Congenital",24
+c,CLC038,Celiac Disease 10,17
+c,CLC045,Celiac Disease 2,17
+c,CLC040,Celiac Disease 6,17
+c,CLC046,Celiac Disease 5,17
+c,CLC047,Celiac Disease 8,16
+c,CLC041,Celiac Disease 7,15
+c,CLC042,Celiac Disease 9,15
+c,CLC044,Celiac Disease 12,15
+c,CLC043,Celiac Disease 11,15
+,GST045,Gastroenteritis,59
+,APL026,Aplasia Cutis Congenita with Intestinal Lymphangiectasia,16
+,LYM047,"Lymphoma, Gastric Non Hodgkins Type",12
+,INT253,Intestinal Benign Neoplasm,48
+,ENT006,Enterokinase Deficiency,23
+,GST050,Gastrointestinal System Disease,58
+,PLY131,"Polyposis, Skin Pigmentation, Alopecia, and Fingernail Changes",39
+,ATN011,Autoinflammation with Infantile Enterocolitis,36
+P,INT006,Intestinal Botulism,19
+,GST037,Gastroparesis,54
+,MCR094,Microvillus Inclusion Disease,49
+P,ATR005,Atrophic Gastritis,47
+,PRT019,Protein-Losing Enteropathy,42
+,CLN004,Colon Carcinoma in Situ,35
+,DDN002,Duodenal Gastrinoma,33
+,ASC004,Ascending Colon Cancer,31
+,DSC005,Descending Colon Cancer,31
+c,ADL069,Adult Intestinal Botulism,12
+,CLN019,Colonic Disease,50
+,ENT003,Enterobiasis,49
+,ESN005,Eosinophilic Gastroenteritis,46
+,VPM001,Vipoma,40
+,IMM027,"Immune Dysregulation, Polyendocrinopathy, Enteropathy, X-Linked Syndrome",28
+,HYP550,"Hypomagnesemia 1, Intestinal",28
+,ATM077,Autoimmune Gastrointestinal Dysmotility,11
+,CHR557,Chronic Intestinal Pseudoobstruction,25
+,ADN006,Adenosquamous Colon Carcinoma,13
+,CRH001,Crohn's Disease,76
+P,CTS001,Cutis Laxa,57
+,MGL001,Megaloblastic Anemia,51
+,TRN003,Transverse Colon Cancer,38
+,ACT060,Acute Vascular Insufficiency of Intestine,37
+c,CTS029,"Cutis Laxa, Autosomal Recessive, Type Iiia",34
+c,CTS030,"Cutis Laxa, Autosomal Recessive, Type Ia",34
+c,CTS008,"Cutis Laxa, Autosomal Dominant",33
+c,CTS034,"Cutis Laxa, Autosomal Recessive Type 1",30
+c,CTS023,"Cutis Laxa, Autosomal Recessive, Type Iib",28
+c,CTS032,"Cutis Laxa, Autosomal Recessive, Type Iiib",27
+c,ACQ027,Acquired Cutis Laxa,27
+c,CTS038,"Cutis Laxa, Autosomal Recessive, Type Iia",27
+c,CTS033,"Cutis Laxa, Autosomal Recessive, Type Ic",27
+c,CTS019,"Cutis Laxa, Ad",26
+c,CTS031,"Cutis Laxa, Autosomal Dominant 2",23
+c,CTS041,"Cutis Laxa, Autosomal Dominant 3",22
+c,CTS037,"Cutis Laxa, Autosomal Recessive, Type Ib",21
+,GST095,"Gastritis, Familial Giant Hypertrophic",19
+c,ATP003,Atp6v0a2-Related Cutis Laxa,19
+c,EFM001,Efemp2-Related Cutis Laxa,18
+c,FBL003,Fbln5-Related Cutis Laxa,17
+c,STM003,Stomach Carcinoma in Situ,17
+c,ALD008,Aldh18a1-Related Cutis Laxa,16
+,GST003,Gastrin Secretion Abnormality,14
+,GST057,Gastro-Enteropancreatic Neuroendocrine Tumor,12
+c,PYC002,Pycr1-Related Cutis Laxa,11
+c,ELN002,Eln-Related Cutis Laxa,8
+,CRN058,Cornea Guttata with Anterior Polar Cataract,6
+,NTL002,"Natal Teeth, Intestinal Pseudoobstruction and Patent Ductus",4
+,INT046,Intestinal Tuberculosis,35
+,ZLL002,Zollinger-Ellison Syndrome,49
+,ANG011,Angiodysplasia,44
+,INF006,Infant Botulism,42
+,INT052,Intestinal Volvulus,32
+,GST053,Gastric Cancer,52
+,INT051,Intussusception,50
+,CRY003,Cryptosporidiosis,47
+,ESN004,Eosinophilic Gastritis,41
+,SML004,Small Intestine Neuroendocrine Neoplasm,39
+,MCR011,Microinvasive Gastric Cancer,35
+,GST031,Gastric Gastrinoma,22
+,CLN008,Colon Small Cell Carcinoma,20
+,GST025,Gastric Body Carcinoma,19
+,PRM201,Primary Hypomagnesemia with Secondary Hypocalcemia,17
+,OGL001,Ogilvie Syndrome,17
+,ENT016,Enterovesical Fistula,16
+,GST087,Gastric Linitis Plastica,16
+c,MLG024,Malignant Gastric Teratoma,15
+,LPM002,Lipoma of Colon,15
+,ALC012,Alcoholic Gastritis,14
+,GST086,Gastric Adenocarcinoma and Proximal Polyposis of the Stomach,11
+,CLN010,Colonic Lymphangioma,10
+,SML007,Small Intestinal Vasoactive Intestinal Peptide Producing Tumor,9
+,CVR004,Cavernous Hemangioma of Colon,7
+,LBN005,Lubani-Al Saleh-Teebi Syndrome,6
+,HMH001,Hemihypertrophy Intestinal Web Corneal Opacity,3
+P,INT068,Intestinal Disease,60
+,CHY002,Chylomicron Retention Disease,54
+,WHP001,Whipple Disease,49
+c,CNG206,"Congenital Disorder of Glycosylation, Type Ie",49
+c,CNG412,"Congenital Disorder of Glycosylation, Type Ii",46
+c,CNG411,"Congenital Disorder of Glycosylation, Type in",46
+c,CNG415,"Congenital Disorder of Glycosylation, Type Ia",46
+,ENT001,Enterocele,39
+,ABD010,Abdominal Wall Defect,37
+,CLN006,Colonic Pseudo-Obstruction,36
+c,CNG189,"Congenital Disorder of Glycosylation, Type Ib",34
+c,CNG205,"Congenital Disorder of Glycosylation, Type Ij",33
+c,CNG197,"Congenital Disorder of Glycosylation, Type Ih",33
+c,CNG187,"Congenital Disorder of Glycosylation, Type Iid",32
+c,CNG191,"Congenital Disorder of Glycosylation, Type Iia",32
+c,CNG204,"Congenital Disorder of Glycosylation, Type Iih",32
+,GTT002,Guttate Psoriasis,31
+c,CNG208,"Congenital Disorder of Glycosylation, Type Iic",31
+c,CNG195,"Congenital Disorder of Glycosylation, Type Id",30
+c,CNG199,"Congenital Disorder of Glycosylation, Type Im",30
+c,CNG196,"Congenital Disorder of Glycosylation, Type Ic",30
+c,CNG379,"Congenital Disorder of Glycosylation, Type It",28
+c,CNG403,"Congenital Disorder of Glycosylation, Type Ix",28
+c,CNG193,"Congenital Disorder of Glycosylation, Type Ip",27
+c,CNG188,"Congenital Disorder of Glycosylation, Type if",27
+c,CNG414,"Congenital Disorder of Glycosylation, Type Iil",27
+c,CNG194,"Congenital Disorder of Glycosylation, Type Ig",27
+c,CNG200,"Congenital Disorder of Glycosylation, Type Iq",27
+c,CNG209,"Congenital Disorder of Glycosylation, Type Iif",26
+c,CNG192,"Congenital Disorder of Glycosylation, Type Ik",26
+c,CNG383,"Congenital Disorder of Glycosylation, Type Iik",26
+c,CNG190,"Congenital Disorder of Glycosylation, Type Iib",26
+c,CNG201,"Congenital Disorder of Glycosylation, Type Iij",26
+c,CNG185,"Congenital Disorder of Glycosylation, Type Iig",26
+c,CNG389,"Congenital Disorder of Glycosylation, Type Iim",25
+c,CNG198,"Congenital Disorder of Glycosylation, Type Il",25
+,MLL004,Mallory-Weiss Syndrome,25
+c,CNG388,"Congenital Disorder of Glycosylation, Type Iw",24
+c,CNG207,"Congenital Disorder of Glycosylation, Type Io",23
+c,CNG203,"Congenital Disorder of Glycosylation, Type Iii",23
+c,CNG386,"Congenital Disorder of Glycosylation, Type Iu",21
+c,CNG378,"Congenital Disorder of Glycosylation, Type Ir",21
+c,CNG416,"Congenital Disorder of Glycosylation, Type Iy",21
+c,CNG435,"Congenital Disorder of Glycosylation, Type Iz",19
+c,CNG475,Congenital Disorder of Glycosylation 2p,19
+c,ATM060,Autoimmune Atrophic Gastritis,18
+P,CNG474,Congenital Disorder of Glycosylation 2o,16
+c,CNG477,Congenital Disorder of Glycosylation 2n,15
+,CLL026,Collagenous Gastritis,12
+c,CNG088,Congenital Disorder of Glycosylation Type I/iix,11
+,MST008,Mastocytic Enterocolitis,9
+P,INT070,Intestinal Obstruction,55
+,AMB001,Amebiasis,43
+,CLN044,Colon Adenoma,43
+P,ATM020,Autoimmune Enteropathy,37
+,SML014,Small Intestine Leiomyosarcoma,36
+,SML015,Small Intestinal Sarcoma,34
+,CNG016,Congenital Intrinsic Factor Deficiency,28
+,GTT001,Guttmacher Syndrome,22
+c,CLC048,Celiac Disease 3,21
+c,CLC037,Celiac Disease 4,20
+,CLN012,Colon Leiomyosarcoma,19
+c,CLC039,Celiac Disease 13,19
+,CLN018,Colon Sarcoma,18
+,DVR001,Diverticulitis of Colon,18
+,GST094,"Gastroschisis Abdominal Wall Defects, Included",18
+,GST018,Gastrointestinal Tularemia,17
+,SML012,Small Bowel Fibrosarcoma,13
+,LRG015,Large Intestine Adenoma,13
+,CLN007,Colon Kaposi Sarcoma,12
+P,DRR001,Diarrhea,60
+P,SHR001,Short Bowel Syndrome,51
+,MGC001,Megacolon,50
+,SML008,Small Intestine Lymphoma,43
+,EPS023,Epstein-Barr Virus-Associated Gastric Carcinoma,42
+,INT071,Intestinal Perforation,40
+,GST028,Gastric Squamous Cell Carcinoma,39
+,GST007,Gastric Dilatation,38
+c,ACT004,Acute Diarrhea,38
+,PRL008,Paralytic Ileus,37
+,GST015,Gastric Small Cell Carcinoma,37
+,GST036,Gastric Leiomyosarcoma,36
+c,DRR007,Diarrhea 7,32
+,FNC005,Functional Colonic Disease,32
+,LYM015,Lymphocytic Gastritis,31
+c,INF002,Inflammatory Diarrhea,31
+,GST006,Gastric Leiomyoma,31
+c,DRR009,Diarrhea 6,30
+,CLN005,Colon Lymphoma,30
+,HYP572,Hypoganglionosis,29
+,GST008,Gastric Adenosquamous Carcinoma,28
+,GST004,Gastric Neuroendocrine Neoplasm,27
+,GST041,Gastric Cardia Carcinoma,26
+,BLN004,Balantidiasis,26
+,DLF001,Dieulafoy Lesion,21
+P,GST043,Gastric Teratoma,20
+,CYS040,"Cystic Fibrosis with Helicobacter Pylori Gastritis, Megaloblastic Anemia, and Mental Retardation",20
+,KPR002,Kapur-Toriello Syndrome,19
+,CLN014,Colon Neuroendocrine Neoplasm,18
+,UND009,Undifferentiated Carcinoma of Stomach,17
+,CLF042,"Cleft Lip/palate with Characteristic Facies, Intestinal Malrotation, and Lethal Congenital Heart Disease",16
+,CSC001,Cascade Stomach,16
+,GST005,Gastric Hemangioma,15
+,MLG066,Malignant Gastric Germ Cell Tumor,14
+,CRC038,"Carcinoma of Stomach, Salivary Gland Type",14
+c,INT019,Intestine Carcinoma in Situ,14
+,DNT004,Dientamoebiasis,14
+c,SCN046,Secondary Short Bowel Syndrome,13
+,MTR006,Mature Gastric Teratoma,13
+,LRG007,Large Intestine Lipoma,13
+,SML006,Small Intestine Leiomyoma,12
+,INT302,Intestinal Pseudoobstruction with Patent Ductus Arteriosus and Natal Teeth,12
+,SML024,"Small Intestine Cancer, Childhood",11
+,SML005,Small Intestine Diverticulitis,11
+,GST022,Gastric Pylorus Carcinoma,9
+,GST011,Gastric Liposarcoma,9
+,CNG260,Congenital Enterovirus Infection,9
+,PLX003,Plexosarcoma,8
+,HRD181,Hereditary Neuroendocrine Tumor of Small Intestine,8
+,CLN011,Colon Leiomyoma,8
+,MLG044,Malignant Gastric Granular Cell Tumor,7
+,INT252,Intestinal Neuroendocrine Benign Tumor,7
+,STM002,Stomach Diverticulosis,5
+,FTL017,Fetal Enterovirus Syndrome,5
+c,CHR465,Chronic Diarrhea Due to Guanylate Cyclase 2c Overactivity,5
+,NNH007,Non-Hypoproteinemic Hypertrophic Gastropathy,4
+,IRR002,Irritable Bowel Syndrome,58
+,MCN017,Meconium Ileus,53
+,SHG001,Shigellosis,52
+,STR008,Strongyloidiasis,51
+,CCC002,Coccidiosis,49
+,INT017,Intestinal Schistosomiasis,45
+,TRP004,Tropical Sprue,36
+c,CNG413,Congenital Short Bowel Syndrome,34
+c,BCT005,Bacterial Gastritis,21
+,MNG003,Mungan Syndrome,21
+c,VRL009,Viral Gastritis,8
+,HRP003,Herpetic Gastritis,6
+,FNG002,Fungal Gastritis,5
+,RCT015,Reactive Arthritis,65
+P,CLR108,Colorectal Adenoma,60
+P,FRC002,Fructose Intolerance,54
+,GST078,Gastrointestinal Allergy,41
+c,GST048,Gastrointestinal System Benign Neoplasm,40
+,INT060,Intestinal Atresia,37
+,GST071,Gastrointestinal Carcinoma,37
+,ATM015,Autoimmune Disease of Gastrointestinal Tract,33
+,LNT001,Linitis Plastica,32
+,GST009,Gastroschisis,31
+,NRN029,Neuronal Intestinal Dysplasia,31
+,GST090,Gastroduodenal Crohn's Disease,26
+c,ADN040,"Adenomas, Multiple Colorectal",26
+,GST046,Gastrointestinal Anthrax,23
+,DRR005,"Diarrhea 4, Malabsorptive, Congenital",20
+,GST056,Gastrocutaneous Syndrome,14
+,SML035,Small Intestine Carcinoid Neuroendocrine Tumor,13
+c,ACQ013,Acquired Fructose Intolerance,11
+P,HYD006,Hydrocephalus,68
+c,HRD010,Hereditary Spastic Paraplegia,66
+,LDD001,Ladd Syndrome,60
+P,DDN001,Duodenal Ulcer,51
+,PRS034,Parasitic Helminthiasis Infectious Disease,47
+,DDN006,Duodenitis,44
+,ACT058,Active Peptic Ulcer Disease,44
+,CRN055,Carney Triad,40
+,CLS016,Clostridium Difficile Colitis,38
+,PPT001,Peptic Esophagitis,35
+c,CNG216,Congenital Hydrocephalus,35
+c,SPS078,Spastic Paraplegia 7,34
+,FNC006,Functional Gastric Disease,33
+,PLY073,"Polyposis, Gastric",32
+,GST039,Gastroduodenitis,32
+c,HYD008,Hydrocephalus Due to Aqueductal Stenosis,32
+,PNM003,Pneumatosis Cystoides Intestinalis,32
+,GST014,Gastrointestinal Lymphoma,31
+c,SPS151,"Spastic Paraplegia 11, Autosomal Recessive",31
+c,SPS079,Spastic Paraplegia 2,29
+c,SPS153,"Spastic Paraplegia 35, Autosomal Recessive",29
+,INT050,Intestinal Impaction,28
+c,SPS147,"Spastic Paraplegia 4, Autosomal Dominant",28
+c,SPS099,"Spastic Paraplegia 42, Autosomal Dominant",28
+,GRN011,Granulomatous Gastritis,28
+,GST038,Gastrointestinal Adenoma,28
+,CHR067,Chronic Intestinal Vascular Insufficiency,28
+c,SPS036,Spastic Paraplegia 3,28
+P,SPS012,Spastic Paraplegia 3a,28
+c,SPS103,"Spastic Paraplegia 50, Autosomal Recessive",26
+c,SPS101,"Spastic Paraplegia 56, Autosomal Recessive",26
+,ENT007,Enteropathica,26
+c,SPS130,"Spastic Paraplegia 43, Autosomal Recessive",26
+c,HYD047,"Hydrocephalus, Nonsyndromic, Autosomal Recessive",25
+c,SPS114,"Spastic Paraplegia 45, Autosomal Recessive",25
+c,SPS148,"Spastic Paraplegia 31, Autosomal Dominant",25
+c,SPS152,"Spastic Paraplegia 51, Autosomal Recessive",25
+c,SPS096,"Spastic Paraplegia 44, Autosomal Recessive",25
+c,SPS137,"Spastic Paraplegia 57, Autosomal Recessive",25
+c,SPS095,"Spastic Paraplegia 47, Autosomal Recessive",25
+c,SPS013,Spastic Paraplegia 8,25
+c,SPS124,"Spastic Paraplegia 28, Autosomal Recessive",25
+c,SPS121,"Spastic Paraplegia 3a, Autosomal Dominant",24
+c,SPS109,"Spastic Paraplegia 46, Autosomal Recessive",24
+c,SPS126,"Spastic Paraplegia 49, Autosomal Recessive",24
+c,SPS071,"Spastic Paraplegia 48, Autosomal Recessive",24
+c,SPS107,"Spastic Paraplegia 18, Autosomal Recessive",24
+c,HYD043,"Hydrocephalus, Nonsyndromic, Autosomal Recessive 2",24
+c,SPS098,"Spastic Paraplegia 30, Autosomal Recessive",24
+c,SPS106,"Spastic Paraplegia 54, Autosomal Recessive",24
+c,SPS138,"Spastic Paraplegia 72, Autosomal Recessive",24
+c,SPS119,"Spastic Paraplegia 55, Autosomal Recessive",24
+c,SPS122,"Spastic Paraplegia 52, Autosomal Recessive",24
+c,SPS104,"Spastic Paraplegia 53, Autosomal Recessive",24
+c,SPS092,Spastic Paraplegia 11,24
+c,SPS021,Spastic Paraplegia 10,23
+c,SPS125,"Spastic Paraplegia 15, Autosomal Recessive",23
+,CLN022,Colonic Atresia,23
+c,SPS157,"Spastic Paraplegia 64, Autosomal Recessive",23
+c,SPS159,"Spastic Paraplegia 9b, Autosomal Recessive",23
+c,SPS025,Spastic Paraplegia 15,23
+c,SPS091,Spastic Paraplegia 4,22
+c,SPS039,Spastic Paraplegia 5a,22
+c,SPS027,Spastic Paraplegia 17,22
+c,SPS113,"Spastic Paraplegia 33, Autosomal Dominant",22
+c,SPS135,Spastic Paraplegia 63,22
+c,SPS141,"Spastic Paraplegia 61, Autosomal Recessive",22
+c,SPS160,"Spastic Paraplegia 73, Autosomal Dominant",21
+c,SPS020,Spastic Paraplegia 1,21
+c,SPS129,"Spastic Paraplegia 39, Autosomal Recessive",21
+c,SPS116,"Spastic Paraplegia 26, Autosomal Recessive",21
+c,SPS128,"Spastic Paraplegia 7, Autosomal Recessive",21
+c,SPS108,"Spastic Paraplegia 5a, Autosomal Recessive",21
+c,SPS127,"Spastic Paraplegia 6, Autosomal Dominant",20
+c,CHR464,Chronic Intestinal Failure,20
+,CRN265,"Craniofacial Malformations, Asymmetric, with Polysyndactyly and Abnormal Skin and Gut Development",20
+c,SPS118,"Spastic Paraplegia 36, Autosomal Dominant",20
+c,SPS041,Spastic Paraplegia 6,20
+c,SPS117,"Spastic Paraplegia 10, Autosomal Dominant",20
+c,SPS149,"Spastic Paraplegia 8, Autosomal Dominant",20
+c,SPS156,"Spastic Paraplegia 74, Autosomal Recessive",20
+c,SPS028,Spastic Paraplegia 18,20
+c,SPS131,"Spastic Paraplegia 12, Autosomal Dominant",20
+c,HYD019,Hydrocephalus Due to Congenital Stenosis of Aqueduct of Sylvius,19
+c,SPS042,Spastic Paraplegia 9,19
+c,GST091,Gastrointestinal Neuroendocrine Benign Tumor,19
+c,SPS097,"Spastic Paraplegia 13, Autosomal Dominant",19
+c,SPS023,Spastic Paraplegia 13,19
+c,SPS094,"Spastic Paraplegia 29, Autosomal Dominant",19
+c,SPS031,Spastic Paraplegia 23,19
+c,SPS110,"Spastic Paraplegia 19, Autosomal Dominant",19
+c,SPS054,Spastic Paraplegia 35,19
+c,SPS123,"Spastic Paraplegia 32, Autosomal Recessive",18
+c,SPS068,"Spastic Paraplegia 14, Autosomal Recessive",18
+c,SPS100,"Spastic Paraplegia 38, Autosomal Dominant",18
+c,SPS105,"Spastic Paraplegia 37, Autosomal Dominant",18
+c,SPS111,"Spastic Paraplegia 27, Autosomal Recessive",18
+c,SPS120,"Spastic Paraplegia 24, Autosomal Recessive",17
+c,SPS115,"Spastic Paraplegia 41, Autosomal Dominant",17
+c,SPS022,Spastic Paraplegia 12,17
+c,SPS182,Spastic Paraplegia 75,17
+c,HYD042,"Hydrocephalus, Autosomal Dominant",17
+c,SPS080,Spastic Paraplegia 51,17
+,GST088,Gastric Endocrine Tumor,16
+c,SPS064,Spastic Paraplegia 45,16
+,APH015,Aphalangy with Hemivertebrae,16
+c,SPS038,Spastic Paraplegia 39,16
+c,SPS034,Spastic Paraplegia 26,16
+,VLV047,Volvulus of Midgut,16
+c,SPS102,"Spastic Paraplegia 25, Autosomal Recessive",16
+c,SPS037,Spastic Paraplegia 31,15
+c,SPS165,Spastic Paraplegia 47,15
+c,LTB003,Ltbp4-Related Cutis Laxa,14
+c,SPS174,Spastic Paraplegia 46,14
+c,SPS173,Spastic Paraplegia 43,14
+c,SPS175,Spastic Paraplegia 49,14
+c,SCN043,Secondary Intestinal Lymphangiectasia,14
+c,SPS024,Spastic Paraplegia 14,14
+c,SPS026,Spastic Paraplegia 16,14
+c,SPS056,Spastic Paraplegia 44,14
+c,SPS033,Spastic Paraplegia 25,14
+c,SPS053,Spastic Paraplegia 33,13
+c,SPS178,Spastic Paraplegia 55,13
+,END077,Endocrine Tumor of Colon,13
+c,SPS032,Spastic Paraplegia 24,13
+c,SPS168,Spastic Paraplegia 56,13
+c,SPS181,Spastic Paraplegia 72,13
+,NKC001,Nk-Cell Enteropathy,13
+c,SPS029,Spastic Paraplegia 19,13
+c,SPS035,Spastic Paraplegia 29,13
+c,SPS052,Spastic Paraplegia 30,12
+c,SPS055,Spastic Paraplegia 42,12
+c,SPS167,Spastic Paraplegia 52,12
+c,SPS177,Spastic Paraplegia 54,12
+c,SPS179,Spastic Paraplegia 57,12
+,SGL001,Siegler Brewer Carey Syndrome,12
+c,SPS161,Spastic Paraplegia 32,12
+,GST055,Gastric Duplication Cysts,12
+c,ATS183,Autosomal Recessive Spastic Paraplegia Type 62,12
+,ACT226,Actg2,12
+c,SPS040,Spastic Paraplegia 5b,12
+c,SPS164,Spastic Paraplegia 28,12
+c,SPS180,Spastic Paraplegia 61,12
+c,SPS140,Spastic Paraplegia 64,12
+c,SPS166,Spastic Paraplegia 50,11
+c,SPS076,Spastic Paraplegia 48,11
+c,NNS028,"Nonsyndromic Hydrocephalus, Ccdc88c-Related",10
+,PRT022,Protozoal Dysentery,10
+c,ATS184,Autosomal Recessive Spastic Paraplegia Type 60,10
+c,ATS185,Autosomal Recessive Spastic Paraplegia Type 59,10
+c,ATS186,Autosomal Recessive Spastic Paraplegia Type 68,10
+c,ATS187,Autosomal Recessive Spastic Paraplegia Type 69,10
+c,ATS188,Autosomal Recessive Spastic Paraplegia Type 70,10
+c,ATS189,Autosomal Recessive Spastic Paraplegia Type 71,10
+c,ATS190,Autosomal Recessive Spastic Paraplegia Type 66,10
+c,ATS191,Autosomal Recessive Spastic Paraplegia Type 67,10
+,NCR005,Necrotizing Gastritis,10
+,INT043,Intestinal Disaccharidase Deficiency,10
+c,SPS176,Spastic Paraplegia 53,10
+,END008,Endometriosis of Intestine,10
+c,NNS036,"Nonsyndromic Hydrocephalus, Mpdz-Related",10
+,PNC101,"Pancreatic Hypoplasia, Intestinal Atresia, and Gallbladder Aplasia or Hypoplasia, with or Without Tracheoesophageal Fistula",10
+c,SPS199,Spastic Paraplegia 59,9
+c,SPS169,Spastic Paraplegia 66,9
+,ANG012,Angiodysplasia of Intestine,9
+,CLN023,Colonic Malakoplakia,9
+c,MLH002,Mlh1-Related Lynch Syndrome,8
+c,MSH002,Msh2-Related Lynch Syndrome,8
+c,MSH005,Msh6-Related Lynch Syndrome,8
+c,PMS003,Pms2-Related Lynch Syndrome,8
+,ACQ006,Acquired Gastric Outlet Stenosis,8
+c,MLH005,Mlh3-Related Lynch Syndrome,8
+c,ATM071,Autoimmune Enteropathy Type 2,7
+c,PMS002,Pms1-Related Lynch Syndrome,7
+c,ATM070,Autoimmune Enteropathy Type 3,7
+,CLN046,"Colon Cancer, Advanced Somatic",7
+,DGS006,Digestive Duplication Cyst of the Tongue,7
+,GMF001,Game Friedman Paradice Syndrome,7
+,MCP018,Mcpherson Clemens Syndrome,6
+,LRG006,Large Bowel Leiomyoma,6
+c,DDN013,Duodenal Ulcer Due to Antral G-Cell Hyperfunction,6
+c,SDH004,Sdhb-Related Paraganglioma and Gastric Stromal Sarcoma,6
+c,SDH006,Sdhc-Related Paraganglioma and Gastric Stromal Sarcoma,6
+c,SDH008,Sdhd-Related Paraganglioma and Gastric Stromal Sarcoma,6
+c,HYD017,Hydrocephalus Autosomal Recessive,5
+,PRN015,Perinatal Intestinal Perforation,5
+,CLN013,Colonic L-Cell Glucagon-Like Peptide Producing Tumor,5
+,SML013,Small Intestinal L-Cell Glucagon-Like Peptide Producing Tumor,5
+,ENT009,Enterovirus Antenatal Infection,5
+,11P001,11p15-P14 Deletion Syndrome,5
+,INV020,Invasive Infections Due to Vancomycin-Resistant Enterococci,5
+,MYP066,Myopathic Intestinal Pseudoobstruction,5
+,STL002,Stalker Chitayat Syndrome,4
+,CNG363,Congenital Enterocyte Heparan Sulfate Deficiency,4
+,UNC010,Unclassified Intestinal Pseudoobstruction,4
+,BNG062,Benign Infantile Seizures Associated to Mild Gastroenteritis,3
+P,HPT021,Hepatitis,74
+c,HPT073,Hepatitis C Virus,72
+c,HPT001,Hepatitis C,68
+,CHR012,Chronic Granulomatous Disease,66
+,PRT036,Peritonitis,65
+P,CNJ013,Conjunctivitis,65
+P,BRD002,Bardet-Biedl Syndrome,64
+P,CWD001,Cowden Disease,63
+P,ESP024,Esophagitis,62
+c,ATM011,Autoimmune Hepatitis,62
+c,HPT016,Hepatitis B,61
+,GNG013,Gingivitis,61
+P,PRT013,Portal Hypertension,61
+,APP008,Appendicitis,61
+,MVD001,Moved to,60
+c,VRL010,Viral Hepatitis,60
+,CNT097,"Central Hypoventilation Syndrome, Congenital",59
+P,CNG015,Congenital Diaphragmatic Hernia,58
+,PPT005,Peptic Ulcer Disease,58
+,CHL067,Cholecystitis,57
+,CNS004,Constipation,57
+,ING001,Inguinal Hernia,57
+,CLT003,Colitis,56
+,BNN001,Bannayan-Riley-Ruvalcaba Syndrome,56
+c,HPT003,Hepatitis a,55
+c,TYR012,"Tyrosinemia, Type I",54
+,ESP023,Esophageal Disease,52
+,TTH006,Tooth Disease,52
+,GNG012,Gingival Overgrowth,52
+c,BRD010,Bardet-Biedl Syndrome 1,52
+,PRT002,Paratyphoid Fever,52
+P,DGR001,Digeorge Syndrome,52
+c,HPT015,Hepatitis D,51
+c,HPT007,Hepatitis E,51
+c,INF071,Inflammatory Bowel Disease 1,51
+,CRH005,Crohn's Colitis,50
+,BLR006,Biliary Tract Disease,50
+,DYS014,Dyspepsia,50
+,ESP020,Esophageal Atresia,48
+,ILT001,Ileitis,48
+P,CHL066,Cholangitis,48
+,CHL004,Cholelithiasis,48
+,CMP002,Campylobacteriosis,47
+,OBS001,Obstructive Jaundice,47
+P,SCL009,Sclerosing Cholangitis,47
+,GLC036,Glucagonoma,47
+,DVR002,Diverticulitis,47
+P,PRD008,Periodontitis,46
+,ANS003,Anisakiasis,46
+,GLS007,Glossitis,46
+c,CHR086,Chronic Conjunctivitis,46
+,MCR191,Microscopic Colitis,46
+,PYL006,Pyloric Stenosis,46
+,HPT046,Hepatic Veno-Occlusive Disease,46
+,MCR037,Macroglossia,45
+,PHH001,Phaeohyphomycosis,45
+,GGR001,Geographic Tongue,45
+,DNT012,Dental Caries,45
+,PLP001,Pulpitis,45
+c,TYR013,"Tyrosinemia, Type Ii",44
+P,TYR004,Tyrosinemia,44
+,RDT013,Radiation Proctitis,43
+,ANL022,Anal Fistula,43
+c,CWD006,Cowden Syndrome 1,43
+,TRC012,Trichuriasis,42
+,DRR008,"Diarrhea 1, Secretory Chloride, Congenital",42
+,PRC003,Proctitis,42
+,DYS015,Dysentery,42
+,STT004,Steatorrhea,41
+,RCT011,Rectal Prolapse,41
+,UMB002,Umbilical Hernia,40
+P,ESP035,"Esophagitis, Eosinophilic, 1",40
+,PRD003,Periodontosis,40
+,HTS001,Hiatus Hernia,40
+P,HYP009,Hypertrophic Pyloric Stenosis,40
+,CHL052,Choledochal Cyst,40
+,DMP001,Dumping Syndrome,39
+,FNC002,Functional Diarrhea,39
+,JJN008,Jejunoileitis,38
+,GLC022,Glucose/galactose Malabsorption,38
+,ISC015,Ischemic Colitis,38
+c,BCT006,Bacterial Conjunctivitis,38
+c,TYR011,"Tyrosinemia, Type Iii",38
+,ILC002,Ileocolitis,38
+,GRN009,Granulomatous Hepatitis,37
+,ABD004,Abdominal Tuberculosis,37
+,TBR008,Tuberculous Peritonitis,37
+,GNG003,Gingival Recession,37
+,PPT002,Peptic Ulcer Perforation,36
+,MCK002,Meckel's Diverticulum,36
+,RTC003,Root Caries,36
+,CHL013,Cholecystolithiasis,36
+c,BRD015,Bardet-Biedl Syndrome 3,36
+,CLL021,Collagenous Colitis,36
+,LPD027,Lip Disease,35
+,ACL001,Acalculous Cholecystitis,35
+,SPP004,Suppurative Cholangitis,35
+c,INF095,"Inflammatory Bowel Disease 25, Early Onset, Autosomal Recessive",35
+,DDN009,Duodenal Obstruction,35
+,MGS001,Megaesophagus,35
+,EXT006,Extrahepatic Cholestasis,35
+,RCT017,Rectal Disease,35
+c,PRD030,"Periodontitis 1, Juvenile",34
+c,CWD003,Cowden Syndrome 2,34
+,DDN007,Duodenal Disease,34
+,MYF001,Myofibroma,34
+,FSS001,Fissured Tongue,34
+,SPP003,Suppurative Periapical Periodontitis,33
+,HPT006,Hepatic Angiomyolipoma,33
+,PST035,Postgastrectomy Syndrome,33
+c,ACT067,Acute Conjunctivitis,32
+,RFR013,Refractory Celiac Disease,32
+,DVR006,Diversion Colitis,32
+,CHL039,Choledocholithiasis,32
+c,BRD014,Bardet-Biedl Syndrome 2,32
+,DDN004,Duodenogastric Reflux,32
+,ANS012,Anus Disease,32
+c,BRD013,Bardet-Biedl Syndrome 12,32
+,PST030,Postcholecystectomy Syndrome,31
+,HYP021,Hypercementosis,31
+,SCR003,Secretory Diarrhea,31
+,DYS011,Dyskinesia of Esophagus,31
+,CCL002,Cecal Disease,31
+c,ACT036,Acute Cholangitis,31
+,FLT009,"Folate Malabsorption, Hereditary",31
+c,INF067,Inflammatory Bowel Disease 10,31
+c,CHL119,"Cholangitis, Primary Sclerosing",31
+,XNT002,Xanthogranulomatous Cholecystitis,30
+,CPP003,Cap Polyposis,30
+,ATR073,Atrophic Glossitis,30
+c,BRD012,Bardet-Biedl Syndrome 11,30
+,BLR004,Biliary Dyskinesia,29
+,BLN006,Blind Loop Syndrome,29
+,LPD007,Lipoadenoma,29
+c,BRD032,Bardet-Biedl Syndrome 14,29
+,MDN001,Median Rhomboid Glossitis,29
+,SQM005,Squamous Papillomatosis,29
+,MLK004,Malakoplakia,28
+,ASC003,Ascending Cholangitis,28
+c,BRD011,Bardet-Biedl Syndrome 10,28
+c,BRD018,Bardet-Biedl Syndrome 6,28
+,GLD002,Goldberg-Shprintzen Megacolon Syndrome,28
+,EPS001,Epstein-Barr Virus Hepatitis,28
+,OSM001,Osmotic Diarrhea,28
+c,CWD004,Cowden Syndrome 5,28
+,FNG003,Fungal Esophagitis,27
+,TXC001,Toxic Megacolon,26
+c,INF087,Inflammatory Bowel Disease 4,26
+c,CWD008,Cowden Syndrome 6,26
+c,CHR013,Chronic Apical Periodontitis,26
+,PRM190,Periampullary Adenoma,26
+,SCR037,"Sucrase-Isomaltase Deficiency, Congenital",26
+,PRC008,Pericholangitis,26
+c,CHR036,Chronic Cholangitis,25
+,ATM081,"Autoimmune Disease, Multisystem, with Facial Dysmorphism",25
+c,BRD017,Bardet-Biedl Syndrome 5,25
+P,HRD144,Hereditary Mixed Polyposis Syndrome,25
+,DNT006,Dental Pulp Necrosis,25
+,LCT013,"Lactase Deficiency, Congenital",24
+,DNT010,Dentin Caries,24
+c,HRD101,Hereditary Mixed Polyposis Syndrome 1,24
+c,BRD016,Bardet-Biedl Syndrome 4,24
+,PYL002,Pylorospasm,23
+c,INF068,Inflammatory Bowel Disease 13,23
+c,CWD007,Cowden Syndrome 3,23
+,CHM005,Chemical Colitis,23
+c,INF078,Inflammatory Bowel Disease 2,23
+c,CWD005,Cowden Syndrome 4,23
+c,INF077,Inflammatory Bowel Disease 19,23
+,PLM049,Plummer Vinson Syndrome,22
+,ULC008,Ulcerative Proctitis,22
+,DRR004,"Diarrhea 3, Secretory Sodium, Congenital, Syndromic",22
+c,INF093,Inflammatory Bowel Disease 14,22
+P,INF094,"Inflammatory Bowel Disease 28, Early Onset, Autosomal Recessive",22
+c,BRD021,Bardet-Biedl Syndrome 9,21
+c,BRD044,Bardet-Biedl Syndrome 17,21
+c,BRD020,Bardet-Biedl Syndrome 8,21
+c,BRD047,Bardet-Biedl Syndrome 16,21
+c,BRD019,Bardet-Biedl Syndrome 7,21
+,ESP001,Esophageal Tuberculosis,21
+c,INF072,Inflammatory Bowel Disease 11,20
+c,INF073,Inflammatory Bowel Disease 12,20
+c,BRD033,Bardet-Biedl Syndrome 13,20
+c,INF086,Inflammatory Bowel Disease 3,20
+,EMP002,Emphysematous Cholecystitis,20
+c,BRD048,Bardet-Biedl Syndrome 18,20
+,GLL029,Gallbladder Adenoma,20
+c,BRD035,Bardet-Biedl Syndrome 15,20
+c,INF088,Inflammatory Bowel Disease 5,20
+c,BRD045,Bardet-Biedl Syndrome 19,19
+,ESN022,Eosinophilic Colitis,19
+c,INF079,Inflammatory Bowel Disease 20,19
+c,INF089,Inflammatory Bowel Disease 6,19
+,SLT007,Solitary Rectal Ulcer Syndrome,19
+,TRH001,Trehalase Deficiency,19
+c,INF091,Inflammatory Bowel Disease 8,19
+c,INF075,Inflammatory Bowel Disease 16,19
+c,BBS002,Bbs10-Related Bardet-Biedl Syndrome,18
+c,INF080,Inflammatory Bowel Disease 21,18
+c,INF083,Inflammatory Bowel Disease 24,18
+c,INF074,Inflammatory Bowel Disease 15,18
+c,PLY066,"Polyposis Syndrome, Hereditary Mixed, 2",18
+c,INF090,Inflammatory Bowel Disease 7,18
+c,INF092,Inflammatory Bowel Disease 9,18
+c,INF081,Inflammatory Bowel Disease 22,18
+,ACT062,Acute Pericementitis,18
+,CHR595,"Chromosome 10q23 Deletion Syndrome Juvenile Polyposis of Infancy, Included",18
+c,DPH016,Diaphragmatic Hernia 3,18
+,SND005,Sandifer Syndrome,18
+,AFF001,Afferent Loop Syndrome,17
+c,INF076,Inflammatory Bowel Disease 18,17
+,MYM008,Moyamoya 6 with Achalasia,17
+,STP002,Staphyloenterotoxemia,17
+c,SCN059,Secondary Sclerosing Cholangitis,17
+c,BCT001,Bacterial Esophagitis,17
+c,INF082,Inflammatory Bowel Disease 23,17
+c,INF085,Inflammatory Bowel Disease 27,16
+,PLY138,Polymerase Proofreading-Related Adenomatous Polyposis,16
+,ANL005,Anal Spasm,15
+P,ACT046,Acute Apical Periodontitis,15
+,OCC004,Occlusion of Gallbladder,15
+c,DGR004,Digeorge Syndrome 2,15
+c,ESP034,"Esophagitis, Eosinophilic, 2",15
+c,INF084,Inflammatory Bowel Disease 26,14
+,GLL016,Gallbladder Leiomyosarcoma,14
+,RCT035,Rectum Adenoma,14
+c,BBS004,Bbs1-Related Bardet-Biedl Syndrome,14
+,GLS013,Glossodynia,14
+,MCC004,Mucocele of Appendix,14
+c,CWD009,Cowden Syndrome 7,14
+,ANR003,Anorectal Stricture,13
+,CTN018,"Cutaneous Photosensitivity and Colitis, Lethal",13
+c,BBS005,Bbs2-Related Bardet-Biedl Syndrome,13
+,ANS009,Anus Leiomyosarcoma,13
+,MCK004,Meckel's Diverticulitis,13
+,HYD004,Hydrops of Gallbladder,13
+,END073,Endocrine Tumor of the Appendix,13
+,END078,Endocrine Tumor of Rectum,13
+c,BBS008,Bbs7-Related Bardet-Biedl Syndrome,13
+c,BBS006,Bbs4-Related Bardet-Biedl Syndrome,12
+,SGM001,Sigmoid Disease,12
+,NNP013,Non-Polyposis Turcot Syndrome,12
+,GLL011,Gallbladder Leiomyoma,12
+c,ARL003,Arl6-Related Bardet-Biedl Syndrome,12
+c,BBS009,Bbs9-Related Bardet-Biedl Syndrome,12
+c,TTC002,Ttc8-Related Bardet-Biedl Syndrome,12
+,HRS038,Hirschsprung Disease with Hypoplastic Nails and Dysmorphic Facial Features,12
+,ESP003,Esophageal Lipoma,12
+c,BBS003,Bbs12-Related Bardet-Biedl Syndrome,11
+c,BBS007,Bbs5-Related Bardet-Biedl Syndrome,11
+,RCT016,Rectum Leiomyosarcoma,11
+,DDN022,Duodenum Adenoma,11
+c,TRM009,Trim32-Related Bardet-Biedl Syndrome,11
+,ANL006,Anal Paget's Disease,11
+c,IFT002,Ift27-Related Bardet-Biedl Syndrome,11
+c,CP2001,Cep290-Related Bardet-Biedl Syndrome,11
+c,MKK001,Mkks-Related Bardet-Biedl Syndrome,11
+c,MKS001,Mks1-Related Bardet-Biedl Syndrome,11
+c,WDP001,Wdpcp-Related Bardet-Biedl Syndrome,11
+,ESP017,Esophageal Diverticulosis,11
+,PRT107,Proton-Pump Inhibitor-Responsive Esophageal Eosinophilia,10
+,ESP008,Esophageal Leukoplakia,10
+c,BBP001,Bbip1-Related Bardet-Biedl Syndrome,10
+c,C2R002,C2orf86-Related Bardet-Biedl Syndrome,10
+,CHR009,Chronic Duodenal Ileus,10
+,ULC002,Ulcer of Anus and Rectum,9
+,CCM005,Cecum Adenoma,9
+,PLP002,Pulp Degeneration,9
+,END076,Endocrine Tumor of Anal Canal,9
+,GLL014,Gallbladder Rhabdomyosarcoma,8
+,MDS017,Mediastinum Leiomyosarcoma,8
+,CHR474,Chronic Diarrhea Due to Glucoamylase Deficiency,8
+,STR003,Strawberry Gallbladder,8
+,FBR006,Fibroepithelial Polyp of the Anus,8
+c,SSC054,Susceptibility to Localized Juvenile Periodontitis,8
+,GLL002,Gallbladder Angiosarcoma,8
+,MLG031,Malignant Granular Cell Esophageal Tumor,8
+,OTL001,Outlet Dysfunction Constipation,7
+,ODN001,Odontoclasia,7
+,HYP049,Hypertrophy of Tongue Papillae,7
+c,SDC001,Sdccag8-Related Bardet-Biedl Syndrome,7
+,LPM003,Lipoma of the Rectum,7
+,DRR012,"Diarrhea, Chronic, with Villous Atrophy",7
+,ANS008,Anus Rhabdomyosarcoma,7
+,ESP007,Esophagus Liposarcoma,7
+,ILL007,Ileal Endocrine Tumor,7
+,JJN006,Jejunal Endocrine Tumor,7
+,ESP014,Esophagus Leiomyoma,7
+,UTR019,Uterine Corpus Lipoleiomyoma,6
+,DSP001,Displacement of Cardia Through Esophageal Hiatus,6
+,CLS044,Classic Endocrine Tumor of Appendix,6
+,ESP019,Esophagus Leiomyosarcoma,6
+,LCL008,L-Cell Glucagon-Like Peptide Producing Tumor,6
+c,PYL009,"Pyloric Stenosis, Infantile Hypertrophic, 3",6
+c,PYL008,"Pyloric Stenosis, Infantile Hypertrophic, 2",6
+c,PYL011,"Pyloric Stenosis, Infantile Hypertrophic, 5",6
+c,PYL010,"Pyloric Stenosis, Infantile Hypertrophic, 4",6
+,GCG001,Gcgr-Related Hyperglucagonemia,6
+,ESP013,Esophagus Squamous Cell Papilloma,5
+,UND004,Undetermined Colitis,5
+,INT285,Intractable Diarrhea-Choanal Atresia-Eye Anomalies Syndrome,5
+,GLL003,Gallbladder Lipoma,5
+,GLL006,Gallbladder Papillomatosis,5
+,ANS005,Anus Leiomyoma,5
+,RCT004,Rectum Leiomyoma,5
+,DPH005,Diphtheritic Peritonitis,4
+c,DH1001,Dih1-Related Congenital Diaphragmatic Hernia,4
+,MTL001,Motility-Related Diarrhea,3
+c,PRT053,Portal Hypertension Due to Infrahepatic Block,2
+,GST063,Gastric Cancer Risk After H. Pylori Infection,52
+P,CLR023,Colorectal Cancer,96
+c,FML053,Familial Colorectal Cancer,50
+c,HRD169,Hereditary Colorectal Cancer,42
+c,CLR085,Colorectal Cancer 1,39
+c,CLR075,Colorectal Cancer 3,37
+c,CLR077,Colorectal Cancer 10,33
+c,CLR080,Colorectal Cancer 5,32
+c,CLR087,Colorectal Cancer 12,32
+c,FML311,Familial Colorectal Cancer Type X,32
+c,CLR079,Colorectal Cancer 2,29
+c,CLR083,Colorectal Cancer 8,26
+c,CLR081,Colorectal Cancer 6,23
+c,CLR082,Colorectal Cancer 7,22
+c,CLR084,Colorectal Cancer 9,19
+c,CLR078,Colorectal Cancer 11,19
+P,LYN001,Lynch Syndrome,69
+,INT111,"Intestinal Pseudoobstruction, Neuronal",31
+,DFF019,Diffuse Gastric Cancer,41
+,FML011,Familial Adenomatous Polyposis,68
+,SML036,Small Intestinal Adenocarcinoma,46
+,GST027,Gastric Lymphoma,54
+P,NRP037,"Neuropathy, Hereditary Sensory and Autonomic, Type V",53
+c,NRP042,"Neuropathy, Hereditary Sensory and Autonomic, Type Ii",42
+c,NRP033,"Neuropathy, Hereditary Sensory and Autonomic, Type Ia",27
+c,NRP038,"Neuropathy, Hereditary Sensory and Autonomic, Type Vi",23
+c,NRP040,"Neuropathy, Hereditary Sensory and Autonomic, Type Ic",23
+c,NRP031,"Neuropathy, Hereditary Sensory and Autonomic, Type Vii",21
+c,NRP018,"Neuropathy, Hereditary Sensory and Autonomic, Type Iib",21
+c,NRP044,"Neuropathy, Hereditary Sensory and Autonomic, Type Viii",17
+c,HRD081,Hereditary Sensory and Autonomic Neuropathy Type Iic,10
+,GST040,Gastric Adenocarcinoma,57
+,BRR013,Barrett Esophagus/esophageal Adenocarcinoma,57
+,DGS008,Digestive System Melanoma,18
+,STM011,"Stomach Cancer, Childhood",12
+P,GST049,Gastrointestinal System Cancer,59
+,CLN015,Colon Adenocarcinoma,55
+P,LYM124,"Lymphangiectasia, Intestinal",23
+,CRC014,"Carcinoid Tumors, Intestinal",30
+,GST012,Gastroesophageal Junction Adenocarcinoma,46
+P,HRD021,Hereditary Sensory Neuropathy,42
+,CLD014,Cole Disease,38
+,ENT008,Enteropathy-Associated T-Cell Lymphoma,36
+c,NRP041,"Neuropathy, Hereditary Sensory, Type Ie",35
+,GST029,Gastric Cardia Adenocarcinoma,35
+c,SNS009,Sensory Neuropathy Type 1,32
+,MCN009,Mucinous Stomach Adenocarcinoma,32
+,CLN002,Colon Mucinous Adenocarcinoma,30
+c,NRP036,"Neuropathy, Hereditary Sensory, Type if",23
+c,NRP039,"Neuropathy, Hereditary Sensory, Type Id",21
+,GST016,Gastric Signet Ring Cell Adenocarcinoma,20
+,CNJ003,Conjunctiva Squamous Cell Carcinoma,19
+c,NRP030,"Neuropathy, Hereditary Sensory, Type Ib",18
+c,NRP029,"Neuropathy, Hereditary Sensory, Type Iic",17
+,ADN021,Adenomatous Polyposis Coli,71
+,ABC001,Abcd Syndrome,28
+,ESP021,Esophageal Cancer,75
+P,GST047,Gastrointestinal Neuroendocrine Tumor,39
+,LRG016,Large Intestine Adenocarcinoma,28
+,MTC096,Mitchell-Riley Syndrome,21
+,IPX001,Ipex Syndrome,35
+,SGM002,Sigmoid Neoplasm,34
+,GST017,Gastric Tubular Adenocarcinoma,30
+c,SPS158,"Spastic Paraplegia 9a, Autosomal Dominant",27
+,PYL007,Pylorus Cancer,19
+,SPL003,Splenic Flexure Cancer,16
+,HPT005,Hepatic Flexure Cancer,16
+c,EPC004,Epcam-Related Lynch Syndrome,14
+,GST032,Gastric Papillary Adenocarcinoma,13
+,CLN001,Colon Signet Ring Adenocarcinoma,11
+,INT044,Intestinal Variant Cervical Mucinous Adenocarcinoma,5
+,KRT026,Keratosis Palmoplantaris Adenocarcinoma of the Colon,3
+,MTC061,Mitochondrial Dna Depletion Syndrome 1,31
+P,MRT001,Muir-Torre Syndrome,59
+,CYS005,Cysticercosis,52
+,APP009,Appendix Adenocarcinoma,40
+,PNC016,Pancreatic Cholera,38
+,EPD045,"Epidermolysis Bullosa, Junctional, with Pyloric Stenosis",37
+,MTC016,Mitochondrial Neurogastrointestinal Encephalopathy Disease,24
+c,MLH003,Mlh1-Related Muir-Torre Syndrome,7
+c,MSH003,Msh2-Related Muir-Torre Syndrome,5
+,CLR109,Colorectal Adenocarcinoma,50
+c,GMM003,Gamma Heavy Chain Disease,46
+P,HVY001,Heavy Chain Disease,41
+c,ALP005,Alpha Chain Disease,36
+,PNC027,Pancreatic Gastrinoma,34
+,GST042,Gastric Diffuse Adenocarcinoma,30
+P,MCH003,Mu Chain Disease,24
+c,ALP087,Alpha-Heavy Chain Disease,23
+P,FML168,Familial Isolated Pituitary Adenoma,22
+,MSN008,Mesenteric Artery Ischemia,20
+c,APR002,Aip-Related Familial Isolated Pituitary Adenomas,16
+,PNC011,Pancreatic Vasoactive Intestinal Peptide Producing Tumor,16
+c,DLT001,Delta Chain Disease,14
+,SQM015,Squamous Cell Carcinoma of Small Intestine,14
+,PYL003,Pyloric Antrum Cancer,12
+,SBM001,Submucosal Invasive Colon Adenocarcinoma,5
+P,LVR013,Liver Disease,76
+,WLS001,Wilson Disease,72
+,LVR012,Liver Cirrhosis,71
+c,MLT136,Multiple Endocrine Neoplasia 1,68
+c,MLT024,Multiple Endocrine Neoplasia Iia,64
+,GLL018,Gallbladder Cancer,63
+P,PNC044,Pancreatitis,62
+,ALC006,Alcoholic Hepatitis,60
+,CNG368,Congenital Adrenal Hyperplasia,60
+,INS001,Insulinoma,60
+P,GLL020,Gallbladder Disease,59
+c,PNC108,"Pancreatitis, Hereditary",59
+c,ACT027,Acute Pancreatitis,59
+,PLY023,Polycystic Liver Disease,57
+,CHL068,Cholestasis,57
+,HPT022,Hepatoblastoma,57
+,PNC034,Pancreas Disease,56
+c,MLT025,Multiple Endocrine Neoplasia Iib,56
+P,MLT074,Multiple Endocrine Neoplasia,55
+,ACH005,Achalasia,55
+P,PRM006,Primary Biliary Cirrhosis,55
+,ALC009,Alcoholic Liver Cirrhosis,53
+,RCT018,Rectal Neoplasm,53
+,BLR001,Biliary Atresia,52
+,ORL004,Oral Submucous Fibrosis,52
+,PLM014,Pleomorphic Adenoma,51
+c,MLT086,"Multiple Endocrine Neoplasia, Type Iv",49
+,HPT009,Hepatopulmonary Syndrome,48
+,BLD036,Bile Duct Disease,47
+P,ATT003,Attenuated Familial Adenomatous Polyposis,47
+P,TRC086,Trichohepatoenteric Syndrome 1,46
+c,ATM024,Autoimmune Pancreatitis,46
+c,ACT134,Acute Liver Failure,46
+,SLD003,Sialadenitis,45
+,BRR002,Barrett's Adenocarcinoma,45
+,LVR002,Liver Angiosarcoma,44
+,ANS011,Anus Cancer,44
+,GLL017,Gallbladder Adenocarcinoma,44
+,TRP008,Tropical Calcific Pancreatitis,42
+,HPT008,Hepatic Tuberculosis,42
+,ESP025,Esophagus Adenocarcinoma,42
+,DNT001,Dental Fluorosis,42
+,PRD007,Periodontal Disease,42
+,GNT001,Giant Cell Reparative Granuloma,41
+,AND001,Anodontia,40
+,CRL004,Caroli Disease,40
+,DRG002,Drug-Induced Hepatitis,39
+,SLL001,Sialolithiasis,39
+,RCT008,Rectosigmoid Junction Neoplasm,38
+,APP003,Appendiceal Neoplasm,37
+,SPR007,Superior Mesenteric Artery Syndrome,37
+,MLT073,Multisystemic Smooth Muscle Dysfunction Syndrome,36
+c,RCR022,Recurrent Acute Pancreatitis,36
+,ANL004,Anal Canal Squamous Cell Carcinoma,36
+,PRM014,Periampullary Adenocarcinoma,36
+,CHL040,Cholangiolocellular Carcinoma,35
+,ILM001,Ileum Cancer,35
+,AMP003,Ampulla of Vater Neoplasm,35
+,ESP010,Esophageal Basaloid Squamous Cell Carcinoma,35
+,PNC028,Pancreatic Steatorrhea,34
+,LYM042,Lymphocytic Colitis,34
+,AMP009,Ampulla of Vater Adenocarcinoma,34
+,BLR005,Biliary Papillomatosis,34
+c,GLL024,Gallbladder Disease 1,34
+,ALV001,Alveolar Periostitis,34
+,ORL019,Oral Hairy Leukoplakia,33
+,GLL021,Gallbladder Sarcoma,33
+,ESP027,Esophagus Squamous Cell Carcinoma,32
+,PLS002,Peliosis Hepatis,32
+,CLC003,Cloacogenic Carcinoma,32
+,BLR002,Bile Reflux,31
+,PNC018,Pancreatic Serous Cystadenoma,31
+,PNC019,Pancreatoblastoma,31
+c,TRC078,Trichohepatoenteric Syndrome 2,30
+,ANL014,Anal Canal Adenocarcinoma,30
+,NTM001,Nutmeg Liver,30
+,MTC111,Mitochondrial Neurogastrointestinal Encephalomyopathy,30
+,ACH015,"Achalasia, Familial Esophageal",29
+,JJN003,Jejunal Cancer,29
+,GBL002,Goblet Cell Carcinoid,29
+,PCW002,Pcwh Syndrome,28
+,ANS010,Anus Adenocarcinoma,28
+,CCL003,Cecal Benign Neoplasm,27
+,STY001,Satoyoshi Syndrome,27
+,TTH005,Teeth Hard Tissue Disease,27
+,DDN023,Duodenal Benign Neoplasm,26
+,PNC118,"Pancreas, Annular",26
+,NRG001,Neurogenic Bowel,25
+,BLR028,"Biliary Atresia, Extrahepatic",25
+,MLG038,Malignant Anus Melanoma,25
+,CMM007,Common Bile Duct Disease,25
+,PNC048,Pancreatic Lipase Deficiency,25
+c,GLL027,Gallbladder Disease 4,25
+,MCP008,Mucoepidermoid Esophageal Carcinoma,25
+,PNC039,Pancreatic Cystadenoma,24
+,INT049,Intrahepatic Bile Duct Adenoma,24
+,MCN018,Mucinous Adenocarcinoma of the Appendix,23
+,GLL012,Gallbladder Melanoma,23
+,IMM055,"Immunodeficiency, Common Variable, 8, with Autoimmunity",23
+,ESP026,Esophagus Sarcoma,23
+,GLL013,Gallbladder Lymphoma,23
+,ADN038,"Adenomas, Salivary Gland Pleomorphic",23
+,MXD007,Mixed Hepatoblastoma,22
+,LVR004,Liver Inflammatory Pseudotumor,22
+,MCC003,Mucocele of Salivary Gland,22
+,LVR005,Liver Leiomyoma,22
+,RCT023,Rectum Squamous Cell Carcinoma,22
+,LVR009,Liver Rhabdomyosarcoma,22
+c,LVR028,"Liver Failure, Transient Infantile",22
+,EXC004,"Exocrine Pancreatic Insufficiency, Dyserythropoietic Anemia, and Calvarial Hyperostosis",22
+P,NNT037,Neonatal Inflammatory Skin and Bowel Disease,21
+c,INF145,Infantile Liver Failure Syndrome 1,21
+,ADN072,Adenoma of Pancreas,21
+,HPT081,Hepatic Infarction,20
+,MCN005,Mucinous Intrahepatic Cholangiocarcinoma,20
+,CNG298,Congenital Pancreatic Cyst,20
+P,HMN004,Hemangioma of Liver,19
+c,INF138,Infantile Liver Failure Syndrome 2,19
+c,PRS050,Prss1-Related Hereditary Pancreatitis,19
+,LVR010,Liver Leiomyosarcoma,18
+,ANS001,Anus Basaloid Carcinoma,18
+c,INF144,"Inflammatory Skin and Bowel Disease, Neonatal, 1",18
+c,GLL025,Gallbladder Disease 2,18
+,ESP012,Esophageal Adenoid Cystic Carcinoma,18
+c,GLL026,Gallbladder Disease 3,18
+c,VRL006,Viral Esophagitis,18
+c,ATM064,Autoimmune Pancreatitis Type 1,17
+c,BLR024,"Biliary Cirrhosis, Primary, 1",17
+,RCT022,Rectum Sarcoma,16
+c,BLR016,"Biliary Cirrhosis, Primary, 2",16
+,ESP009,Esophageal Neuroendocrine Tumor,16
+,HRS037,Hirschsprung Disease with Type D Brachydactyly,16
+,ADN005,Adenosquamous Gallbladder Carcinoma,16
+c,BLR017,"Biliary Cirrhosis, Primary, 3",16
+,PPM002,Ppoma,15
+,MLG134,Malignant Epithelial Tumor of Salivary Glands,15
+,ANS014,Anus Sarcoma,15
+c,INF146,"Inflammatory Skin and Bowel Disease, Neonatal, 2",15
+c,BLR025,"Biliary Cirrhosis, Primary, 4",15
+,UND008,Undifferentiated Carcinoma of Esophagus,15
+,EXT021,Extrahepatic Bile Duct Leiomyosarcoma,14
+c,BLR026,"Biliary Cirrhosis, Primary, 5",14
+,ANL010,Anal Neuroendocrine Tumor,14
+,HRS003,Hirschsprung Disease Ganglioneuroblastoma,14
+,ESP005,Esophagus Carcinoma in Situ,14
+,ESP016,Esophagus Melanoma,13
+,HLR004,Hilar Cholangiocellular Carcinoma,13
+,ESP006,Esophageal Adenosquamous Carcinoma,13
+,LVR008,Liver Fibrosarcoma,13
+,ESP015,Esophagus Lymphoma,12
+,ANS007,Anus Lymphoma,12
+,AMP005,Ampullary Signet Ring Cell Adenocarcinoma,12
+c,LVR015,Liver Failure Acute Infantile,12
+c,ATM063,Autoimmune Pancreatitis Type 2,12
+,EXT028,Extrahepatic Bile Duct Adenoma,11
+,GLL010,Gallbladder Mucinous Carcinoma,11
+,BLD035,Bile Duct Cystadenoma,11
+,PRF001,Perforation of Bile Duct,10
+,GLL009,Gallbladder Signet Ring Cell Adenocarcinoma,10
+,ESP011,Esophagus Verrucous Carcinoma,10
+,GLL004,Gallbladder Papillary Carcinoma,9
+,LVR001,Liver Lipoma,9
+,BLD037,Bile Duct Rhabdomyosarcoma,9
+,AMP001,Ampulla of Vater Mucinous Adenocarcinoma,9
+,FML254,Familial Adenomatous Polyposis Due to 5q22.2 Microdeletion,9
+,ANL001,Anal Colloid Adenocarcinoma,8
+,SRC004,Sarcomatous Intrahepatic Cholangiocarcinoma,8
+c,AXN008,Axin2-Related Attenuated Familial Adenomatous Polyposis,8
+c,CFT002,Cftr-Related Hereditary Pancreatitis,8
+c,CTR042,Ctrc-Related Hereditary Pancreatitis,8
+c,SPN164,Spink1-Related Hereditary Pancreatitis,8
+,RCT014,Rectum Kaposi's Sarcoma,8
+,AMP006,Ampulla of Vater Squamous Cell Carcinoma,8
+,AMP004,Ampulla of Vater Adenosquamous Carcinoma,8
+c,CNG267,Congenital Liver Hemangioma,8
+,LVR007,Liver Fibroma,8
+,FLL045,Follicular Cholangitis and Pancreatitis,7
+,EXT017,Extrahepatic Bile Duct Papillary Adenoma,7
+,PRP089,Prp Systemic Amyloidosis,7
+,AMP008,Ampulla of Vater Clear Cell Adenocarcinoma,7
+,PRN012,Perianal Skin Paget's Disease,7
+,BLR003,Biliary Tract Intraductal Papillary Mucinous Neoplasm,6
+,ANL003,Anal Buschke-Lowenstein Tumor,6
+,SGN003,Signet Ring Cell Intrahepatic Cholangiocarcinoma,6
+,PNC024,Pancreatic Colloid Cystadenoma,6
+,GRF006,Grfoma,6
+,NRF005,Neurofibroma of Gallbladder,5
+,EXT005,Extrahepatic Bile Duct Lipoma,5
+,EXT013,Extrahepatic Bile Duct Leiomyoma,5
+,IDP068,Idiopathic Malabsorption Due to Bile Acid Synthesis Defects,5
+,MCR005,Macrotrabecular Hepatoblastoma,4
+,GLL005,Gallbladder Pleomorphic Giant Cell Adenocarcinoma,4
+,EPT026,Epithelio-Exfoliative Colitis-Deafness Syndrome,4
+,MSM014,Mismatch Repair Cancer Syndrome,60
+,VSC017,Visceral Neuropathy Familial,9
+,CLB003,Coloboma of Optic Nerve,34
+,IMM107,"Immunodeficiency 31c, Autosomal Dominant",27
+,FNC009,Fanconi-Bickel Syndrome,51
+,VSC049,"Visceral Myopathy, Familial, with External Ophthalmoplegia",20
+,BLD014,Bladder Colonic Type Adenocarcinoma,14
+,HPT023,Hepatocellular Carcinoma,90
+,CYS001,Cystic Fibrosis,87
+,ULC004,Ulcerative Colitis,74
+P,ALG002,Alagille Syndrome,70
+,FTT001,Fatty Liver Disease,60
+,ABT001,Abetalipoproteinemia,60
+P,INT001,Intrahepatic Cholestasis,58
+,BLD034,Bile Duct Carcinoma,56
+,CHL127,"Cholangiocarcinoma, Susceptibility to",55
+,INT079,Intrahepatic Cholangiocarcinoma,55
+,VSC007,Vascular Disease,51
+,BLR007,Biliary Tract Neoplasm,49
+,CYS008,Cystic Echinococcosis,48
+,HPT014,Hepatorenal Syndrome,47
+,ANL017,Anal Squamous Cell Carcinoma,46
+c,CHL080,"Cholestasis, Progressive Familial Intrahepatic 1",45
+,HPT020,Hepatic Vascular Disease,43
+,SMT003,Somatostatinoma,43
+,KLT001,Klatskin's Tumor,42
+,TNG004,Tongue Disease,40
+,BLD032,Bile Duct Adenocarcinoma,39
+,TTH001,Tooth Ankylosis,38
+c,CHL120,"Cholestasis, Benign Recurrent Intrahepatic",38
+,LVR014,Liver Sarcoma,37
+,EXT027,Extrahepatic Bile Duct Adenocarcinoma,36
+,PNC002,Pancreatic Mucinous Cystadenoma,35
+c,CHL082,"Cholestasis, Progressive Familial Intrahepatic 3",33
+,BLD019,Bile Duct Cystadenocarcinoma,32
+,PRS127,Pearson Marrow-Pancreas Syndrome,31
+,MGL016,"Megaloblastic Anemia-1, Finnish Type",31
+,BLD005,Bile Duct Mucoepidermoid Carcinoma,31
+,ANL012,Anal Gland Adenocarcinoma,31
+c,CHL081,"Cholestasis, Progressive Familial Intrahepatic 2",30
+c,CHL083,"Cholestasis, Progressive Familial Intrahepatic 4",29
+,LVR006,Liver Lymphoma,29
+c,ALG016,Alagille Syndrome 2,28
+,TYL002,Tylosis with Esophageal Cancer,28
+,GLL015,Gallbladder Squamous Cell Carcinoma,27
+,HPT012,Hepatocellular Fibrolamellar Carcinoma,26
+c,CHL118,"Cholestasis, Benign Recurrent Intrahepatic, 2",26
+,SCL007,Sclerosing Hepatic Carcinoma,26
+,GLL007,Gallbladder Small Cell Carcinoma,24
+,ACN026,Acinar Cell Carcinoma of Pancreas,22
+,FLR007,"Failure of Tooth Eruption, Primary",22
+,PNC014,Pancreatic Serous Cystadenocarcinoma,21
+,ANL016,Anal Margin Carcinoma,20
+,SQM014,Squamous Cell Carcinoma of Pancreas,18
+,MCN020,Mucinous Cystadenocarcinoma of Pancreas,17
+,INF148,"Infantile-Onset Multisystem Neurologic, Endocrine, and Pancreatic Disease",17
+,PNC009,Pancreas Sarcoma,16
+,ESP004,Esophagus Small Cell Carcinoma,16
+,BLD038,Bile Duct Sarcoma,16
+,BLD002,Bile Duct Mucinous Adenocarcinoma,15
+,ANL002,Anal Gland Neoplasm,15
+,CRC037,"Carcinoma of Esophagus, Salivary Gland Type",14
+,CMM001,Common Bile Duct Neoplasm,14
+,HRS039,"Hirschsprung Disease with Polydactyly, Renal Agenesis, and Deafness",14
+,DST001,Distal Biliary Tract Carcinoma,13
+,LVR003,Liver Carcinoma in Situ,13
+,INT014,Intrahepatic Gall Duct Cancer,13
+,BLD006,Bile Duct Clear Cell Adenocarcinoma,13
+,ANL007,Anal Margin Squamous Cell Carcinoma,13
+,BLD007,Bile Duct Signet Ring Cell Carcinoma,13
+,EXT002,Extrahepatic Bile Duct Small Cell Adenocarcinoma,13
+c,ABC009,Abcb11-Related Intrahepatic Cholestasis,13
+,AMP002,Ampulla of Vater Small Cell Carcinoma,12
+,INT039,Intrahepatic Biliary Papillomatosis,12
+,HPT011,Hepatocellular Clear Cell Carcinoma,12
+,ANL013,Anal Margin Basal Cell Carcinoma,12
+,ADN003,Adenosquamous Bile Duct Carcinoma,11
+,RCT005,Rectum Neuroendocrine Neoplasm,10
+c,ATP006,Atp8b1-Related Intrahepatic Cholestasis,10
+,SLD011,Solid Pseudopapillary Carcinoma of Pancreas,10
+,PNC042,Pancreatic Intraductal Papillary-Colloid Carcinoma,9
+,EXT015,Extrahepatic Biliary Papillomatosis,9
+c,JG1001,Jag1-Related Alagille Syndrome,9
+c,NTC001,Notch2-Related Alagille Syndrome,9
+,BLD001,Bile Duct Carcinoma in Situ,8
+,PPL008,Papillary Extrahepatic Bile Duct Adenocarcinoma,7
+,INT037,Intrahepatic Bile Duct Cystadenoma,7
+,EXT014,Extrahepatic Bile Duct Cystadenoma,7
+,GLL001,Gall Bladder Carcinoma in Situ,5
+,EMB001,Embryonal Extrahepatic Bile Duct Rhabdomyosarcoma,5
+,AFL001,Aflatoxins-Related Hepatocellular Carcinoma,5
+P,PNC035,Pancreatic Cancer,86
+P,MDL022,"Medullary Thyroid Carcinoma, Familial",62
+,SHW002,Shwachman-Diamond Syndrome,59
+c,PNC111,Pancreatic Cancer 2,33
+c,PNC095,Pancreatic Cancer 3,31
+c,PNC103,Pancreatic Cancer 4,30
+c,PNC094,Pancreatic Cancer 1,27
+,HPT017,Hepatic Osteogenic Sarcoma,14
+,OST141,Osteoclastic Giant Cell Tumor of Pancreas,12
+c,NTR012,Ntrk1-Related Familial Medullary Thyroid Carcinoma,7
